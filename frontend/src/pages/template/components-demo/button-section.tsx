@@ -4,17 +4,19 @@ import { useMemo, useState } from 'react';
 
 type ButtonSize = 'sm' | 'lg';
 
+const variants = [
+  { label: 'indigo', variant: 'indigo' },
+  { label: 'gray', variant: 'gray' },
+  { label: 'lime', variant: 'lime' },
+  { label: 'coral', variant: 'red' },
+  { label: 'outline', variant: 'outline' },
+  { label: 'emoji', variant: 'indigo', isEmoji: true },
+];
+
 export default function ButtonsSection() {
   const [size, setSize] = useState<ButtonSize>('sm');
 
-  const variants = [
-    { label: 'indigo', variant: 'indigo' },
-    { label: 'gray', variant: 'gray' },
-    { label: 'lime', variant: 'lime' },
-    { label: 'coral', variant: 'red' },
-    { label: 'outline', variant: 'outline' },
-    { label: 'emoji', variant: 'indigo', isEmoji: true },
-  ];
+
 
   // 🧠 Dynamic snippet that updates with the selected size
   const snippet = useMemo(() => {

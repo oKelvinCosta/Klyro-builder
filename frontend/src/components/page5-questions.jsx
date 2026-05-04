@@ -297,7 +297,7 @@ export default function RadioGroupShadcn() {
 
     let numbers = toArray.map((item) => {
       // Destructuring
-      const [key, value] = item;
+      const [, value] = item;
       return Number(value.split('/')[1]);
     });
 
@@ -308,7 +308,7 @@ export default function RadioGroupShadcn() {
     setIsFormSubmitted(true);
   };
 
-  const onError = (errors) => {
+  const onError = () => {
     setFormError('Você esqueceu de responder alguma questão');
   };
 

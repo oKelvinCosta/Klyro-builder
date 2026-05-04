@@ -10,11 +10,11 @@ import { useNavigate } from 'react-router-dom';
 export function ListGroups() {
   const navigate = useNavigate();
   const handleOpenGroup = (groupId: string) => {
-    console.log('Open group', groupId);
+    console.info('Open group', groupId);
     navigate(`/app/group/${groupId}`);
   };
 
-  const [userId, setUserId] = useState('69c9a51d260548585aa1fad8');
+  const [userId] = useState('69c9a51d260548585aa1fad8');
 
   // console.log('pagesData', pagesData);
 
@@ -48,7 +48,7 @@ export function ListGroups() {
           </Card>
         </div>
       ) : (
-        groupsWithPages?.map((group: any, index: number) => (
+        groupsWithPages?.map((group: any, index: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
           <div
             key={index}
             className="cursor-pointer md:col-span-4 2xl:col-span-3"
@@ -56,7 +56,7 @@ export function ListGroups() {
           >
             <Card className="overflow-hidden p-0">
               <CardContent className="grid grid-cols-4 gap-3 p-4">
-                {group.pages?.slice(0, 3).map((page: any, pageIndex: number) => (
+                {group.pages?.slice(0, 3).map((page: any, pageIndex: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
                   <Img
                     key={pageIndex}
                     src={page.cover || './imgs/core/placeholder.webp'}

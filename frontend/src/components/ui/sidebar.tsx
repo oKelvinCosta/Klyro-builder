@@ -3,6 +3,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
+/* eslint-disable react-refresh/only-export-components */
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -640,10 +641,14 @@ const SidebarMenuSkeleton = React.forwardRef<
     showIcon?: boolean;
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
+  const id = React.useId();
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `${Math.abs(hash % 40) + 50}%`;
+  }, [id]);
 
   return (
     <div
@@ -743,4 +748,4 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-};
+};  

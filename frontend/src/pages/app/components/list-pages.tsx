@@ -25,7 +25,7 @@ export function ListPages({ pagesData, isLoadingPages }: ListPagesComponentProps
   const navigate = useNavigate();
 
   const handleOpenProject = (pageId: string) => {
-    console.log('Open project', pageId);
+    // console.log('Open project', pageId);
     navigate(`/editor/${pageId}`);
   };
 

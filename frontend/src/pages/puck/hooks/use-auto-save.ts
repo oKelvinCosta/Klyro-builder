@@ -22,7 +22,7 @@ export function useAutoSave() {
       // Schedule new save
       timerRef.current = setTimeout(() => {
         pendingData.current = data;
-        console.log('Auto-saving:', pendingData.current);
+        // console.log('Auto-saving:', pendingData.current);
         updatePage.mutate({ puckData: { page: pendingData.current } });
       }, 1500);
     },

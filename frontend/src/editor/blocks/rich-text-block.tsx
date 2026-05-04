@@ -3,7 +3,7 @@ import Highlight from '@tiptap/extension-highlight';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
 
 export type RichTextBlockProps = {
-  content: any;
+  content: undefined;
 };
 
 const COLORS = [

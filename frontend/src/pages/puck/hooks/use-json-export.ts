@@ -2,7 +2,7 @@
  * Utility function to export data as JSON file
  */
 const saveJsonFile = async (data: unknown) => {
-  console.log('Saving data:', data);
+  // console.log('Saving data:', data);
 
   try {
     // Create blob with JSON data
@@ -22,7 +22,7 @@ const saveJsonFile = async (data: unknown) => {
     // Clean up
     URL.revokeObjectURL(url);
 
-    console.log('Database.json downloaded successfully');
+    // console.log('Database.json downloaded successfully');
   } catch (error) {
     console.error('Error saving data:', error);
   }

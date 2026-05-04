@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Button, type ButtonProps } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { type Dispatch, type ReactNode, type SetStateAction, useContext, useState } from 'react';
@@ -98,4 +99,4 @@ const ClickRevealHidden = ({ children, ...props }: ClickRevealHiddenProps) => {
   );
 };
 
-export { ClickReveal, ClickRevealContent, ClickRevealHidden, ClickRevealTrigger };
+export { ClickReveal, ClickRevealContent, ClickRevealHidden, ClickRevealTrigger };  

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { ListPages } from '../components/list-pages';
 
 export function MyProjects() {
-  const [userId, setUserId] = useState('69c9a51d260548585aa1fad8');
+  const [userId] = useState('69c9a51d260548585aa1fad8');
 
   // Get ungrouped pages of user
   const { data: pagesData, isLoading: isLoadingPages } = useQuery({

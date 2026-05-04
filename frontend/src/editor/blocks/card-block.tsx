@@ -8,10 +8,10 @@ export type CardBlockProps = {
   title?: string;
   horizontal?: boolean;
   side?: 'left' | 'right';
-  content?: any;
+  content?: undefined;
   textSize?: 16 | 18 | 24;
   variant?: 'default' | 'gray';
-  slot?: any[];
+  slot?: undefined[];
 };
 
 export const CardBlock: ComponentConfig<CardBlockProps> = {

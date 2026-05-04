@@ -5,8 +5,7 @@ import * as React from 'react';
 
 const Accordion = AccordionPrimitive.Root;
 
-interface AccordionItemProps
-  extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {}
+type AccordionItemProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>;
 
 const AccordionItem = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Item>,

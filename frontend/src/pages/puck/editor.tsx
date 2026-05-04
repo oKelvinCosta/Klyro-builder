@@ -8,20 +8,27 @@ import { useEditorMode } from '@/editor/stores/editor-mode-store';
 import { Puck, createUsePuck } from '@puckeditor/core';
 import '@puckeditor/core/puck.css';
 import { Eye, Rocket } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import database from '../../../../backend/database/database.json';
-import database2 from '../../../../backend/database/database2.json';
+// import database from '../../../../backend/database/database.json';
+// import database2 from '../../../../backend/database/database2.json';
 import { useAutoSave } from './hooks/use-auto-save';
 import { useJsonExport } from './hooks/use-json-export';
 import { usePageLoader } from './hooks/use-page-loader';
 
 // Static data for testing (can be removed if unused)
-const initialData = database;
-const database2Data = database2;
+// const initialData = database;
+// const database2Data = database2;
 
 // Custom Puck hook with optimized selector for better performance
 const usePuckData = createUsePuck();
+
+const emptyData = {
+  root: { props: {} },
+  content: [],
+  zones: {},
+};
 
 /**
  * Main Puck Editor Component
@@ -60,8 +67,11 @@ export function Editor() {
     projectType: 'choices',
   };
 
-  // Ref to store initial Puck data (populated only once)
-  const initialPuckData = useRef<object | null>(null);
+  // Initial data memoized to stay stable once loaded
+  const initialData = React.useMemo(() => {
+    if (!pageData) return emptyData;
+    return pageData?.puckData?.page ?? emptyData;
+  }, [pageData]);
 
   // Loading state - show skeleton while fetching data
   if (isLoading) {
@@ -81,22 +91,16 @@ export function Editor() {
     return <div>Error loading page.</div>;
   }
 
-  const emptyData = {
-    root: { props: {} },
-    content: [],
-    zones: {},
-  };
+  // emptyData was moved above useMemo
 
-  // Populate initial data ref only once when page data arrives
-  if (pageData && !initialPuckData.current) {
-    initialPuckData.current = pageData?.puckData?.page ?? emptyData;
-  }
+  // The initialData logic above replaces the Ref-based initialization
+  // to comply with React's rules about not accessing refs during render.
 
   return (
     <Puck
       key={isLoading ? 'loading' : pageId}
       config={config(configParams)}
-      data={initialPuckData.current || emptyData}
+      data={initialData}
       onChange={handleAutoSave}
       overrides={{
         // Header actions with preview and export functionality

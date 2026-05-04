@@ -30,7 +30,7 @@ export function AlignmentYField(options?: AlignmentYFieldOptions) {
       const fieldOptions = [
         { label: '', value: 'top', icon: AlignStartHorizontal },
         { label: '', value: 'center', icon: AlignCenterHorizontal },
-        { label: '', value: 'right', icon: AlignEndHorizontal },
+        { label: '', value: 'bottom', icon: AlignEndHorizontal },
       ];
 
       // Use current value or defaultValue as fallback

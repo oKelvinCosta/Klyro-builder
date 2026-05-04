@@ -1,5 +1,7 @@
 import Divider from '@/components/layout/divider';
+import { type DividerType } from '@/components/layout/divider-sections';
 import type { ComponentConfig } from '@puckeditor/core';
+
 import { SlotPuck } from '../utils/slot-puck';
 
 export type SectionBlockProps = {
@@ -13,7 +15,7 @@ export type SectionBlockProps = {
   dividerBottomType?: string;
   dividerBottomClassName?: string;
   contentClassName?: string;
-  slot: any;
+  slot: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
 export const SectionBlock = (): ComponentConfig<SectionBlockProps> => {
@@ -151,7 +153,7 @@ export const SectionBlock = (): ComponentConfig<SectionBlockProps> => {
           {/* Divider Top */}
           {dividerTopType && (
             <Divider
-              type={dividerTopType as any}
+              type={dividerTopType as DividerType}
               flipY={true}
               fitTo="top"
               className={`mt-[-2px] ${dividerTopClassName}`}
@@ -175,7 +177,7 @@ export const SectionBlock = (): ComponentConfig<SectionBlockProps> => {
           {/* Divider Bottom */}
           {dividerBottomType && (
             <Divider
-              type={dividerBottomType as any}
+              type={dividerBottomType as DividerType}
               fitTo="bottom"
               className={dividerBottomClassName}
             />

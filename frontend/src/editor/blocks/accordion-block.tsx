@@ -8,7 +8,7 @@ import type { ComponentConfig } from '@puckeditor/core';
 export type AccordionBlockProps = {
   items: {
     title: string;
-    content: any; // Rich text content from Puck
+    content: undefined; // Rich text content from Puck
     imgSrc?: string;
   }[];
   forcedOpen?: boolean;

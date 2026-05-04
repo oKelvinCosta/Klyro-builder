@@ -1,6 +1,7 @@
 import CarouselCard from '@/components/carousel-card';
 import { Button } from '@/components/ui/button';
 import type { ComponentConfig } from '@puckeditor/core';
+import type * as React from 'react';
 
 /**
  * Props for the CarouselBlock component
@@ -8,7 +9,7 @@ import type { ComponentConfig } from '@puckeditor/core';
 export type CarouselBlockProps = {
   items: {
     title: string;
-    content: any; // Using any for rich text content from Puck
+    content: React.ReactNode;
     imgSrc: string;
     buttonText?: string;
     buttonLink?: string;

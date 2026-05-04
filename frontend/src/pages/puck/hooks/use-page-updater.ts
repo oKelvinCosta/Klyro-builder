@@ -1,7 +1,7 @@
+import { api } from '@/lib/axios';
 import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { api } from '@/lib/axios';
 
 /**
  * Hook to handle page updates with auto-save functionality

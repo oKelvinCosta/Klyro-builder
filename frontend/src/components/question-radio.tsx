@@ -29,7 +29,7 @@ export default function QuestionRadio({
     },
   });
 
-  const selectedAnswer = form.watch('answer');
+  const selectedAnswer = form.watch('answer'); // eslint-disable-line react-hooks/incompatible-library
   const isCorrect = selectedAnswer === correctAnswer;
 
   function radioVisualFeedback(value: string) {

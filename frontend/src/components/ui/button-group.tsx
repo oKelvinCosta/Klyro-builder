@@ -80,4 +80,4 @@ function ButtonGroupSeparator({
   );
 }
 
-export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants };
+export { ButtonGroup, ButtonGroupSeparator, ButtonGroupText, buttonGroupVariants }; // eslint-disable-line react-refresh/only-export-components

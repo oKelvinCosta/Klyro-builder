@@ -34,10 +34,10 @@ export default function QuestionCheckbox({
     },
   });
 
-  const selectedAnswers = form.watch('answers');
+  const selectedAnswers = form.watch('answers'); // eslint-disable-line react-hooks/incompatible-library
 
   // Enhanced feedback state logic with incomplete message support
-  const feedbackState = React.useMemo(() => {
+  const feedbackState = (() => {
     if (selectedAnswers.length === 0) {
       return null;
     }
@@ -62,7 +62,7 @@ export default function QuestionCheckbox({
 
     // Return incomplete state when some correct answers are selected but not all
     return { status: 'incomplete', message: incompleteMessage };
-  }, [selectedAnswers, correctAnswers, successMessage, errorMessage, incompleteMessage]);
+  })();
 
   function checkboxVisualFeedback(value: string) {
     const isSelected = selectedAnswers.includes(value);

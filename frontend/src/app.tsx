@@ -8,7 +8,7 @@ import { Toaster } from 'sonner';
 
 export default function App() {
   if (import.meta.env.VITE_APP_WITHOUT_SCORM === 'true') {
-    console.log('O ambienteSCORM está desativado');
+    console.info('O ambiente SCORM está desativado');
   }
 
   return (

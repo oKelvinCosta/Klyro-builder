@@ -8,6 +8,7 @@
 
 import pipwerks, { type SCORMAPI } from 'pipwerks-scorm-api-wrapper';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+export { LESSON_STATUS } from '@/constants/scorm'; // Re-export for build compatibility
 
 /**
  * SCORM Field Constants
@@ -16,7 +17,8 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
  * with the Learning Management System (LMS). Each field represents a specific piece of
  * learner or course data that can be read from or written to the SCORM API.
  */
-const FIELDS = {
+ 
+export const FIELDS = {
   /** Current status of the lesson */
   lessonStatus: 'cmi.core.lesson_status' as const,
   /** Data to persist between sessions */
@@ -35,18 +37,7 @@ type Fields = (typeof FIELDS)[keyof typeof FIELDS];
  * These constants define the standardized SCORM lesson status states that can be used
  * to track the learner's progress through the course content.
  */
-export const LESSON_STATUS = {
-  /** The lesson has not been attempted */
-  notAttempted: 'not attempted' as const,
-  /** The lesson has been started but not completed */
-  incomplete: 'incomplete' as const,
-  /** The lesson has been completed */
-  completed: 'completed' as const,
-  /** The lesson has been passed */
-  passed: 'passed' as const,
-  /** The lesson has been failed */
-  failed: 'failed' as const,
-} as const;
+
 
 // type LessonStatus = typeof LESSON_STATUS[keyof typeof LESSON_STATUS];
 
@@ -81,7 +72,7 @@ const initializeScormWithTimeout = (timeoutMs: number = 5000): Promise<SCORMAPI>
 
       // If the SCORM wrapper is available in the window (API object found), resolve the promise
       // Note: isAvailable() exists in the runtime wrapper but may not be present in typings, so we cast to any
-      const scormAny = pipwerks.SCORM as any;
+      const scormAny = pipwerks.SCORM as any; // eslint-disable-line @typescript-eslint/no-explicit-any
       if (scormAny && typeof scormAny.isAvailable === 'function' && scormAny.isAvailable()) {
         clearTimeout(timeoutId);
         if (checkScormTimeoutId) {
@@ -132,7 +123,9 @@ export function ScormProvider({ children }: ScormProviderProps) {
   const isProductionDebugMode = import.meta.env.VITE_ENABLE_SCORM_DEBUG_PROD === 'true';
 
   // Activate the debug based on the environment variable
-  pipwerks.debug.isActive = isProductionDebugMode;
+  useEffect(() => {
+    pipwerks.debug.isActive = isProductionDebugMode;
+  }, [isProductionDebugMode]);
 
   useEffect(() => {
     /**
@@ -151,7 +144,7 @@ export function ScormProvider({ children }: ScormProviderProps) {
      */
     function developmentEnvironment() {
       if (isDevelopment) {
-        console.log(
+        console.info(
           '%c ------- ScormWrapper - DEVELOPMENT ENVIRONMENT ------- \n SCORM API not available in development environment. \n -------------------------------------------------------',
           'background: #00f; color: white'
         );
@@ -163,7 +156,7 @@ export function ScormProvider({ children }: ScormProviderProps) {
 
     function productionDebugEnvironment() {
       if (isProductionDebugMode) {
-        console.log(
+        console.info(
           '%c ------- ScormWrapper - PRODUCTION DEBUG MODE ------- \n SCORM API is initialized in debug mode. \n -------------------------------------------------------',
           'background: #6d28d9; color: white'
         );
@@ -235,7 +228,7 @@ export function ScormProvider({ children }: ScormProviderProps) {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [scorm, isDevelopment]);
+  }, [scorm, isDevelopment, isProductionDebugMode, isScormInitialized]);
 
   // Don’t forget the pipwerks wrapper has additional automation running under the hood;
   // in the example above, the scorm.set function first checks to ensure the connection is active,
@@ -290,7 +283,7 @@ export function ScormProvider({ children }: ScormProviderProps) {
 
 // Hook to use the ScormContext
 // The ScormContext is a context that provides functions to interact with the SCORM API.
-export const useScorm = (): ScormContextType => {
+export const useScorm = (): ScormContextType => { // eslint-disable-line react-refresh/only-export-components
   const context = useContext(ScormContext);
   if (context === undefined) {
     throw new Error('useScorm must be used within a ScormProvider');

@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { LESSON_STATUS, useScorm } from '@/contexts/scorm-context';
+import { LESSON_STATUS } from '@/constants/scorm';
+import { useScorm } from '@/contexts/scorm-context';
 
 import type { ButtonProps } from '@/components/ui/button';
 

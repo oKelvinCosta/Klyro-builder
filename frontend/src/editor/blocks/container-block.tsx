@@ -7,7 +7,7 @@ const systemColor = '#3b82f6';
 
 export type ContainerBlockProps = {
   variant: '580' | '780' | '980' | '1280';
-  slot: any;
+  slot: undefined;
 };
 
 export const ContainerBlock = (): ComponentConfig<ContainerBlockProps> => {

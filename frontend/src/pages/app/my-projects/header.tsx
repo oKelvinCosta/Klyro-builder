@@ -3,13 +3,12 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { useState } from 'react';
 
 export function Header() {
-  const [userId, setUserId] = useState('69c9a51d260548585aa1fad8');
+  // const [userId, setUserId] = useState('69c9a51d260548585aa1fad8');
 
   const handleCreateProject = () => {
-    console.log('Create project');
+    // console.log('Create project');
   };
   return (
     <header className="bg-card sticky top-0 z-50 border-b">

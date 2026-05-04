@@ -1,22 +1,20 @@
-import scopackager from "simple-scorm-packager";
-import path from "path";
-import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
+import path from 'path';
+import scopackager from 'simple-scorm-packager';
+import { fileURLToPath } from 'url';
 dotenv.config();
 
 // **🔴ATENÇÃO🔴**
 // Configurações dinâmicas baseadas no curso
 const courseConfig = {
-  
-  title: process.env.VITE_COURSE_TITLE || "Curso Padrão",
-  description: process.env.VITE_COURSE_DESCRIPTION || "Descrição padrão do curso.",
-  keywords: process.env.VITE_COURSE_KEYWORDS 
-  ? process.env.VITE_COURSE_KEYWORDS.split(',') 
-  : ["scorm", "curso"],
-  typicalDuration: process.env.VITE_COURSE_DURATION || "PT0H5M0S",
-  author: process.env.VITE_COURSE_AUTHOR || "Autor",
-  organization: process.env.VITE_COURSE_ORGANIZATION || "Organização"
-
+  title: process.env.VITE_COURSE_TITLE || 'Curso Padrão',
+  description: process.env.VITE_COURSE_DESCRIPTION || 'Descrição padrão do curso.',
+  keywords: process.env.VITE_COURSE_KEYWORDS
+    ? process.env.VITE_COURSE_KEYWORDS.split(',')
+    : ['scorm', 'curso'],
+  typicalDuration: process.env.VITE_COURSE_DURATION || 'PT0H5M0S',
+  author: process.env.VITE_COURSE_AUTHOR || 'Autor',
+  organization: process.env.VITE_COURSE_ORGANIZATION || 'Organização',
 };
 
 // Obtenha o caminho do arquivo atual
@@ -31,12 +29,12 @@ const { title, description, keywords, typicalDuration, author, organization } = 
 
 // Configuração do SCORM
 const config = {
-  version: "1.2",
+  version: '1.2',
   organization: organization,
   title: title,
-  language: "pt-BR",
+  language: 'pt-BR',
   masteryScore: 80,
-  startingPage: "index.html",
+  startingPage: 'index.html',
   source: path.join(__dirname, `dist/${folder}`), // Pasta para os arquivos SCORM
   package: {
     zip: false,
@@ -55,6 +53,6 @@ const config = {
 
 // Executa o pacote SCORM
 scopackager(config, function (msg) {
-  console.log(msg);
+  console.info(msg);
   process.exit(0);
 });

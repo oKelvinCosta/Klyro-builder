@@ -8,10 +8,10 @@ export type GridBlockProps = {
   columnFormat: '1/1' | '1/2-1/2' | '1/3-2/3' | '2/3-1/3' | '1/3-1/3-1/3' | '1/4-1/4-1/4-1/4';
   alignment: 'top' | 'center' | 'bottom';
   mobileBreakpoint: 'never' | 'sm' | 'md' | 'lg';
-  'col-1': any;
-  'col-2': any;
-  'col-3': any;
-  'col-4': any;
+  'col-1': any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  'col-2': any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  'col-3': any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  'col-4': any; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
 const systemColor = '#3b82f6';

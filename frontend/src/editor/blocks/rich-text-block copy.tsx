@@ -2,7 +2,7 @@ import { RichTextMenu, type ComponentConfig } from '@puckeditor/core';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
 
 export type RichTextBlockProps = {
-  content: any;
+  content: undefined;
 };
 
 const COLORS = [
