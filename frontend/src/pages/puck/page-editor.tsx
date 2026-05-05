@@ -34,7 +34,7 @@ const emptyData = {
  * Main Puck Editor Component
  * Handles page loading, editing, and auto-save functionality
  */
-export function Editor() {
+export function PageEditor() {
   // Navigation and editor mode hooks
   const navigate = useNavigate();
   const { setMode } = useEditorMode();
@@ -59,7 +59,7 @@ export function Editor() {
 
   // Handle preview
   const handlePreview = () => {
-    navigate('/preview');
+    navigate(`/preview/${pageId}`);
   };
 
   // Configuration for Puck editor
@@ -114,18 +114,18 @@ export function Editor() {
 
           return (
             <>
-              <Button 
-                variant="outline" 
-                title="Preview" 
-                size={'icon'} 
+              <Button
+                variant="outline"
+                title="Preview"
+                size={'icon'}
                 onClick={handlePreview}
                 disabled={isExporting}
               >
                 <Eye />
               </Button>
 
-              <Button 
-                className="flex items-center pt-[7px]" 
+              <Button
+                className="flex items-center pt-[7px]"
                 onClick={handlePublish}
                 disabled={isExporting}
               >
@@ -136,7 +136,7 @@ export function Editor() {
                   </>
                 ) : (
                   <>
-                    <Rocket className="mr-2" /> 
+                    <Rocket className="mr-2" />
                     Exportar
                   </>
                 )}

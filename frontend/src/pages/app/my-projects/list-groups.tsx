@@ -11,7 +11,7 @@ export function ListGroups() {
   const navigate = useNavigate();
   const handleOpenGroup = (groupId: string) => {
     console.info('Open group', groupId);
-    navigate(`/app/group/${groupId}`);
+    navigate(`/group/${groupId}`);
   };
 
   const [userId] = useState('69c9a51d260548585aa1fad8');
@@ -48,44 +48,54 @@ export function ListGroups() {
           </Card>
         </div>
       ) : (
-        groupsWithPages?.map((group: any, index: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
-          <div
-            key={index}
-            className="cursor-pointer md:col-span-4 2xl:col-span-3"
-            onClick={() => handleOpenGroup(group._id)}
-          >
-            <Card className="overflow-hidden p-0">
-              <CardContent className="grid grid-cols-4 gap-3 p-4">
-                {group.pages?.slice(0, 3).map((page: any, pageIndex: number) => ( // eslint-disable-line @typescript-eslint/no-explicit-any
-                  <Img
-                    key={pageIndex}
-                    src={page.cover || './imgs/core/placeholder.webp'}
-                    className="col-span-2 aspect-video rounded-2xl"
-                    alt=""
-                  />
-                ))}
-                {
-                  // Fill empty slots to maintain grid structure
-                  Array.from({
-                    length: group.pages?.length < 4 ? 4 - group.pages?.length : 0,
-                  }).map((_, emptyIndex) => (
-                    <Card
-                      key={`empty-${emptyIndex}`}
-                      className="col-span-2 aspect-video rounded-2xl"
-                    />
-                  ))
-                }
-              </CardContent>
+        groupsWithPages?.map(
+          (
+            group: any,
+            index: number // eslint-disable-line @typescript-eslint/no-explicit-any
+          ) => (
+            <div
+              key={index}
+              className="cursor-pointer md:col-span-4 2xl:col-span-3"
+              onClick={() => handleOpenGroup(group._id)}
+            >
+              <Card className="overflow-hidden p-0">
+                <CardContent className="grid grid-cols-4 gap-3 p-4">
+                  {group.pages?.slice(0, 3).map(
+                    (
+                      page: any,
+                      pageIndex: number // eslint-disable-line @typescript-eslint/no-explicit-any
+                    ) => (
+                      <Img
+                        key={pageIndex}
+                        src={page.cover || './imgs/core/placeholder.webp'}
+                        className="col-span-2 aspect-video rounded-2xl"
+                        alt=""
+                      />
+                    )
+                  )}
+                  {
+                    // Fill empty slots to maintain grid structure
+                    Array.from({
+                      length: group.pages?.length < 4 ? 4 - group.pages?.length : 0,
+                    }).map((_, emptyIndex) => (
+                      <Card
+                        key={`empty-${emptyIndex}`}
+                        className="col-span-2 aspect-video rounded-2xl"
+                      />
+                    ))
+                  }
+                </CardContent>
 
-              <CardFooter className="p-4 pt-0">
-                <div className="flex flex-col gap-0">
-                  <span className="!text-sm font-medium">{group.name || 'Sem nome'}</span>
-                  <span className="!text-xs">{group.pages?.length || 0} projetos</span>
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
-        ))
+                <CardFooter className="p-4 pt-0">
+                  <div className="flex flex-col gap-0">
+                    <span className="!text-sm font-medium">{group.name || 'Sem nome'}</span>
+                    <span className="!text-xs">{group.pages?.length || 0} projetos</span>
+                  </div>
+                </CardFooter>
+              </Card>
+            </div>
+          )
+        )
       )}
     </>
   );

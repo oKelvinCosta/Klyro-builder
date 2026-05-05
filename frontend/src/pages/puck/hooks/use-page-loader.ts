@@ -9,7 +9,7 @@ export function usePageLoader(pageId: string | undefined) {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['Page', pageId],
     queryFn: async () => {
-      // console.trace('🔴 PAGE FETCH TRIGGERED'); // Debug trace
+      console.trace('🔴 PAGE FETCH TRIGGERED'); // Debug trace
       const response = await api.get(`/pages/${pageId}`);
       return response.data;
     },

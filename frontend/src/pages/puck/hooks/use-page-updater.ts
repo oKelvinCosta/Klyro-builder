@@ -1,18 +1,22 @@
 import { api } from '@/lib/axios';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-/**
- * Hook to handle page updates with auto-save functionality
- * Provides save mutation with success/error feedback
- */
 export function usePageUpdater() {
   const { pageId } = useParams();
+  const queryClient = useQueryClient();
 
   const updatePage = useMutation({
     mutationFn: (data: { puckData: object }) => api.put(`/pages/${pageId}`, data),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      // Atualiza o cache com o dado que acabou de ser salvo
+      queryClient.setQueryData(['Page', pageId], (old: any) => ({
+        ...old,
+        ...variables,
+      }));
+
+      console.log('Page saved successfully!');
       toast.success('Page saved successfully!');
     },
     onError: (error) => {

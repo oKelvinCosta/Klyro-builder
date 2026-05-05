@@ -1,14 +1,13 @@
+import { Spinner } from '@/components/ui/spinner';
 import { config } from '@/editor/puck.config';
 import { Render, type Data } from '@puckeditor/core';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Spinner } from '@/components/ui/spinner';
 
 /**
- * Page component that renders static Puck data.
- * The React Compiler automatically handles memoization for this component and its values.
+ * Page component that renders static Puck data from a SCORM-generated JSON file.
+ * Uses native fetch since the file path is only known at runtime (per-user temp folder).
  */
-export function Page() {
+export function PageProd() {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,19 +16,17 @@ export function Page() {
   const puckConfig = config({ projectType: 'choices' });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('./puck-data.json');
-        setData(response.data);
-      } catch (err) {
+    fetch('./puck-data.json')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((json) => setData(json as Data))
+      .catch((err) => {
         console.error('Erro ao carregar puck-data.json:', err);
         setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -43,9 +40,11 @@ export function Page() {
 
   if (error || !data) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center text-red-500 bg-white">
+      <div className="flex h-screen flex-col items-center justify-center bg-white text-red-500">
         <h2 className="text-xl font-bold">Erro ao carregar o conteúdo</h2>
-        <p className="mt-2 text-gray-600">O arquivo puck-data.json não foi encontrado ou está corrompido.</p>
+        <p className="mt-2 text-gray-600">
+          O arquivo puck-data.json não foi encontrado ou está corrompido.
+        </p>
       </div>
     );
   }

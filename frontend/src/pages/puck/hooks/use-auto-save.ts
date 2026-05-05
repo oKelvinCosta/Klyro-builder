@@ -13,7 +13,7 @@ export function useAutoSave() {
   const pendingData = useRef<object | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Auto-save handler with 1.5s debounce
+  // Auto-save handler with .5s debounce
   const handleAutoSave = useCallback(
     (data: object) => {
       // Cancel previous save attempt
@@ -24,7 +24,7 @@ export function useAutoSave() {
         pendingData.current = data;
         // console.log('Auto-saving:', pendingData.current);
         updatePage.mutate({ puckData: { page: pendingData.current } });
-      }, 1500);
+      }, 500);
     },
     [updatePage]
   );

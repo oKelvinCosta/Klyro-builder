@@ -18,7 +18,7 @@ export function ProjectsByGroup() {
 
   // Get pages of user
   const { data: pagesData, isLoading: isLoadingPages } = useQuery({
-    queryKey: ['userPages', groupId],
+    queryKey: ['groupPages', groupId],
     queryFn: () => api.get(`/pages/group/${groupId}`).then((res) => res.data),
     staleTime: 2 * 60 * 1000, // 10 minutos cache
     gcTime: 4 * 60 * 1000, // 15 minutos cache
@@ -35,13 +35,13 @@ export function ProjectsByGroup() {
               <BreadcrumbList className="flex">
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/app">App</Link>
+                    <Link to="/">App</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
 
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Free</BreadcrumbPage>
+                  <BreadcrumbPage>Grupo</BreadcrumbPage>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </BreadcrumbList>
