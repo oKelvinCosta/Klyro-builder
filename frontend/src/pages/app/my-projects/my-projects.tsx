@@ -1,7 +1,9 @@
 import { api } from '@/lib/axios';
-import { Header, ListGroups } from '@/pages/app/my-projects';
+import { ListGroups } from '@/pages/app/my-projects';
+
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { Header } from '../components/header';
 import { ListPages } from '../components/list-pages';
 
 export function MyProjects() {

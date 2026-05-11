@@ -1,16 +1,17 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { NavUser } from '@/editor/components/nav-user';
-import { ChartPieIcon, ChartSplineIcon, HashIcon, UsersIcon } from 'lucide-react';
+import { BellIcon, TrashIcon, UsersIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function AppSidebar() {
   const mockUser = {
@@ -21,58 +22,70 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
-        <SidebarGroup>
+        {/* Pages */}
+        <SidebarGroup className="dark:text-space-300">
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* User */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavUser user={mockUser} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarSeparator />
+              <SidebarGroup>
+                {/* Menu */}
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="#">
+                      <BellIcon />
+                      Notificações
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="#">
+                      <UsersIcon />
+                      <span>Compartilhados comigo</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <a href="#">
+                      <TrashIcon />
+                      <span>Lixeira</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarGroup>
             </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Pages</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <ChartSplineIcon />
-                    <span>Content Performance</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <UsersIcon />
-                    <span>Audience Insight</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <ChartPieIcon />
-                    <span>Engagement Metrics</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#">
-                    <HashIcon />
-                    <span>Hashtag Performance</span>
-                  </a>
-                </SidebarMenuButton>
-                <SidebarMenuBadge className="bg-primary/10 rounded-full">3</SidebarMenuBadge>
-              </SidebarMenuItem>
-            </SidebarMenu>
+
+            <SidebarSeparator />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        {/* Logo */}
+        <SidebarGroup className="flex justify-center md:h-[70px]">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-2.5!">
+                  <Link to={'/'}>
+                    <span className="text-space-500 dark:text-primary text-title m-0 text-2xl">
+                      Klyro
+                    </span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarFooter>
     </Sidebar>
   );
 }

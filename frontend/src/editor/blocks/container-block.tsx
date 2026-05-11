@@ -3,8 +3,6 @@ import Container from '@/components/layout/container';
 import type { ComponentConfig } from '@puckeditor/core';
 import { SlotPuck } from '../utils/slot-puck';
 
-const systemColor = '#3b82f6';
-
 export type ContainerBlockProps = {
   variant: '580' | '780' | '980' | '1280';
   slot: React.ReactNode;
@@ -27,9 +25,7 @@ export const ContainerBlock = (): ComponentConfig<ContainerBlockProps> => {
 
           return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <span style={{ color: '#5A5A5A' }} className="text-sm font-semibold">
-                Largura do Container
-              </span>
+              <span className="text-label-puck text-sm font-semibold">Largura do Container</span>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                 {options.map((opt) => (
                   <button
@@ -38,9 +34,8 @@ export const ContainerBlock = (): ComponentConfig<ContainerBlockProps> => {
                     title={opt.label}
                     style={{
                       padding: '8px',
-                      border: `2px solid ${value === opt.value ? systemColor : '#eee'}`,
+                      border: `2px solid `,
                       borderRadius: '4px',
-                      background: '#fff',
                       cursor: 'pointer',
                       height: '40px',
                       display: 'flex',
@@ -48,24 +43,26 @@ export const ContainerBlock = (): ComponentConfig<ContainerBlockProps> => {
                       justifyContent: 'center',
                       position: 'relative',
                     }}
+                    className={``}
                   >
                     <div
                       style={{
                         width: `${(opt.width / 1280) * 100}%`,
                         height: '24px',
-                        background: value === opt.value ? systemColor : '#ddd',
                         borderRadius: '2px',
                         maxWidth: '90%',
                       }}
+                      className={`${value === opt.value ? 'bg-primary' : 'bg-muted'}`}
                     />
                     <span
                       style={{
                         position: 'absolute',
                         bottom: '2px',
                         fontSize: '12px',
-                        color: value === opt.value ? '#fff' : '#666',
+
                         fontWeight: value === opt.value ? 600 : 400,
                       }}
+                      className={`${value === opt.value ? 'text-primary-foreground' : ''}`}
                     >
                       {opt.label}
                     </span>

@@ -1,15 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { AlignCenterVertical, AlignEndVertical, AlignStartVertical } from 'lucide-react';
+import { borderColor, checkedColor, inputForegroundColor } from '../utils/styles';
 
 // Options interface for the AlignmentXField component
 export interface AlignmentXFieldOptions {
   label?: string; // Custom label for the field
   defaultValue?: 'left' | 'center' | 'right'; // Default alignment value
 }
-
-// System color for active state (blue)
-const systemColor = '#3b82f6';
 
 // Custom field component for horizontal alignment selection
 export function AlignmentXField(options?: AlignmentXFieldOptions) {
@@ -41,9 +39,7 @@ export function AlignmentXField(options?: AlignmentXFieldOptions) {
         <>
           <div className="flex flex-col gap-2">
             {/* Field label */}
-            <span style={{ color: '#5A5A5A' }} className="text-sm font-semibold">
-              {label}
-            </span>
+            <span className="text-sm font-semibold">{label}</span>
             <ButtonGroup fullWidth className="w-full">
               {fieldOptions.map((opt) => {
                 const Icon = opt.icon;
@@ -57,19 +53,19 @@ export function AlignmentXField(options?: AlignmentXFieldOptions) {
                       variant="outline"
                       title={opt.label}
                       style={{
-                        border: `2px solid ${isActive ? systemColor : '#eee'}`,
+                        border: `1px solid ${isActive ? checkedColor : borderColor}`,
                       }}
                       className="flex w-[33.33%] items-center justify-center"
                     >
                       {/* Icon with color based on active state */}
-                      <Icon size={16} color={isActive ? systemColor : '#666'} />
+                      <Icon size={16} color={isActive ? checkedColor : inputForegroundColor} />
 
                       {/* Optional text label (currently empty) */}
                       {opt.label && (
                         <span
                           style={{
                             fontSize: '10px',
-                            color: isActive ? systemColor : '#666',
+                            color: isActive ? checkedColor : inputForegroundColor,
                             fontWeight: isActive ? 600 : 400,
                           }}
                         >

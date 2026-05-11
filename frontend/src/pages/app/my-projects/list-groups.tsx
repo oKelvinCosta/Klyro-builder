@@ -88,8 +88,10 @@ export function ListGroups() {
 
                 <CardFooter className="p-4 pt-0">
                   <div className="flex flex-col gap-0">
-                    <span className="!text-sm font-medium">{group.name || 'Sem nome'}</span>
-                    <span className="!text-xs">{group.pages?.length || 0} projetos</span>
+                    <span className="!text-xs font-medium">{group.name || 'Sem nome'}</span>
+                    <span className="text-muted-foreground !text-xs">
+                      {group.pages?.length || 0} projetos
+                    </span>
                   </div>
                 </CardFooter>
               </Card>

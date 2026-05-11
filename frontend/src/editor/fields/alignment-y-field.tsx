@@ -1,15 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { AlignCenterHorizontal, AlignEndHorizontal, AlignStartHorizontal } from 'lucide-react';
+import { borderColor, checkedColor, inputForegroundColor } from '../utils/styles';
 
 // Options interface for the AlignmentYField component
 export interface AlignmentYFieldOptions {
   label?: string; // Custom label for the field
   defaultValue?: 'top' | 'center' | 'bottom'; // Default alignment value
 }
-
-// System color for active state (blue)
-const systemColor = '#3b82f6';
 
 // Custom field component for horizontal alignment selection
 export function AlignmentYField(options?: AlignmentYFieldOptions) {
@@ -41,9 +39,7 @@ export function AlignmentYField(options?: AlignmentYFieldOptions) {
         <>
           <div className="flex flex-col gap-2">
             {/* Field label */}
-            <span style={{ color: '#5A5A5A' }} className="text-sm font-semibold">
-              {label}
-            </span>
+            <span className="text-sm font-semibold">{label}</span>
             <ButtonGroup fullWidth className="w-full">
               {fieldOptions.map((opt) => {
                 const Icon = opt.icon;
@@ -54,22 +50,22 @@ export function AlignmentYField(options?: AlignmentYFieldOptions) {
                     <Button
                       key={opt.value}
                       onClick={() => onChange(opt.value as 'top' | 'center' | 'bottom')}
-                      variant="outline"
+                      variant="space"
                       title={opt.label}
                       style={{
-                        border: `2px solid ${isActive ? systemColor : '#eee'}`,
+                        border: `1px solid ${isActive ? checkedColor : borderColor}`,
                       }}
                       className="flex w-[33.33%] items-center justify-center"
                     >
                       {/* Icon with color based on active state */}
-                      <Icon size={16} color={isActive ? systemColor : '#666'} />
+                      <Icon size={16} color={isActive ? checkedColor : inputForegroundColor} />
 
                       {/* Optional text label (currently empty) */}
                       {opt.label && (
                         <span
                           style={{
                             fontSize: '10px',
-                            color: isActive ? systemColor : '#666',
+                            color: isActive ? checkedColor : inputForegroundColor,
                             fontWeight: isActive ? 600 : 400,
                           }}
                         >

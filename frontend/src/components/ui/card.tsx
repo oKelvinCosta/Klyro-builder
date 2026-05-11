@@ -24,7 +24,7 @@ type Variant = 'default' | 'gray';
 
 /* ADDED: shared variant classes */
 const variantClasses: Record<Variant, string> = {
-  default: 'border-gray-200 bg-card text-card-foreground',
+  default: 'border dark:border-space-600 bg-card text-card-foreground',
   gray: 'border-gray-200 bg-gray-100 text-gray-800',
 };
 

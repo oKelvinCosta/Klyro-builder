@@ -9,34 +9,37 @@
   :root {
     color-scheme: light;
 
-    --background: 0 0% 100%;
-    --foreground: 218 19% 26%; /* gray-700 */
+    --background: 255, 25%, 96.86%;
+    --foreground: var(--space-600);
 
     --card: 0 0% 100%;
-    --card-foreground: 218 19% 26%; /* gray-700 */
+    --card-foreground: var(--space-600);
 
     --popover: 0 0% 100%;
-    --popover-foreground: 218 19% 26%; /* gray-700 */
+    --popover-foreground: var(--space-600);
 
-    --primary: 243 75% 59%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 67.85, 98.34%, 40.25%;
+    --primary-foreground: var(--space-600);
 
-    --secondary: 206 80% 69%;
-    --secondary-foreground: 218 19% 26%; /* gray-700 */
+    --secondary: 207 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --tertiary: 255 100% 57%;
+    --tertiary-foreground: 0 0% 100%;
 
     --muted: 60 4.8% 95.9%;
-    --muted-foreground: 218 10% 65%; /* gray-400 */
+    --muted-foreground: var(--space-400);
 
     --accent: 218 26% 92%;
-    --accent-foreground: 218 19% 26%; /* gray-700 */
+    --accent-foreground: 218 19% 26%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 141.9 69.2% 58%;
-    --success-foreground: 143.8 61.2% 20.2%;
+    --success: 160.1 84.1% 39.4%;
+    --success-foreground: 0 0% 100%;
 
-    --border: 20 5.9% 90%;
+    --border: 253 25% 93%;
     --input: 20 5.9% 90%;
     --ring: 215 20.2% 65.1%; /* typical ring tone */
     --radius: 0.5rem;
@@ -49,51 +52,114 @@
     --chart-5: 27 87% 67%;
 
     /* Your custom brand tokens */
-    --azure-200: 206 80% 86%;
-    --azure-400: 206 80% 69%;
-    --coral-200: 8 76% 88%;
-    --coral-400: 8 100% 65%;
-    --lime-200: 72 100% 86%;
-    --lime-400: 72 100% 68%;
-    --sidebar-background: 0 0% 98%;
+    /* Primary — Neon Green */
+    --neon-0: 68 0% 100%;
+    --neon-50: 68 90% 97%;
+    --neon-100: 75 94% 93%;
+    --neon-200: 74 96% 87%;
+    --neon-300: 72 98% 72%;
+    --neon-400: 68 100% 59%;
+    --neon-500: 67.85, 99.34%, 47.25%;
+    --neon-600: 69 90% 42%;
+    --neon-700: 67 78% 30%;
+    --neon-800: 64 68% 20%;
+    --neon-900: 61 58% 12%;
+    --neon-950: 58 50% 8%;
+    --neon-1000: 55 0% 0%;
+
+    /* Secondary — Electric Blue */
+    --azure-0: 207 0% 100%;
+    --azure-50: 207 100% 97%;
+    --azure-100: 207 100% 93%;
+    --azure-200: 207 100% 85%;
+    --azure-300: 207 100% 75%;
+    --azure-400: 207 100% 65%;
+    --azure-500: 207 100% 50%;
+    --azure-600: 207 100% 42%;
+    --azure-700: 207 100% 32%;
+    --azure-800: 207 100% 22%;
+    --azure-900: 207 100% 14%;
+    --azure-950: 207 100% 9%;
+    --azure-1000: 207 0% 0%;
+
+    /* Tertiary — Vivid Purple */
+    --purple-0: 255 0% 100%;
+    --purple-50: 255 100% 98%;
+    --purple-100: 255 100% 94%;
+    --purple-200: 255 100% 87%;
+    --purple-300: 255 100% 78%;
+    --purple-400: 255 100% 68%;
+    --purple-500: 255 100% 57%;
+    --purple-600: 255 98% 44%;
+    --purple-700: 255 95% 34%;
+    --purple-800: 255 90% 24%;
+    --purple-900: 255 85% 15%;
+    --purple-950: 255 80% 9%;
+    --purple-1000: 255 0% 0%;
+
+    /* Gray — Deep Space */
+    --space-0: 253 0% 100%;
+    --space-50: 253 25% 97%;
+    --space-100: 253 25% 93%;
+    --space-200: 253 25% 86%;
+    --space-300: 253 28% 75%;
+    --space-400: 253 28% 63%;
+    --space-500: 253 24% 31%;
+    --space-600: 253 25% 25%;
+    --space-700: 253 25% 22%;
+    --space-800: 253 25% 15%;
+    --space-900: 253 22% 10%;
+    --space-950: 253 20% 6%;
+    --space-1000: 253 0% 0%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 207 100% 50%;
+
+    --puck-checked: hsl(var(--secondary)); /* highlight */
+    --puck-input: hsl(var(--input)); /* input background */
+    --puck-input-foreground: hsl(var(--space-600)); /* input text color */
   }
 
   .dark {
     color-scheme: dark;
 
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
+    --background: var(--space-600);
+    --foreground: 253.33 25.71% 93.14%;
 
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
+    --card: 252.63 23.75% 31.37%; /* space-500 */
+    --card-foreground: 0 0% 100%;
 
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
+    --popover: var(--space-800); /* usando neon-300 */
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 60 9.1% 97.8%;
-    --primary-foreground: 24 9.8% 10%;
+    --primary: 67.83 100% 59.41%;
+    --primary-foreground: var(--space-600);
 
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
+    --secondary: 207 100% 50%;
+    --secondary-foreground: 0 0% 100%;
+
+    --tertiary: 255 100% 57%;
+    --tertiary-foreground: 0 0% 100%;
 
     --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --muted-foreground: var(--space-400);
 
     --accent: 12 6.5% 15.1%;
     --accent-foreground: 60 9.1% 97.8%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
+    --success: 160.1 84.1% 39.4%;
+    --success-foreground: 0 0% 100%;
+
+    --border: var(--space-700);
+    --input: 12 6.5% 16.1%;
     --ring: 24 5.7% 82.9%;
 
     /* Charts (optional dark variants) */
@@ -104,20 +170,15 @@
     --chart-5: 340 75% 55%;
 
     /* Keep your custom brand tokens mirrored if needed */
-    --azure-200: 206 80% 86%;
-    --azure-400: 206 80% 69%;
-    --coral-200: 8 76% 88%;
-    --coral-400: 8 100% 65%;
-    --lime-200: 72 100% 86%;
-    --lime-400: 72 100% 68%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
+
+    --sidebar-background: var(--space-500);
+    --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent: 253.13, 25.4%, 24.71%; /* space-600 */
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 253.13, 25.4%, 24.71%; /* space-600 */
+    --sidebar-ring: 207 100% 50%;
   }
 }
 
@@ -191,9 +252,16 @@
 
 /* TYPOGRAPHY ------------------------------------------------------ */
 :root {
-  --title-font-family: 'gamay-editorial', 'Roboto', 'Helvetica Neue', sans-serif;
-  --title-font-weight: 600;
-  --text-font-family: 'gamay-editorial', 'Roboto', 'Helvetica Neue', sans-serif;
+  --title-font-family: 'Space Grotesk', 'Roboto', 'Helvetica Neue', sans-serif;
+  --title-font-weight: 700;
+  --text-font-family: 'Lexend', 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+.text-font {
+  font-family: var(--text-font-family);
+}
+.title-font {
+  font-family: var(--title-font-family);
 }
 
 .display {

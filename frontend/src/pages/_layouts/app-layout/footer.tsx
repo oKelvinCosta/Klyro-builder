@@ -13,7 +13,7 @@ export function Footer() {
           >
             Kelvin Costa
           </a>
-          , Made with ❤️ for better web design
+          , feito com ❤️ para criadores
         </p>
       </div>
     </footer>

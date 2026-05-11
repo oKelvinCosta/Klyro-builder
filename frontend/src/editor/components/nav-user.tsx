@@ -1,8 +1,9 @@
 import {
-  BellIcon,
-  CreditCardIcon,
   LogOutIcon,
+  MoonIcon,
   MoreVerticalIcon,
+  SettingsIcon,
+  SunIcon,
   UserCircleIcon,
 } from 'lucide-react';
 
@@ -13,7 +14,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -22,6 +29,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useTheme } from 'next-themes';
 
 export function NavUser({
   user,
@@ -34,10 +42,17 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
 
+  const { theme, setTheme } = useTheme();
+
+  function handleAppearanceChange() {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
+          {/* Trigger */}
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
@@ -54,12 +69,15 @@ export function NavUser({
               <MoreVerticalIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
+
+          {/* Content */}
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
             side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
+            {/* User Info */}
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
@@ -73,22 +91,44 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+
+            {/* Menu Items */}
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircleIcon />
-                Account
+                Conta
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCardIcon />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon />
-                Notifications
-              </DropdownMenuItem>
+
+              {/* Aparência */}
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <SettingsIcon />
+                  Aparência
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup
+                      value={theme}
+                      onValueChange={() => {
+                        handleAppearanceChange();
+                      }}
+                    >
+                      <DropdownMenuRadioItem value="light">
+                        <SunIcon className="mr-2 h-4 w-4" />
+                        Claro
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="dark">
+                        <MoonIcon className="mr-2 h-4 w-4" />
+                        Escuro
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
             </DropdownMenuGroup>
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

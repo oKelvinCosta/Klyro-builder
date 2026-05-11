@@ -1,0 +1,60 @@
+:root {
+  /* Puck exclusive colors that override global theme */
+
+  /* Backgrounds - Maximum priority over global */
+  --puck-color-white: hsl(var(--space-0));
+
+  --puck-color-grey-11: hsl(var(--space-100)); /* page background */
+  --puck-color-grey-12: hsl(var(--background)); /* sidebar */
+  --puck-color-grey-09: hsl(var(--border)); /* border */
+
+  /* Sidebar - Puck specific colors */
+
+  --puck-color-azure-12: hsl(var(--space-100)); /* left sidebar button background */
+  --puck-color-azure-04: hsl(var(--space-600)); /* accent primary color */
+  --puck-color-azure-11: hsl(var(--space-100)); /* active editor button */
+
+  /* Borders and elements */
+  --puck-color-grey-07: hsl(var(--space-300));
+  --puck-color-grey-08: hsl(var(--space-100)); /* borders */
+  --puck-color-grey-09: hsl(var(--border)); /* secondary texts */
+  --puck-color-grey-10: hsl(var(--space-200)); /* outline button background */
+
+  /* Backgrounds */
+  --puck-background: #0a0a0f;
+  --puck-surface: #1a1a2e;
+
+  /* Fonts and texts */
+  --puck-font-family: var(--text-font-family);
+  --puck-font-size-base: 16px;
+  --puck-font-size-lg: 24px;
+  --puck-color-black: hsl(var(--foreground)); /* title font color */
+  --puck-color-grey-03: hsl(var(--space-400)); /* backgrounds */
+  --puck-color-grey-04: hsl(var(--muted-foreground)); /* primary texts */
+  --puck-color-grey-05: hsl(var(--muted-foreground)); /* backgrounds */
+
+  /* Custom colors for puck custom components editor */
+  --puck-checked: hsl(var(--space-500)); /* highlight - mapeado para bg-checked */
+  --puck-border: hsl(var(--border)); /* border */
+  --puck-input: hsl(var(--space-100)); /* input background - mapeado para bg-input */
+  --puck-input-foreground: hsl(var(--muted-foreground)); /* input text color */
+}
+
+.dark {
+  color-scheme: dark;
+
+  --puck-color-white: hsl(var(--background));
+  --puck-color-azure-04: hsl(var(--primary)); /* accent primary color */
+  --puck-color-grey-11: hsl(var(--space-600)); /* page background */
+  --puck-color-white: hsl(var(--space-500)); /* background */
+  --puck-color-grey-12: hsl(var(--space-500)); /* sidebar */
+  --puck-color-azure-11: hsl(var(--space-00)); /* active editor button */
+  --puck-color-azure-12: hsl(var(--space-700)); /* left sidebar button background */
+  --puck-color-grey-10: hsl(var(--space-600)); /* outline button background */
+
+  /* Custom colors for puck custom components editor */
+  --puck-checked: hsl(var(--primary)); /* highlight - mapeado para bg-checked */
+  --puck-border: hsl(var(--border)); /* border */
+  --puck-input: hsl(var(--space-600)); /* input background - mapeado para bg-input */
+  --puck-input-foreground: hsl(var(--space-300)); /* input text color */
+}

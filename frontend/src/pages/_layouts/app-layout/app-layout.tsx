@@ -8,7 +8,7 @@ const AppLayout = () => {
     <div className="flex min-h-dvh w-full">
       <SidebarProvider>
         <AppSidebar />
-        <main className="flex flex-1 flex-col">
+        <main className="bg-background flex flex-1 flex-col">
           {/* Dynamic routes content */}
           <Outlet />
           <Footer />

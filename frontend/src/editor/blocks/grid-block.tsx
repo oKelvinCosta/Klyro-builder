@@ -3,6 +3,7 @@ import * as Fields from '@/editor/fields';
 import type { ComponentConfig } from '@puckeditor/core';
 import { Monitor, Smartphone, Tablet, XCircle } from 'lucide-react';
 import { SlotPuck } from '../utils/slot-puck';
+import { borderColor, checkedColor, inputColor, inputForegroundColor } from '../utils/styles';
 
 export type GridBlockProps = {
   columnFormat: '1/1' | '1/2-1/2' | '1/3-2/3' | '2/3-1/3' | '1/3-1/3-1/3' | '1/4-1/4-1/4-1/4';
@@ -14,7 +15,6 @@ export type GridBlockProps = {
   'col-4': any; // eslint-disable-line @typescript-eslint/no-explicit-any
 };
 
-const systemColor = '#3b82f6';
 const defaultAlignmentY = 'center' satisfies GridBlockProps['alignment'];
 
 export const GridBlock = (): ComponentConfig<GridBlockProps> => {
@@ -37,9 +37,7 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
 
           return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <span style={{ color: '#5A5A5A' }} className="text-sm font-semibold">
-                Layout
-              </span>
+              <span className="text-sm font-semibold">Layout</span>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                 {options.map((opt) => (
                   <button
@@ -48,9 +46,8 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
                     title={opt.label}
                     style={{
                       padding: '4px',
-                      border: `2px solid ${value === opt.value ? systemColor : '#eee'}`,
+                      border: `1px solid ${value === opt.value ? checkedColor : borderColor}`,
                       borderRadius: '4px',
-                      background: '#fff',
                       cursor: 'pointer',
                       height: '32px',
                       display: 'flex',
@@ -62,7 +59,8 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
                         key={i}
                         style={{
                           flex: w,
-                          background: value === opt.value ? systemColor : '#ddd',
+                          backgroundColor:
+                            value === opt.value ? checkedColor : inputForegroundColor,
                           borderRadius: '2px',
                         }}
                       />
@@ -91,9 +89,7 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
 
           return (
             <div className="flex flex-col gap-2">
-              <span style={{ color: '#5A5A5A' }} className="text-sm font-semibold">
-                Quebra de Coluna
-              </span>
+              <span className="text-sm font-semibold">Quebra de Coluna</span>
               <div className="grid grid-cols-4 gap-4">
                 {options.map((opt) => {
                   const Icon = opt.icon;
@@ -105,9 +101,9 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
                       title={opt.label}
                       style={{
                         padding: '12px 4px 6px 4px',
-                        border: `2px solid ${isActive ? systemColor : '#eee'}`,
+                        border: `1px solid ${isActive ? checkedColor : borderColor}`,
                         borderRadius: '6px',
-                        background: '#fff',
+                        background: inputColor,
                         cursor: 'pointer',
                         display: 'flex',
                         flexDirection: 'column',
@@ -116,12 +112,12 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
                         transition: 'all 0.2s',
                       }}
                     >
-                      <Icon size={16} color={isActive ? systemColor : '#666'} />
+                      <Icon size={16} color={isActive ? checkedColor : inputForegroundColor} />
                       <span
                         style={{
                           fontSize: '10px',
-                          color: isActive ? systemColor : '#666',
                           fontWeight: isActive ? 600 : 400,
+                          color: isActive ? checkedColor : inputForegroundColor,
                         }}
                       >
                         {opt.label}

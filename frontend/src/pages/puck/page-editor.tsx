@@ -17,6 +17,8 @@ import { useAutoSave } from './hooks/use-auto-save';
 import { useJsonExport } from './hooks/use-json-export';
 import { usePageLoader } from './hooks/use-page-loader';
 
+import '@/styles/puck-theme.css';
+
 // Static data for testing (can be removed if unused)
 // const initialData = database;
 // const database2Data = database2;
@@ -115,7 +117,7 @@ export function PageEditor() {
           return (
             <>
               <Button
-                variant="outline"
+                variant="muted"
                 title="Preview"
                 size={'icon'}
                 onClick={handlePreview}
@@ -125,9 +127,10 @@ export function PageEditor() {
               </Button>
 
               <Button
-                className="flex items-center pt-[7px]"
+                className="flex items-center"
                 onClick={handlePublish}
                 disabled={isExporting}
+                variant={'neon'}
               >
                 {isExporting ? (
                   <>
