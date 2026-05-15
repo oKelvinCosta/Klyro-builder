@@ -6,13 +6,14 @@ import { config } from '@/editor/puck.config';
 import { useEditorMode } from '@/editor/stores/editor-mode-store';
 import { Puck, createUsePuck } from '@puckeditor/core';
 import '@puckeditor/core/puck.css';
-import { CloudCheckIcon, Cog, Eye, Rocket } from 'lucide-react';
+import { Cog, Eye, Rocket, Server } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // import database from '../../../../backend/database/database.json';
 // import database2 from '../../../../backend/database/database2.json';
 import { CanvasWrapper } from '@/editor/components/canvas-wrapper';
 import { ConfigPanel } from '@/editor/components/config-panel';
+import { SnapshotPanel } from '@/editor/components/snapshot-panel';
 import { CanvasThemePanel } from '@/editor/components/theme-panel';
 import '@/styles/canvas.css';
 import '@/styles/editor.css';
@@ -84,14 +85,14 @@ export function PageEditor() {
 
   const SnapshotPlugin = {
     name: 'snapshots',
-    label: 'Snapshots',
-    icon: <CloudCheckIcon size={24} />,
-    render: () => <SnapshotsPanel />,
+    label: 'Snap...',
+    icon: <Server size={24} />,
+    render: () => <SnapshotPanel />,
   };
 
   const ConfigPlugin = {
     name: 'config',
-    label: 'Config',
+    label: 'Config...',
     icon: <Cog size={24} />,
     render: () => <ConfigPanel />,
   };
@@ -126,7 +127,7 @@ export function PageEditor() {
         config={config(configParams)}
         data={initialData}
         onChange={handleAutoSave}
-        plugins={[themePlugin, ConfigPlugin]}
+        plugins={[themePlugin, SnapshotPlugin, ConfigPlugin]}
         overrides={{
           // Header actions with preview and export functionality
           headerActions: function HeaderActions() {

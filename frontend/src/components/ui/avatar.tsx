@@ -44,4 +44,15 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-export { Avatar, AvatarFallback, AvatarImage };
+const AvatarGroup = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn('flex items-center -space-x-3 [&>*]:ring-2 [&>*]:ring-background', className)}
+      {...props}
+    />
+  )
+);
+AvatarGroup.displayName = 'AvatarGroup';
+
+export { Avatar, AvatarFallback, AvatarGroup, AvatarImage };
