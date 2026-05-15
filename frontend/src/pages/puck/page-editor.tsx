@@ -186,3 +186,20 @@ export function PageEditor() {
 Note: config and blocks must be functions so zustand store 
 can be used correctly inside them
 */
+
+// Preparing to use pagination
+//
+// 1. Modelo de "Múltiplas Páginas" (Recomendado para SCORM)
+// Nesse modelo, cada página é um objeto de dados (JSON) independente. O "Projeto" seria uma coleção dessas páginas.
+
+// Como funcionaria no Editor:
+// Você teria um painel lateral (como o de "Tema" que você já tem) chamado "Páginas".
+// Lá, o usuário veria uma lista: Página 1, Página 2, etc.
+// Ao clicar em uma página, o editor carregaria o pageId correspondente na URL (ex: /editor/projeto-1/pagina-2).
+// O componente PageEditor que você já tem apenas trocaria os dados do canvas.
+// Como funcionaria no Visualizador (Player):
+// O player carrega a primeira página. Ao chegar no final, um botão "Próxima Página" simplesmente carrega o próximo JSON da lista.
+// Vantagens:
+// Performance: O navegador não precisa renderizar 50 blocos de uma vez; ele renderiza apenas o que está na página atual.
+// SCORM: É muito mais fácil rastrear o progresso ("O aluno completou 3 de 5 páginas").
+// Organização: Você pode reordenar páginas facilmente arrastando-as na lista lateral.

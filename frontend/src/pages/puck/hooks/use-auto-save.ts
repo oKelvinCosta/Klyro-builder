@@ -24,7 +24,7 @@ export function useAutoSave() {
         pendingData.current = data;
         // console.log('Auto-saving:', pendingData.current);
         updatePage.mutate({ puckData: { page: pendingData.current } });
-      }, 500);
+      }, 800);
     },
     [updatePage]
   );
