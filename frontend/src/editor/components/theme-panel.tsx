@@ -17,6 +17,7 @@ import {
 import { useCanvasThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
 import { Palette, RotateCcw, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { cn } from '../../lib/utils';
 import { FontPicker } from './font-picker';
 
 /**
@@ -159,16 +160,22 @@ const ColorField = ({
     <div className="space-y-1.5">
       <Label
         htmlFor={id}
-        className="text-muted-foreground text-[11px] font-medium uppercase tracking-wider"
+        className={cn(
+          'text-muted-foreground',
+          'text-[11px]',
+          'font-medium',
+          'uppercase',
+          'tracking-wider'
+        )}
       >
         {label}
       </Label>
-      <div className="flex gap-2">
+      <div className={cn('flex', 'gap-2')}>
         {/* Native Color Picker */}
         <Input
           id={id}
           type="color"
-          className="size-8 shrink-0 cursor-pointer p-0.5"
+          className={cn('size-8', 'shrink-0', 'cursor-pointer', 'p-0.5')}
           value={hslToHex(localTheme[id] as string)}
           onChange={(e) => handleColorChange(id, e.target.value)}
         />
@@ -178,7 +185,7 @@ const ColorField = ({
           value={inputValue}
           onChange={(e) => handleTextChange(e.target.value)}
           onBlur={handleBlur}
-          className="h-8 font-mono text-xs"
+          className={cn('h-8', 'font-mono', 'text-xs')}
           placeholder="#000000 ou H S L"
         />
       </div>
@@ -222,28 +229,39 @@ export function CanvasThemePanel() {
   };
 
   return (
-    <div className="bg-background/50 flex h-full flex-col">
+    <div className={cn('bg-background/50', 'flex', 'h-full', 'flex-col')}>
       {/* Panel Header */}
-      <div className="flex items-center gap-2 border-b border-white/5 p-4">
-        <Palette className="text-primary size-4" />
-        <h3 className="text-muted-foreground mb-0 text-xs font-bold uppercase tracking-widest">
+      <div className={cn('flex', 'items-center', 'gap-2', 'border-b', 'border-white/5', 'p-4')}>
+        <Palette className={cn('text-primary', 'size-4')} />
+        <h3
+          className={cn(
+            'text-muted-foreground',
+            'mb-0',
+            'text-xs',
+            'font-bold',
+            'uppercase',
+            'tracking-widest'
+          )}
+        >
           Configurações de Tema
         </h3>
       </div>
 
       {/* Main Content Area: Grouped Settings in Accordions */}
-      <div className="flex-1 space-y-6 overflow-y-auto p-4 [&_h3]:mb-0">
-        <Accordion type="multiple" defaultValue={['base', 'brand']} className="w-full space-y-2">
+      <div className={cn('flex-1', 'space-y-6', 'overflow-y-auto', 'p-4', '[&_h3]:mb-0')}>
+        <Accordion
+          type="multiple"
+          defaultValue={['base', 'brand']}
+          className={cn('w-full', 'space-y-2')}
+        >
           {/* Base Background & Foreground Colors */}
           <AccordionItem value="base" className="border-white/5">
-            <AccordionTrigger className="py-2 text-xs font-semibold hover:no-underline">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
               Cores Base
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
-              <ColorField label="Primária" id="primary" {...commonProps} />
-              <ColorField label="Texto sobre Primária" id="primary-foreground" {...commonProps} />
-              {/* <ColorField label="Secundária" id="secondary" {...commonProps} />
-              <ColorField label="Terciária" id="tertiary" {...commonProps} /> */}
               <ColorField label="Fundo" id="background" {...commonProps} />
               <ColorField label="Texto Principal" id="foreground" {...commonProps} />
               <ColorField label="Card" id="card" {...commonProps} />
@@ -251,9 +269,32 @@ export function CanvasThemePanel() {
             </AccordionContent>
           </AccordionItem>
 
+          {/* Components and buttons */}
+          <AccordionItem value="components" className="border-white/5">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
+              Componentes e Botões
+            </AccordionTrigger>
+            <AccordionContent className="space-y-4">
+              <ColorField label="Primária" id="primary" {...commonProps} />
+              <ColorField label="Texto sobre Primária" id="primary-foreground" {...commonProps} />
+              <ColorField label="Secundária" id="secondary" {...commonProps} />
+              <ColorField
+                label="Texto sobre Secundária"
+                id="secondary-foreground"
+                {...commonProps}
+              />
+              <ColorField label="Terciária" id="tertiary" {...commonProps} />
+              <ColorField label="Texto sobre Terciária" id="tertiary-foreground" {...commonProps} />
+            </AccordionContent>
+          </AccordionItem>
+
           {/* Feedback & UI Status Colors */}
           <AccordionItem value="status" className="border-white/5">
-            <AccordionTrigger className="py-2 text-xs font-semibold hover:no-underline">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
               Status
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
@@ -266,7 +307,9 @@ export function CanvasThemePanel() {
 
           {/* Layout, Borders & Spacing */}
           <AccordionItem value="layout" className="border-white/5">
-            <AccordionTrigger className="py-2 text-xs font-semibold hover:no-underline">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
               Bordas e Layout
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
@@ -276,7 +319,13 @@ export function CanvasThemePanel() {
               <div className="space-y-1.5">
                 <Label
                   htmlFor="radius"
-                  className="text-muted-foreground text-[11px] font-medium uppercase tracking-wider"
+                  className={cn(
+                    'text-muted-foreground',
+                    'text-[11px]',
+                    'font-medium',
+                    'uppercase',
+                    'tracking-wider'
+                  )}
                 >
                   Bordas Arredondadas (Radius)
                 </Label>
@@ -285,7 +334,7 @@ export function CanvasThemePanel() {
                   type="text"
                   value={localTheme.radius}
                   onChange={(e) => handleChange('radius', e.target.value)}
-                  className="h-8 text-xs"
+                  className={cn('h-8', 'text-xs')}
                 />
               </div>
             </AccordionContent>
@@ -293,14 +342,22 @@ export function CanvasThemePanel() {
 
           {/* Font Family Configuration */}
           <AccordionItem value="typography" className="border-white/5">
-            <AccordionTrigger className="py-2 text-xs font-semibold hover:no-underline">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
               Tipografia
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
               <div className="space-y-1.5">
                 <Label
                   htmlFor="title-font"
-                  className="text-muted-foreground text-[11px] font-medium uppercase tracking-wider"
+                  className={cn(
+                    'text-muted-foreground',
+                    'text-[11px]',
+                    'font-medium',
+                    'uppercase',
+                    'tracking-wider'
+                  )}
                 >
                   Fonte de Título
                 </Label>
@@ -314,7 +371,13 @@ export function CanvasThemePanel() {
               <div className="space-y-1.5">
                 <Label
                   htmlFor="title-font-weight"
-                  className="text-muted-foreground text-[11px] font-medium uppercase tracking-wider"
+                  className={cn(
+                    'text-muted-foreground',
+                    'text-[11px]',
+                    'font-medium',
+                    'uppercase',
+                    'tracking-wider'
+                  )}
                 >
                   Peso do Título
                 </Label>
@@ -322,7 +385,7 @@ export function CanvasThemePanel() {
                   value={localTheme['title-font-weight']}
                   onValueChange={(val) => handleChange('title-font-weight', val)}
                 >
-                  <SelectTrigger id="title-font-weight" className="h-8 text-xs">
+                  <SelectTrigger id="title-font-weight" className={cn('h-8', 'text-xs')}>
                     <SelectValue placeholder="Peso da fonte" />
                   </SelectTrigger>
                   <SelectContent>
@@ -360,7 +423,13 @@ export function CanvasThemePanel() {
               <div className="space-y-1.5">
                 <Label
                   htmlFor="text-font"
-                  className="text-muted-foreground text-[11px] font-medium uppercase tracking-wider"
+                  className={cn(
+                    'text-muted-foreground',
+                    'text-[11px]',
+                    'font-medium',
+                    'uppercase',
+                    'tracking-wider'
+                  )}
                 >
                   Fonte de Texto
                 </Label>
@@ -375,11 +444,13 @@ export function CanvasThemePanel() {
 
           {/* Additional Custom Colors */}
           <AccordionItem value="extra" className="border-white/5">
-            <AccordionTrigger className="py-2 text-xs font-semibold hover:no-underline">
+            <AccordionTrigger
+              className={cn('py-2', 'text-xs', 'font-semibold', 'hover:no-underline')}
+            >
               Paleta de Cores
             </AccordionTrigger>
             <AccordionContent className="space-y-4">
-              <p className="text-muted-foreground text-[11px] font-medium">
+              <p className={cn('text-muted-foreground', 'text-[11px]', 'font-medium')}>
                 *Aparecerá no color picker dos componentes
               </p>
               <ColorField label="Cor Extra 1" id="extra-color-1" {...commonProps} />
@@ -393,10 +464,20 @@ export function CanvasThemePanel() {
       </div>
 
       {/* Footer Actions: Reset and Apply Changes */}
-      <div className="bg-background/80 sticky bottom-0 border-t border-white/5 p-4 backdrop-blur-sm">
-        <div className="grid grid-cols-2 gap-2">
-          <Button variant="muted" size="sm" onClick={resetTheme} className="h-9 text-xs">
-            <RotateCcw className="mr-2 size-3.5" />
+      <div
+        className={cn(
+          'bg-background/80',
+          'sticky',
+          'bottom-0',
+          'border-t',
+          'border-white/5',
+          'p-4',
+          'backdrop-blur-sm'
+        )}
+      >
+        <div className={cn('grid', 'grid-cols-2', 'gap-2')}>
+          <Button variant="muted" size="sm" onClick={resetTheme} className={cn('h-9', 'text-xs')}>
+            <RotateCcw className={cn('mr-2', 'size-3.5')} />
             Resetar
           </Button>
           <Button
@@ -404,9 +485,9 @@ export function CanvasThemePanel() {
             size="sm"
             onClick={handleSave}
             disabled={JSON.stringify(localTheme) === JSON.stringify(theme)}
-            className="h-9 text-xs"
+            className={cn('h-9', 'text-xs')}
           >
-            <Save className="mr-2 size-3.5" />
+            <Save className={cn('mr-2', 'size-3.5')} />
             Aplicar
           </Button>
         </div>

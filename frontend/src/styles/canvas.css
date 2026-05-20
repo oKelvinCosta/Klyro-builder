@@ -8,6 +8,7 @@
   ex: <div class="klyro-canvas" style="--canvas-bg: #f5f0ff">
 */
 
+/* Always maintan synchronized with use-canvas-teme-store.css */
 .klyro-canvas {
   /* Reset de tokens shadcn/ui para light */
   --background: var(--space-0);
@@ -19,13 +20,13 @@
   --popover: 0 0% 100%;
   --popover-foreground: var(--space-500);
 
-  --primary: var(--tertiary);
+  --primary: var(--neon-500);
   --primary-foreground: var(--space-600);
 
-  --secondary: 207 100% 50%;
+  --secondary: var(--azure-500);
   --secondary-foreground: 0 0% 100%;
 
-  --tertiary: 255 100% 57%;
+  --tertiary: var(--purple-500);
   --tertiary-foreground: 0 0% 100%;
 
   --muted: 60 4.8% 95.9%;
@@ -60,7 +61,7 @@
   --neon-200: 74 96% 87%;
   --neon-300: 72 98% 72%;
   --neon-400: 68 100% 59%;
-  --neon-500: 67.85, 99.34%, 47.25%;
+  --neon-500: 67.85 99.34% 47.25%;
   --neon-600: 69 90% 42%;
   --neon-700: 67 78% 30%;
   --neon-800: 64 68% 20%;

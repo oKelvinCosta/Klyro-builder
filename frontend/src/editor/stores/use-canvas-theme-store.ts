@@ -11,6 +11,12 @@ export interface CanvasTheme {
   primary: string;
   'primary-foreground': string;
 
+  secondary: string;
+  'secondary-foreground': string;
+
+  tertiary: string;
+  'tertiary-foreground': string;
+
   destructive: string;
   'destructive-foreground': string;
 
@@ -34,13 +40,20 @@ export interface CanvasTheme {
 }
 
 // Tema padrão mockado — futuramente vem do banco
+// Always maintan synchronized with canvas.css
 const defaultTheme: CanvasTheme = {
   background: '253 0% 100%',
   foreground: '253 25% 25%',
   card: '0 0% 100%',
   'card-foreground': '253 24% 31%',
-  primary: '255 100% 57%',
+  primary: '67.85 99.34% 47.25%',
   'primary-foreground': '253 25% 25%',
+
+  secondary: '207 100% 50%',
+  'secondary-foreground': '0 0% 100%',
+
+  tertiary: '255 100% 57%',
+  'tertiary-foreground': '0 0% 100%',
 
   destructive: '0 84.2% 60.2%',
   'destructive-foreground': '0 0% 100%',

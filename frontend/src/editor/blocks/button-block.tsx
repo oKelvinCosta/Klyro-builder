@@ -1,4 +1,3 @@
-// @/components/puck/ImgBlock.tsx
 import { Button } from '@/components/ui/button';
 import { AlignmentXField } from '@/editor/fields';
 import { cn } from '@/lib/utils';
@@ -9,10 +8,12 @@ export type ButtonBlockProps = {
   content: string;
   link: string;
   alignment: 'left' | 'center' | 'right';
-  variant: 'link' | 'canvas-primary' | 'canvas-outline' | 'success' | 'destructive';
-  size: 'canvas-default' | 'canvas-lg' | 'canvas-sm';
-  customBg?: string;
-  customText?: string;
+  color: 'primary' | 'secondary' | 'tertiary' | 'custom';
+
+  style: 'link' | 'solid' | 'outline';
+  size: 'default' | 'lg' | 'sm';
+  customBgColor?: string;
+  customTextColor?: string;
 };
 
 export const ButtonBlock: ComponentConfig<ButtonBlockProps> = {
@@ -32,59 +33,85 @@ export const ButtonBlock: ComponentConfig<ButtonBlockProps> = {
       label: 'Link URL',
     },
     alignment: AlignmentXField(),
-    variant: {
+    color: {
+      label: 'Cor',
       type: 'radio',
       options: [
+        { label: 'Primária', value: 'primary' },
+        { label: 'Secundária', value: 'secondary' },
+        { label: 'Terciária', value: 'tertiary' },
+        { label: 'Personalizado', value: 'custom' },
+      ],
+    },
+    style: {
+      label: 'Estilo',
+      type: 'radio',
+      options: [
+        { label: 'Sólido', value: 'solid' },
+        { label: 'Contorno', value: 'outline' },
         { label: 'Link', value: 'link' },
-        { label: 'Primary', value: 'canvas-primary' },
-        { label: 'Outline', value: 'canvas-outline' },
-        { label: 'Success', value: 'success' },
-        { label: 'Destructive', value: 'destructive' },
       ],
     },
     size: {
+      label: 'Tamanho',
       type: 'radio',
       options: [
-        { label: 'Default', value: 'canvas-default' },
-        { label: 'Large', value: 'canvas-lg' },
-        { label: 'Small', value: 'canvas-sm' },
+        { label: 'Grande', value: 'lg' },
+        { label: 'Padrão', value: 'default' },
+        { label: 'Pequeno', value: 'sm' },
       ],
     },
-    customBg: {
-      type: 'text',
-      label: 'Cor de Fundo (Hex/HSL)',
-    },
-    customText: {
-      type: 'text',
-      label: 'Cor do Texto (Hex/HSL)',
-    },
+  },
+  resolveFields: (data, { fields }) => {
+    if (data.props.color === 'custom') {
+      const { content, link, alignment, color, style, size } = fields;
+      return {
+        content,
+        link,
+        alignment,
+        color,
+        customBgColor: {
+          type: 'text',
+          label: 'Cor de Fundo (Hex/HSL)',
+        },
+        customTextColor: {
+          type: 'text',
+          label: 'Cor do Texto (Hex/HSL)',
+        },
+        style,
+        size,
+      };
+    }
+    return fields;
   },
   defaultProps: {
     content: 'Botão',
     link: '',
     alignment: 'left',
-    variant: 'canvas-primary',
-    size: 'canvas-default',
+    color: 'primary',
+    style: 'solid',
+    size: 'default',
   },
-  render: ({ content, link, alignment, variant, size, customBg, customText }) => {
+  render: ({ content, link, alignment, color, size, style, customBgColor, customTextColor }) => {
     const alignmentClasses = {
       left: 'mr-auto',
       center: 'mx-auto',
       right: 'ml-auto',
     };
 
-    const style = {
-      backgroundColor: customBg || undefined,
-      color: customText || undefined,
-      borderColor: variant === 'canvas-outline' && customBg ? customBg : undefined,
+    const styleCss = {
+      backgroundColor: customBgColor || undefined,
+      color: customTextColor || undefined,
+      borderColor: style === 'outline' ? customTextColor : undefined,
     };
-
+    console.log('color', color);
     const buttonElement = (
       <Button
-        variant={variant}
-        size={size}
+        canvasColor={color}
+        canvasStyle={style}
+        canvasSize={size}
         className={cn(alignmentClasses[alignment], 'transition-opacity hover:opacity-80')}
-        style={style}
+        style={styleCss}
       >
         {content}
       </Button>
