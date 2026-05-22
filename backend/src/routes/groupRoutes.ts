@@ -15,7 +15,7 @@ router.post("/", createGroup);
 router.get("/", getGroupsByUserId);
 router.get("/with-pages", getGroupsWithPages);
 router.get("/:id", getGroupById);
-router.put("/:id", updateGroup);
+router.patch("/:id", updateGroup);
 router.delete("/:id", deleteGroup);
 
 export default router;

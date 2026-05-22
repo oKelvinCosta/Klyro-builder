@@ -3,10 +3,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 
 import { connectDB } from './config/db.ts';
-import groupRoutes from './routes/groupRoutes.ts';
-import pageRoutes from './routes/pageRoutes.ts';
-import userRoutes from './routes/userRoutes.ts';
 import exportRoutes from './routes/exportRoutes.ts';
+import groupRoutes from './routes/groupRoutes.ts';
+import projectRoutes from './routes/projectRoutes.ts';
+import userRoutes from './routes/userRoutes.ts';
 
 dotenv.config();
 
@@ -24,8 +24,8 @@ app.get('/', (_req, res) => {
   res.json({ message: 'API funcionando' });
 });
 
-
-app.use('/pages', pageRoutes);
+// app.use('/pages', pageRoutes);
+app.use('/projects', projectRoutes);
 app.use('/groups', groupRoutes);
 app.use('/users', userRoutes);
 app.use('/export', exportRoutes);

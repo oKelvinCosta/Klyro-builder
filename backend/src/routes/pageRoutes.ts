@@ -1,25 +1,30 @@
 import express from "express";
-
-import {
-  createPage,
-  deletePage,
-  getPageById,
-  getPagesByGroupId,
-  getPagesByUserId,
-  getUngroupedPagesByUserId,
-  updatePage
-} from "../controllers/pageController.ts";
+import * as pageController from "../controllers/pageController.ts";
 
 const router = express.Router();
 
-// the order of routes matters
-// more specific routes should be defined before general ones
-router.post("/", createPage);
-router.get("/", getPagesByUserId);
-router.get("/ungrouped", getUngroupedPagesByUserId);
-router.get("/group/:groupId", getPagesByGroupId);
-router.get("/:id", getPageById);
-router.put("/:id", updatePage);
-router.delete("/:id", deletePage);
+// Create a new page
+router.post("/", pageController.createPage);
+
+// Get all pages for a project
+router.get("/", pageController.getPagesByProject);
+
+// Get a single page
+router.get("/:id", pageController.getPage);
+
+// Update a page
+router.patch("/:id", pageController.updatePage);
+
+// Trash a page
+router.patch("/:id/trash", pageController.trashPage);
+
+// Restore a trashed page
+router.patch("/:id/restore", pageController.restorePage);
+
+// Delete a page permanently
+router.delete("/:id", pageController.deletePage);
+
+// Reorder pages
+router.patch("/reorder", pageController.reorderPages);
 
 export default router;

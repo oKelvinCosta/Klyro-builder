@@ -4,35 +4,54 @@ import mongoose from "mongoose";
 dotenv.config();
 
 const PageSchema = new mongoose.Schema({
-  title: String,
-  slug: String,
-  type: String,
-  order: Number,
+  // Title from page
+  title: {
+    type: String,
+    default: 'Página Klyro'
+  },
 
-  puckData: Object,
-  version: Number,
-  cover: String,
-
-  // Page N:1 User
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  // For use in routes to wotk with pagination
+   slug: {
+    type: String,
     required: true
   },
 
-  // Page N:1 Group
-  groupId: {
+  // Extra, maybe useful at future
+  type: {
+    type: String,
+    default: 'landing',
+    enum: ['landing']
+  },
+
+  // Order to pagination
+  order: {
+    type: Number,
+    required: true
+  },
+
+  // Heavy data from Puck
+  puckData: {
+    type: Object,
+    required: true
+  },
+
+  // Page N:1 Project
+  projectId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Group"
+    ref: "Project",
+    required: true
+  },
+
+  // Soft delete — set when project is moved to trash
+  deletedAt: {
+    type: Date,
+    default: null
   }
 
 }, { timestamps: true });
 
-// Índice composto para buscar páginas de um grupo em ordem
-PageSchema.index({ groupId: 1, order: 1 });
-
-// Índice para buscar páginas por usuário (se necessário no futuro)
-PageSchema.index({ userId: 1 });
+// Compound index to fetch pages of a project in order
+PageSchema.index({ projectId: 1, order: 1 });
 
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) {
