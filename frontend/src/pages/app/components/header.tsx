@@ -12,13 +12,37 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Link } from 'react-router-dom';
+import { api } from '@/lib/axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Header({ breadcrumb = false }) {
-  // const [userId, setUserId] = useState('69c9a51d260548585aa1fad8');
+  const queryClient = useQueryClient();
+  const [isCreating, setIsCreating] = useState(false);
+  const navigate = useNavigate();
+
+  const { mutate: createProject, isPending } = useMutation({
+    mutationFn: async () => {
+      const response = await api.post(`/projects`, {});
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages'] });
+      queryClient.setQueryData(['Project', data.project._id], {
+        project: data.project,
+        firstPage: data.page,
+      });
+      navigate(`/editor/${data.project._id}/${data.page._id}`);
+    },
+    onError: () => {
+      setIsCreating(false);
+    },
+  });
 
   const handleCreateProject = () => {
-    // console.log('Create project');
+    setIsCreating(true);
+    createProject();
   };
   return (
     <header className="bg-card sticky top-0 z-50 border-b">
@@ -45,19 +69,16 @@ export function Header({ breadcrumb = false }) {
           )}
         </div>
         <div className="flex items-center gap-4">
-          <Button
-            variant={'muted'}
-            className="flex items-center gap-2"
-            onClick={() => handleCreateProject()}
-          >
+          <Button variant={'muted'} className="flex items-center gap-2" disabled>
             <ImportIcon className="" /> Importar
           </Button>
           <Button
             variant={'neon'}
             className="flex items-center gap-2"
             onClick={() => handleCreateProject()}
+            disabled={isCreating || isPending}
           >
-            <Plus className="" /> Projeto
+            <Plus className="" /> {isCreating ? 'Criando...' : 'Projeto'}
           </Button>
         </div>
       </div>

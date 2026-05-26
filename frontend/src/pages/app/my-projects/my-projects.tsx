@@ -13,10 +13,10 @@ export function MyProjects() {
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
     queryKey: ['ungroupedPages', userId],
     queryFn: () => api.get(`/projects/ungrouped?userId=${userId}`).then((res) => res.data),
-    staleTime: 2 * 60 * 1000, // 10 minutos cache
-    gcTime: 4 * 60 * 1000, // 15 minutos cache
+    staleTime: 0,
+    gcTime: 4 * 60 * 1000,
   });
-  console.log('my-projects', projectsData);
+  // console.log('my-projects', projectsData);
   return (
     <>
       <Header />

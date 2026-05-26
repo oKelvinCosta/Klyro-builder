@@ -7,13 +7,13 @@ const PageSchema = new mongoose.Schema({
   // Title from page
   title: {
     type: String,
-    default: 'Página Klyro'
+    default: () => `Página Klyro${Date.now()}`
   },
 
   // For use in routes to wotk with pagination
    slug: {
     type: String,
-    required: true
+    default: () => `pagina-${Date.now()}`
   },
 
   // Extra, maybe useful at future
@@ -32,7 +32,7 @@ const PageSchema = new mongoose.Schema({
   // Heavy data from Puck
   puckData: {
     type: Object,
-    required: true
+    required: true,
   },
 
   // Page N:1 Project

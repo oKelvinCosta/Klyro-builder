@@ -27,29 +27,25 @@ type Response = express.Response;
  *   "groupId": "60d5ec7f9d23a8001c8b4567"
  * }
  */
-export const createProject = async (req: Request, res: Response) => {
+export const createProject = async (req: Request, res: Response) => {  
   try {
-    const userId = "69c9a51d260548585aa1fad8";
-    const { title, slug, cover, groupId } = req.body;
+    const userId = new mongoose.Types.ObjectId("69c9a51d260548585aa1fad8");
+    const { groupId } = req.body;
 
-    if (!title || !slug) {
-      return res.status(400).json({ error: 'Title and slug are required' });
-    }
-
-    const result = await createProjectWithPage(
-      { title, slug, cover, userId, groupId },
-    );
+    const result = await createProjectWithPage({
+      userId,
+      ...req.body,
+      groupId: groupId ? new mongoose.Types.ObjectId(groupId) : null,
+    });
 
     return res.status(201).json(result);
   } catch (err) {
     const error = err as Error;
+    console.error('[createProject] error:', error);
     if (error.message.includes('E11000')) {
       return res.status(409).json({ error: 'Slug already exists' });
     }
-    if (error.message.includes('ValidationError')) {
-      return res.status(400).json({ error: 'Invalid data' });
-    }
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message, stack: error.stack });
   }
 };
 
@@ -412,7 +408,7 @@ export const getTrashedProjects = async (req: Request, res: Response) => {
  */
 export const duplicateProject = async (req: Request, res: Response) => {
   try {
-     const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
+    const projectId = req.params.id;
     const newProject = await duplicateProjectWithPages(projectId);
 
     if (!newProject) {

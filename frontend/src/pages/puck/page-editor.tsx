@@ -45,7 +45,7 @@ export function PageEditor() {
   const { setMode } = useEditorMode();
   const { projectId } = useParams();
 
-  console.log('useParams()', useParams());
+  // console.log('useParams()', useParams());
 
   // Page loader hook - projectId is required, so we use non-null assertion
   const { data: pageData, isLoading, isError } = usePageLoader(projectId!);

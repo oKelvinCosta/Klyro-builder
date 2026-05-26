@@ -46,7 +46,7 @@ export function ListProjects({ projectsData, isLoadingPages }: ListProjectsCompo
     navigate(`/editor/${projectId}/${pageId}`);
   };
 
-  console.log('ListProjects', projectsData);
+  // console.log('ListProjects', projectsData);
 
   return (
     <>

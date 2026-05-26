@@ -55,7 +55,7 @@ export const getGroupsWithProjects = async (req: Request, res: Response) => {
     
     // Primeiro, testa apenas o match
     const groups = await Group.find({ userId: userObjectId });
-    console.log('groups found:', groups.length);
+    // console.log('groups found:', groups.length);
     
     // Se não houver grupos, retorna vazio
     if (groups.length === 0) {

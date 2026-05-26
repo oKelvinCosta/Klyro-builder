@@ -3,8 +3,8 @@ import Page from "../models/Page.ts";
 import Project from "../models/Project.ts";
 
 interface CreateProjectData {
-  title: string;
-  slug: string;
+  title?: string;
+  slug?: string;
   cover?: string;
   userId: string | mongoose.Types.ObjectId;
   groupId?: string | mongoose.Types.ObjectId | null;
@@ -12,12 +12,11 @@ interface CreateProjectData {
 
 /**
  * Creates a project and its first default page.
- * Reused by createProject and duplicateProject.
+ * All fields are optional — schema defaults will fill in title, slug, cover, etc.
  * Returns { project, page } on success, throws Error on failure.
  */
 export const createProjectWithPage = async (
-  data: CreateProjectData,
-  firstPage?: { title?: string; slug: string; puckData: object }
+  data?: CreateProjectData,
 ) => {
   let project;
   let page;
@@ -25,21 +24,18 @@ export const createProjectWithPage = async (
   try {
     project = await Project.create({
       ...data,
-      groupId: data.groupId ?? null,
+      groupId: data?.groupId ?? null,
       version: 1,
       deletedAt: null,
     });
 
     page = await Page.create({
-      title: firstPage?.title ?? "Página Klyro",
-      slug: firstPage?.slug ?? `page-${Date.now()}`,
       order: 1,
-      puckData: firstPage?.puckData ?? {},
+      puckData: {},
       projectId: project._id,
       deletedAt: null,
     });
   } catch (err) {
-    // If page creation failed but project was created, clean up
     if (project) {
       await Project.findByIdAndDelete(project._id);
     }
@@ -85,32 +81,30 @@ export const updateProjectAndPage = async (
 
 /**
  * Duplicates a project and all its pages.
+ * All fields from the original are copied explicitly.
  */
 export const duplicateProjectWithPages = async (projectId: string) => {
   const [original, pages] = await Promise.all([
     Project.findById(projectId),
-    Page.find({ projectId }).sort({ order: 1 }),
+    Page.find({ projectId, deletedAt: null }).sort({ order: 1 }),
   ]);
 
   if (!original) return null;
 
-  const { project: newProject } = await createProjectWithPage(
-    {
+  let newProject;
+  try {
+    newProject = await Project.create({
       title: `${original.title} (copy)`,
       slug: `${original.slug}-copy-${Date.now()}`,
       cover: original.cover,
       userId: original.userId,
       groupId: original.groupId ?? null,
-    },
-    pages.length > 0
-      ? { title: pages[0].title, slug: pages[0].slug, puckData: pages[0].puckData }
-      : undefined
-  );
+      version: original.version,
+      deletedAt: null,
+    });
 
-  // Insert remaining pages (skip first, already created above)
-  if (pages.length > 1) {
     await Page.insertMany(
-      pages.slice(1).map(({ title, slug, type, order, puckData }) => ({
+      pages.map(({ title, slug, type, order, puckData }) => ({
         title,
         slug,
         type,
@@ -120,6 +114,11 @@ export const duplicateProjectWithPages = async (projectId: string) => {
         deletedAt: null,
       }))
     );
+  } catch (err) {
+    if (newProject) {
+      await Project.findByIdAndDelete(newProject._id);
+    }
+    throw err;
   }
 
   return newProject;

@@ -7,14 +7,12 @@ const ProjectSchema = new mongoose.Schema({
   // Project Title
   title: {
     type: String,
-    required: true,
-    default: 'Untitled Project'+Date.now()
+    default: () => `Untitled Project-${Date.now()}`
   },
   // For Routes
   slug: {
     type: String,
-    required: true,
-    default: 'project'+Date.now()
+    default: () => `projeto-${Date.now()}`
   },
 
   // Versioning the macro project
