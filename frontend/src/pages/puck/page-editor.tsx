@@ -43,10 +43,12 @@ export function PageEditor() {
   // Navigation and editor mode hooks
   const navigate = useNavigate();
   const { setMode } = useEditorMode();
-  const { pageId } = useParams();
+  const { projectId } = useParams();
 
-  // Page loader hook
-  const { data: pageData, isLoading, isError } = usePageLoader(pageId);
+  console.log('useParams()', useParams());
+
+  // Page loader hook - projectId is required, so we use non-null assertion
+  const { data: pageData, isLoading, isError } = usePageLoader(projectId!);
 
   // JSON export hook
   const { saveJsonFile, isExporting } = useJsonExport();
@@ -64,7 +66,7 @@ export function PageEditor() {
 
   // Handle preview
   const handlePreview = () => {
-    navigate(`/preview/${pageId}`);
+    navigate(`/preview/${projectId}`);
   };
 
   // Configuration for Puck editor
@@ -73,7 +75,8 @@ export function PageEditor() {
   };
 
   // Initial data for Puck editor
-  const initialData = pageData?.puckData?.page ?? emptyData;
+  const firstPage = pageData?.firstPage;
+  const initialData = firstPage?.puckData ?? emptyData;
 
   // Define the theme plugin to add a new tab to the sidebar
   const themePlugin = {
@@ -123,7 +126,7 @@ export function PageEditor() {
   return (
     <div className="klyro-editor">
       <Puck
-        key={isLoading ? 'loading' : pageId}
+        key={isLoading ? 'loading' : projectId}
         config={config(configParams)}
         data={initialData}
         onChange={handleAutoSave}

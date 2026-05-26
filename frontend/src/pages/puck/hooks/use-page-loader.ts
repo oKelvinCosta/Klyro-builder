@@ -2,15 +2,15 @@ import { api } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 
 /**
- * Hook to load page data with optimized caching
+ * Hook to load project and your pages with optimized caching
  * Fetches data only once per session to prevent unnecessary requests
  */
-export function usePageLoader(pageId: string | undefined) {
+export function usePageLoader(projectId: string) {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['Page', pageId],
+    queryKey: ['Project', projectId],
     queryFn: async () => {
       console.trace('🔴 PAGE FETCH TRIGGERED'); // Debug trace
-      const response = await api.get(`/pages/${pageId}`);
+      const response = await api.get(`/projects/${projectId}`);
       return response.data;
     },
     staleTime: Infinity, // Only fetch once per session
@@ -24,6 +24,6 @@ export function usePageLoader(pageId: string | undefined) {
     data,
     isLoading,
     isError,
-    pageId,
+    projectId,
   };
 }

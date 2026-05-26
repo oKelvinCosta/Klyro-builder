@@ -63,12 +63,13 @@ export const getPagesByProject = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'projectId query parameter is required' });
     }
 
+    // without puckData to be more lightweight
     const userObjectId = new mongoose.Types.ObjectId(projectId as string);
     const pages = await Page.find({ 
       projectId: userObjectId, 
       deletedAt: null 
     })
-      .select('_id title slug order puckData projectId createdAt updatedAt')
+      .select('_id title slug order projectId createdAt updatedAt')
       .sort({ order: 1 });
 
     return res.json(pages);

@@ -63,7 +63,7 @@ export const updateProjectAndPage = async (
   const project = await Project.findByIdAndUpdate(
     projectId,
     { $set: { ...projectData, updatedAt: new Date() } },
-    { new: true }
+    { returnDocument: 'after' }
   );
 
   if (!project) {
@@ -75,7 +75,7 @@ export const updateProjectAndPage = async (
     const page = await Page.findByIdAndUpdate(
       pageId,
       { $set: { ...pageData, updatedAt: new Date() } },
-      { new: true }
+      { returnDocument: 'after' }
     );
     return { project, page };
   }
@@ -123,4 +123,36 @@ export const duplicateProjectWithPages = async (projectId: string) => {
   }
 
   return newProject;
+};
+
+/**
+ * Updates multiple pages at once (e.g., for reordering).
+ * Returns array of updated pages on success, throws Error on failure.
+ */
+export const updatePagesBulk = async (
+  projectId: string,
+  pages: Array<{ _id: string; order?: number; title?: string; slug?: string; puckData?: object }>
+) => {
+  const project = await Project.findById(projectId);
+  if (!project) {
+    throw new Error('Project not found');
+  }
+
+  const updatedPages = await Promise.all(
+    pages.map(async (pageData) => {
+      const update: any = { updatedAt: new Date() };
+      if (pageData.order !== undefined) update.order = pageData.order;
+      if (pageData.title !== undefined) update.title = pageData.title;
+      if (pageData.slug !== undefined) update.slug = pageData.slug;
+      if (pageData.puckData !== undefined) update.puckData = pageData.puckData;
+
+      return Page.findByIdAndUpdate(
+        pageData._id,
+        { $set: update },
+        { returnDocument: 'after' }
+      );
+    })
+  );
+
+  return updatedPages;
 };

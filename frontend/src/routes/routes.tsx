@@ -23,7 +23,7 @@ const routesDEV = [
   },
 
   {
-    path: '/editor/:pageId',
+    path: '/editor/:projectId/:pageId',
     element: <BlankLayout />,
     children: [{ path: '', element: <PageEditor /> }],
   },

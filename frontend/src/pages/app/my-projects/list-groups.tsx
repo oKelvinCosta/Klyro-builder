@@ -14,24 +14,25 @@ export function ListGroups() {
     navigate(`/group/${groupId}`);
   };
 
-  const [userId] = useState('69c9a51d260548585aa1fad8');
+  const [userId] = useState('69c9a51d260548585aa1fad8'); //kelvin
 
   // console.log('pagesData', pagesData);
 
-  const useGroupsWithPages = () => {
+  const useGroupsWithProjects = () => {
     return useQuery({
-      queryKey: ['groupsWithPages', userId],
-      queryFn: () => api.get(`/groups/with-pages?userId=${userId}`).then((res) => res.data),
+      queryKey: ['groupsWithProjects', userId],
+      queryFn: () => api.get(`/groups/with-projects?userId=${userId}`).then((res) => res.data),
       staleTime: 5 * 60 * 1000,
       gcTime: 8 * 60 * 1000,
     });
   };
 
-  const { data: groupsWithPages, isLoading: isLoadingGroupsWithPages } = useGroupsWithPages();
+  const { data: groupsWithProjects, isLoading: isLoadingGroupsWithProjects } =
+    useGroupsWithProjects();
 
   return (
     <>
-      {isLoadingGroupsWithPages ? (
+      {isLoadingGroupsWithProjects ? (
         <div className="cursor-pointer md:col-span-4 2xl:col-span-3">
           <Card className="overflow-hidden p-0">
             <CardContent className="grid grid-cols-4 gap-3 p-4">
@@ -48,7 +49,7 @@ export function ListGroups() {
           </Card>
         </div>
       ) : (
-        groupsWithPages?.map(
+        groupsWithProjects?.map(
           (
             group: any,
             index: number // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -60,7 +61,7 @@ export function ListGroups() {
             >
               <Card className="overflow-hidden p-0">
                 <CardContent className="grid grid-cols-4 gap-3 p-4">
-                  {group.pages?.slice(0, 3).map(
+                  {group.projects?.slice(0, 3).map(
                     (
                       page: any,
                       pageIndex: number // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -76,7 +77,7 @@ export function ListGroups() {
                   {
                     // Fill empty slots to maintain grid structure
                     Array.from({
-                      length: group.pages?.length < 4 ? 4 - group.pages?.length : 0,
+                      length: group.projects?.length < 4 ? 4 - group.projects?.length : 0,
                     }).map((_, emptyIndex) => (
                       <Card
                         key={`empty-${emptyIndex}`}
@@ -90,7 +91,7 @@ export function ListGroups() {
                   <div className="flex flex-col gap-0">
                     <span className="!text-xs font-medium">{group.name || 'Sem nome'}</span>
                     <span className="text-muted-foreground !text-xs">
-                      {group.pages?.length || 0} projetos
+                      {group.projects?.length || 0} projetos
                     </span>
                   </div>
                 </CardFooter>

@@ -41,8 +41,8 @@ export const getGroupById = async (req: Request, res: Response) => {
   }
 };
 
-// GET /groups-with-pages?userId=123
-export const getGroupsWithPages = async (req: Request, res: Response) => {
+// GET /groups-with-getGroupsWithProjects?userId=123
+export const getGroupsWithProjects = async (req: Request, res: Response) => {
   try {
     const { userId } = req.query;
     
@@ -52,6 +52,16 @@ export const getGroupsWithPages = async (req: Request, res: Response) => {
     
     const userObjectId = new mongoose.Types.ObjectId(userId);
     
+    
+    // Primeiro, testa apenas o match
+    const groups = await Group.find({ userId: userObjectId });
+    console.log('groups found:', groups.length);
+    
+    // Se não houver grupos, retorna vazio
+    if (groups.length === 0) {
+      return res.json([]);
+    }
+    
     const data = await Group.aggregate([
       {
         $match: {
@@ -60,7 +70,7 @@ export const getGroupsWithPages = async (req: Request, res: Response) => {
       },
       {
         $lookup: {
-          from: 'pages',
+          from: 'projects',
           let: { groupId: '$_id' },
           pipeline: [
             {
@@ -73,15 +83,15 @@ export const getGroupsWithPages = async (req: Request, res: Response) => {
                 title: 1,
                 cover: 1,
                 slug: 1,
-                order: 1,
+                version: 1,
                 updatedAt: 1
               }
             },
             {
-              $sort: { order: 1 }
+              $sort: { updatedAt: -1 }
             }
           ],
-          as: 'pages'
+          as: 'projects'
         }
       },
       {

@@ -104,7 +104,7 @@ export const ButtonBlock: ComponentConfig<ButtonBlockProps> = {
       color: customTextColor || undefined,
       borderColor: style === 'outline' ? customTextColor : undefined,
     };
-    console.log('color', color);
+
     const buttonElement = (
       <Button
         canvasColor={color}

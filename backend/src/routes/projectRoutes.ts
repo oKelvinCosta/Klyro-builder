@@ -11,6 +11,7 @@ import {
     getUngroupedProjectsByUser,
     restoreProject,
     trashProject,
+    updatePagesBulkController,
     updateProject,
     updateProjectGroup
 } from "../controllers/projectController.ts";
@@ -28,6 +29,7 @@ router.get("/group/:groupId", getProjectsByGroup);
 router.get("/:id", getProject);
 router.patch("/:id/group", updateProjectGroup);
 router.patch("/:projectId/:pageId", updateProject);
+router.patch("/:projectId/pages/bulk", updatePagesBulkController);
 router.patch("/:id/trash", trashProject);
 router.patch("/:id/restore", restoreProject);
 router.delete("/:id", deleteProjectAndPages);

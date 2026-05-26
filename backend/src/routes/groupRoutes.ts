@@ -5,7 +5,7 @@ import {
     deleteGroup,
     getGroupById,
     getGroupsByUserId,
-    getGroupsWithPages,
+    getGroupsWithProjects,
     updateGroup
 } from "../controllers/groupController.ts";
 
@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post("/", createGroup);
 router.get("/", getGroupsByUserId);
-router.get("/with-pages", getGroupsWithPages);
+router.get("/with-projects", getGroupsWithProjects);
 router.get("/:id", getGroupById);
 router.patch("/:id", updateGroup);
 router.delete("/:id", deleteGroup);

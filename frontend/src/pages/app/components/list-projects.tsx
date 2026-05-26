@@ -19,29 +19,34 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 
-interface pagesDataProps {
+interface ProjectsDataProps {
   _id: string;
   title: string;
   slug: string;
+  version: string;
   cover: string;
   updatedAt: string;
   createdAt: string;
   userId: string;
-  groupCardId?: string;
+  groupId: null | string;
+  deletedAt: null | string;
+  firstPageId: string;
 }
 
-interface ListPagesComponentProps {
-  pagesData: pagesDataProps[];
+interface ListProjectsComponentProps {
+  projectsData: ProjectsDataProps[];
   isLoadingPages: boolean;
 }
 
-export function ListPages({ pagesData, isLoadingPages }: ListPagesComponentProps) {
+export function ListProjects({ projectsData, isLoadingPages }: ListProjectsComponentProps) {
   const navigate = useNavigate();
 
-  const handleOpenProject = (pageId: string) => {
+  const handleOpenProject = (projectId: string, pageId: string) => {
     // console.log('Open project', pageId);
-    navigate(`/editor/${pageId}`);
+    navigate(`/editor/${projectId}/${pageId}`);
   };
+
+  console.log('ListProjects', projectsData);
 
   return (
     <>
@@ -61,11 +66,11 @@ export function ListPages({ pagesData, isLoadingPages }: ListPagesComponentProps
           </Card>
         </div>
       ) : (
-        pagesData?.map((page: pagesDataProps) => (
+        projectsData?.map((page: ProjectsDataProps) => (
           <div
             key={page._id}
             className="group cursor-pointer md:col-span-4 2xl:col-span-3"
-            onClick={() => handleOpenProject(page._id)}
+            onClick={() => handleOpenProject(page._id, page.firstPageId)}
           >
             <Card className="overflow-hidden p-0 transition-all duration-200 group-hover:shadow-lg">
               <CardHeader className="relative">

@@ -4,23 +4,22 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 export function usePageUpdater() {
-  const { pageId } = useParams();
+  const { projectId, pageId } = useParams();
   const queryClient = useQueryClient();
 
   const updatePage = useMutation({
-    mutationFn: (data: { puckData: object }) => api.put(`/pages/${pageId}`, data),
+    mutationFn: (data: { page: { puckData: object } }) =>
+      api.patch(`/projects/${projectId}/${pageId}`, data),
     onSuccess: (_, variables) => {
-      // Atualiza o cache com o dado que acabou de ser salvo
-      queryClient.setQueryData(['Page', pageId], (old: any) => ({
+      queryClient.setQueryData(['Project', projectId], (old: any) => ({
         ...old,
         ...variables,
       }));
-
-      console.log('Page saved successfully!');
-      toast.success('Page saved successfully!');
+      console.log('Project saved successfully!');
+      toast.success('Project saved successfully!');
     },
     onError: (error) => {
-      toast.error('Error saving page');
+      toast.error('Error saving Project');
       console.error('Save error:', error);
     },
   });
