@@ -2,6 +2,7 @@ import PreviewLayout from '@/pages/_layouts/preview-layout';
 
 import { MyProjects } from '@/pages/app/my-projects';
 import { ProjectsByGroup } from '@/pages/app/projects-by-group/';
+import { MyTrash } from '@/pages/app/trash';
 import { PageEditor } from '@/pages/puck/page-editor';
 import { PagePreview } from '@/pages/puck/page-preview';
 import { createHashRouter } from 'react-router-dom';
@@ -19,6 +20,7 @@ const routesDEV = [
     children: [
       { path: '', element: <MyProjects /> },
       { path: 'group/:groupId', element: <ProjectsByGroup /> },
+      { path: 'lixeira', element: <MyTrash /> },
     ],
   },
 

@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export function Header({ breadcrumb = false }) {
+export function Header({ breadcrumb = false, title }: { breadcrumb?: boolean; title?: string }) {
   const queryClient = useQueryClient();
   const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export function Header({ breadcrumb = false }) {
                 <BreadcrumbSeparator />
 
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Grupo</BreadcrumbPage>
+                  <BreadcrumbPage>{title || 'Grupo'}</BreadcrumbPage>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </BreadcrumbList>

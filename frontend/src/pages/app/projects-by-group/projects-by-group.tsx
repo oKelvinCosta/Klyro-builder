@@ -7,17 +7,22 @@ import { Header } from '../components/header';
 export function ProjectsByGroup() {
   const { groupId } = useParams();
 
-  // Get pages of user
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
     queryKey: ['groupPages', groupId],
     queryFn: () => api.get(`/projects/group/${groupId}`).then((res) => res.data),
-    staleTime: 2 * 60 * 1000, // 10 minutos cache
-    gcTime: 4 * 60 * 1000, // 15 minutos cache
+    staleTime: 2 * 60 * 1000,
+    gcTime: 4 * 60 * 1000,
+  });
+
+  const { data: groupData } = useQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => api.get(`/groups/${groupId}`).then((res) => res.data),
+    staleTime: 5 * 60 * 1000,
   });
 
   return (
     <>
-      <Header breadcrumb />
+      <Header breadcrumb title={groupData?.name} />
       <div className="mx-auto size-full flex-1 px-4 py-6 sm:px-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-8 lg:grid-cols-12 lg:gap-8 2xl:grid-cols-12">
           {/* Pages */}

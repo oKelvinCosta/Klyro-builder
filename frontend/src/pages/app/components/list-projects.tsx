@@ -3,7 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatRelativeTime } from '@/lib/date';
-import { CopyIcon, EllipsisVerticalIcon, FolderInputIcon, TrashIcon, UserPlus } from 'lucide-react';
+import {
+  CheckIcon,
+  CopyIcon,
+  EllipsisVerticalIcon,
+  FolderInputIcon,
+  FolderMinusIcon,
+  RotateCcwIcon,
+  TrashIcon,
+  UserPlus,
+} from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -18,7 +27,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { api } from '@/lib/axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ProjectsDataProps {
@@ -38,13 +48,18 @@ interface ProjectsDataProps {
 interface ListProjectsComponentProps {
   projectsData: ProjectsDataProps[];
   isLoadingPages: boolean;
+  variant?: 'default' | 'trash';
 }
 
-export function ListProjects({ projectsData, isLoadingPages }: ListProjectsComponentProps) {
+export function ListProjects({
+  projectsData,
+  isLoadingPages,
+  variant = 'default',
+}: ListProjectsComponentProps) {
   const navigate = useNavigate();
 
   const handleOpenProject = (projectId: string, pageId: string) => {
-    // console.log('Open project', pageId);
+    if (variant === 'trash') return;
     navigate(`/editor/${projectId}/${pageId}`);
   };
 
@@ -71,7 +86,7 @@ export function ListProjects({ projectsData, isLoadingPages }: ListProjectsCompo
         projectsData?.map((page: ProjectsDataProps) => (
           <div
             key={page._id}
-            className="group cursor-pointer md:col-span-4 2xl:col-span-3"
+            className={`group md:col-span-4 2xl:col-span-3 ${variant !== 'trash' ? 'cursor-pointer' : 'cursor-default'}`}
             onClick={() => handleOpenProject(page._id, page.firstPageId)}
           >
             <Card className="overflow-hidden p-0 transition-all duration-200 group-hover:shadow-lg">
@@ -85,11 +100,15 @@ export function ListProjects({ projectsData, isLoadingPages }: ListProjectsCompo
                   className="absolute left-[50%] top-[50%] max-w-[80px] translate-x-[-50%] translate-y-[-50%] !rounded-none"
                   alt=""
                 />
-                <DropdownMenuIcons
-                  projectId={page._id}
-                  userId={page.userId}
-                  groupId={page.groupId}
-                />
+                {variant === 'trash' ? (
+                  <DropdownMenuTrashIcons projectId={page._id} userId={page.userId} />
+                ) : (
+                  <DropdownMenuIcons
+                    projectId={page._id}
+                    userId={page.userId}
+                    groupId={page.groupId}
+                  />
+                )}
               </CardHeader>
 
               <CardFooter className="p-4">
@@ -118,14 +137,20 @@ export function DropdownMenuIcons({
   groupId: string | null;
 }) {
   const queryClient = useQueryClient();
+  const [newGroupName, setNewGroupName] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { data: groups = [] } = useQuery<{ _id: string; name: string }[]>({
+    queryKey: ['groups', userId],
+    queryFn: () => api.get(`/groups?userId=${userId}`).then((res) => res.data),
+    staleTime: 2 * 60 * 1000,
+  });
 
   const { mutate: duplicateProject } = useMutation({
     mutationFn: () => api.post(`/projects/${projectId}/duplicate`).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
-      if (groupId) {
-        queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
-      }
+      if (groupId) queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
     },
   });
 
@@ -133,11 +158,50 @@ export function DropdownMenuIcons({
     mutationFn: () => api.patch(`/projects/${projectId}/trash`).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      if (groupId) queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
+    },
+  });
+
+  // Move or to a group or remove
+  const { mutate: moveToGroup } = useMutation({
+    mutationFn: (targetGroupId: string | null) =>
+      api.patch(`/projects/${projectId}/group`, { groupId: targetGroupId }).then((res) => res.data),
+    onSuccess: (_data, targetGroupId) => {
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      if (targetGroupId) {
+        queryClient.invalidateQueries({ queryKey: ['projectsByGroup', targetGroupId] });
+        queryClient.invalidateQueries({ queryKey: ['groupPages', targetGroupId] });
+      }
       if (groupId) {
         queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
+        queryClient.invalidateQueries({ queryKey: ['groupPages', groupId] });
       }
     },
   });
+
+  const { mutate: createGroupAndMove } = useMutation({
+    mutationFn: () =>
+      api
+        .post('/groups', { name: newGroupName.trim(), userId })
+        .then((res) => res.data)
+        .then((group) =>
+          api.patch(`/projects/${projectId}/group`, { groupId: group._id }).then(() => group)
+        ),
+    onSuccess: (group: { _id: string; name: string }) => {
+      queryClient.invalidateQueries({ queryKey: ['groups', userId] });
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      queryClient.invalidateQueries({ queryKey: ['projectsByGroup', group._id] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      setNewGroupName('');
+    },
+  });
+
+  const handleCreateGroup = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (!newGroupName.trim()) return;
+    createGroupAndMove();
+  };
 
   return (
     <>
@@ -166,29 +230,66 @@ export function DropdownMenuIcons({
 
           {/* Mover */}
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger onClick={(e) => e.stopPropagation()}>
               <FolderInputIcon />
               Mover
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>More options</DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuItem>Calendly</DropdownMenuItem>
-                      <DropdownMenuItem>Slack</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Webhook</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-
+              <DropdownMenuSubContent onClick={(e) => e.stopPropagation()}>
+                {groupId && (
+                  <>
+                    <DropdownMenuItem
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        moveToGroup(null);
+                      }}
+                    >
+                      <FolderMinusIcon />
+                      Desagrupar
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Advanced...</DropdownMenuItem>
+                {groups.map((group) => (
+                  <DropdownMenuItem
+                    key={group._id}
+                    disabled={group._id === groupId}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      moveToGroup(group._id);
+                    }}
+                  >
+                    {group.name}
+                  </DropdownMenuItem>
+                ))}
+
+                {groups.length > 0 && <DropdownMenuSeparator />}
+
+                {/* Create new group */}
+                <div
+                  className="flex items-center gap-1 px-2 py-1"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <input
+                    ref={inputRef}
+                    value={newGroupName}
+                    onChange={(e) => setNewGroupName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleCreateGroup(e);
+                    }}
+                    placeholder="Novo grupo..."
+                    className="bg-background h-7 w-full rounded border px-2 text-xs outline-none focus:ring-1"
+                  />
+                  <Button
+                    size="icon"
+                    variant="muted"
+                    className="h-7 w-7 shrink-0"
+                    disabled={!newGroupName.trim()}
+                    onClick={handleCreateGroup}
+                  >
+                    <CheckIcon className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
@@ -197,6 +298,7 @@ export function DropdownMenuIcons({
             <UserPlus />
             Compartilhar
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-destructive"
@@ -211,5 +313,49 @@ export function DropdownMenuIcons({
         </DropdownMenuContent>
       </DropdownMenu>
     </>
+  );
+}
+
+export function DropdownMenuTrashIcons({
+  projectId,
+  userId,
+}: {
+  projectId: string;
+  userId: string;
+}) {
+  const queryClient = useQueryClient();
+
+  const { mutate: restoreProject } = useMutation({
+    mutationFn: () => api.patch(`/projects/${projectId}/restore`).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['deletedProjects', userId] });
+    },
+  });
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          data-sidebar="trigger"
+          variant="muted"
+          size="icon"
+          className="group-hover:bg-space-500/40 absolute right-2 top-0 h-8 w-8 !text-white"
+        >
+          <EllipsisVerticalIcon />
+          <span className="sr-only">Toggle página menu</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            restoreProject();
+          }}
+        >
+          <RotateCcwIcon />
+          Restaurar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

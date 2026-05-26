@@ -1,12 +1,12 @@
 import express from "express";
 
 import {
-    createGroup,
-    deleteGroup,
-    getGroupById,
-    getGroupsByUserId,
-    getGroupsWithProjects,
-    updateGroup
+  createGroup,
+  deleteGroup,
+  getGroupById,
+  getGroupsByUserId,
+  getGroupsWithProjects,
+  updateGroup
 } from "../controllers/groupController.ts";
 
 const router = express.Router();

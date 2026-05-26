@@ -75,7 +75,12 @@ export const getGroupsWithProjects = async (req: Request, res: Response) => {
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ['$groupId', '$$groupId'] }
+                $expr: {
+                  $and: [
+                    { $eq: ['$groupId', '$$groupId'] },
+                    { $eq: ['$deletedAt', null] }
+                  ]
+                }
               }
             },
             {

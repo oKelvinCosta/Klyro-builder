@@ -10,7 +10,7 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { NavUser } from '@/editor/components/nav-user';
-import { BellIcon, TrashIcon, UsersIcon } from 'lucide-react';
+import { BellIcon, HouseIcon, TrashIcon, UsersIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function AppSidebar() {
@@ -37,6 +37,14 @@ export function AppSidebar() {
                 {/* Menu */}
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
+                    <Link to={'/'}>
+                      <HouseIcon />
+                      <span>Início</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
                     <a href="#">
                       <BellIcon />
                       Notificações
@@ -54,10 +62,10 @@ export function AppSidebar() {
 
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <a href="#">
+                    <Link to={'/lixeira'}>
                       <TrashIcon />
                       <span>Lixeira</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarGroup>
