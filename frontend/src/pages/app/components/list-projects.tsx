@@ -74,8 +74,15 @@ export function ListProjects({ projectsData, isLoadingPages }: ListProjectsCompo
           >
             <Card className="overflow-hidden p-0 transition-all duration-200 group-hover:shadow-lg">
               <CardHeader className="relative">
-                <Img src={page.cover} className="aspect-video !rounded-none" alt="" />
+                {/* <Img src={page.cover} className="aspect-video !rounded-none" alt="" /> */}
 
+                {/* Provisory */}
+                <Img src={page.cover} className="aspect-video !rounded-none opacity-0" alt="" />
+                <Img
+                  src={page.cover}
+                  className="absolute left-[50%] top-[50%] max-w-[80px] translate-x-[-50%] translate-y-[-50%] !rounded-none"
+                  alt=""
+                />
                 <DropdownMenuIcons />
               </CardHeader>
 

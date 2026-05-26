@@ -24,7 +24,7 @@ const ProjectSchema = new mongoose.Schema({
   // Image Cover
   cover: {
     type: String,
-    default: 'https://picsum.photos/id/18/2500/1667'
+    default: () => `https://api.dicebear.com/9.x/identicon/svg?seed=projeto-${Date.now()}`
   },
 
   // Project N:1 User
