@@ -17,7 +17,9 @@ export function AppSidebar() {
   const mockUser = {
     name: 'Kelvin costa',
     email: 'okelvincosta@gmail.com',
-    avatar: 'https://api.dicebear.com/9.x/bottts-neutral/svg?seed=oKelvin',
+
+    // avatar: 'https://api.dicebear.com/9.x/bottts-neutral/svg?seed=oKelvin',
+    avatar: 'https://avatars.githubusercontent.com/u/28162385?v=4&size=64',
   };
   return (
     <Sidebar>

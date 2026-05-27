@@ -58,6 +58,7 @@ export function ListProjects({
 }: ListProjectsComponentProps) {
   const navigate = useNavigate();
 
+  // Open project if not in trash
   const handleOpenProject = (projectId: string, pageId: string) => {
     if (variant === 'trash') return;
     navigate(`/editor/${projectId}/${pageId}`);
@@ -67,62 +68,68 @@ export function ListProjects({
 
   return (
     <>
-      {isLoadingPages ? (
-        <div className="md:col-span-4 2xl:col-span-3">
-          <Card className="overflow-hidden p-0">
-            <CardHeader>
-              <Skeleton className="col-span-2 aspect-video w-full !rounded-none" />
-            </CardHeader>
-
-            <CardFooter className="p-4">
-              <div className="w-full space-y-2">
-                <Skeleton className="h-4 w-[80%]" /> {/* Agora funciona */}
-                <Skeleton className="h-3 w-[100px]" />
-              </div>
-            </CardFooter>
-          </Card>
-        </div>
-      ) : (
-        projectsData?.map((page: ProjectsDataProps) => (
-          <div
-            key={page._id}
-            className={`group md:col-span-4 2xl:col-span-3 ${variant !== 'trash' ? 'cursor-pointer' : 'cursor-default'}`}
-            onClick={() => handleOpenProject(page._id, page.firstPageId)}
-          >
-            <Card className="overflow-hidden p-0 transition-all duration-200 group-hover:shadow-lg">
-              <CardHeader className="relative">
-                {/* <Img src={page.cover} className="aspect-video !rounded-none" alt="" /> */}
-
-                {/* Provisory */}
-                <Img src={page.cover} className="aspect-video !rounded-none opacity-0" alt="" />
-                <Img
-                  src={page.cover}
-                  className="absolute left-[50%] top-[50%] max-w-[80px] translate-x-[-50%] translate-y-[-50%] !rounded-none"
-                  alt=""
-                />
-                {variant === 'trash' ? (
-                  <DropdownMenuTrashIcons projectId={page._id} userId={page.userId} />
-                ) : (
-                  <DropdownMenuIcons
-                    projectId={page._id}
-                    userId={page.userId}
-                    groupId={page.groupId}
-                  />
-                )}
+      {
+        // While loading
+        isLoadingPages ? (
+          <div className="md:col-span-4 2xl:col-span-3">
+            <Card className="overflow-hidden p-0">
+              <CardHeader>
+                <Skeleton className="col-span-2 aspect-video w-full !rounded-none" />
               </CardHeader>
 
               <CardFooter className="p-4">
-                <div className="flex flex-col gap-0">
-                  <span className="!text-xs font-medium">{page.title || 'Sem título'}</span>
-                  <span className="text-muted-foreground !text-xs">
-                    Editado há {formatRelativeTime(page.updatedAt)}
-                  </span>
+                <div className="w-full space-y-2">
+                  <Skeleton className="h-4 w-[80%]" /> {/* Agora funciona */}
+                  <Skeleton className="h-3 w-[100px]" />
                 </div>
               </CardFooter>
             </Card>
           </div>
-        ))
-      )}
+        ) : (
+          projectsData?.map((page: ProjectsDataProps) => (
+            <div
+              key={page._id}
+              className={`group md:col-span-4 2xl:col-span-3 ${variant !== 'trash' ? 'cursor-pointer' : 'cursor-default'}`}
+              onClick={() => handleOpenProject(page._id, page.firstPageId)}
+            >
+              <Card className="overflow-hidden p-0 transition-all duration-200 group-hover:shadow-lg">
+                <CardHeader className="relative">
+                  {/* <Img src={page.cover} className="aspect-video !rounded-none" alt="" /> */}
+
+                  {/* Provisory */}
+                  <Img src={page.cover} className="aspect-video !rounded-none opacity-0" alt="" />
+                  <Img
+                    src={page.cover}
+                    className="absolute left-[50%] top-[50%] max-w-[80px] translate-x-[-50%] translate-y-[-50%] !rounded-none"
+                    alt=""
+                  />
+                  {
+                    // Show trash icons if in trash, otherwise show regular icons
+                    variant === 'trash' ? (
+                      <DropdownMenuTrashIcons projectId={page._id} userId={page.userId} />
+                    ) : (
+                      <DropdownMenuIcons
+                        projectId={page._id}
+                        userId={page.userId}
+                        groupId={page.groupId}
+                      />
+                    )
+                  }
+                </CardHeader>
+
+                <CardFooter className="p-4">
+                  <div className="flex flex-col gap-0">
+                    <span className="!text-xs font-medium">{page.title || 'Sem título'}</span>
+                    <span className="text-muted-foreground !text-xs">
+                      Editado há {formatRelativeTime(page.updatedAt)}
+                    </span>
+                  </div>
+                </CardFooter>
+              </Card>
+            </div>
+          ))
+        )
+      }
     </>
   );
 }
@@ -140,12 +147,14 @@ export function DropdownMenuIcons({
   const [newGroupName, setNewGroupName] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Get groups list
   const { data: groups = [] } = useQuery<{ _id: string; name: string }[]>({
     queryKey: ['groups', userId],
     queryFn: () => api.get(`/groups?userId=${userId}`).then((res) => res.data),
     staleTime: 2 * 60 * 1000,
   });
 
+  // Duplicate project
   const { mutate: duplicateProject } = useMutation({
     mutationFn: () => api.post(`/projects/${projectId}/duplicate`).then((res) => res.data),
     onSuccess: () => {
@@ -154,15 +163,17 @@ export function DropdownMenuIcons({
     },
   });
 
+  // Trash project
   const { mutate: trashProject } = useMutation({
     mutationFn: () => api.patch(`/projects/${projectId}/trash`).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      queryClient.invalidateQueries({ queryKey: ['deletedProjects', userId] });
       if (groupId) queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
     },
   });
 
-  // Move or to a group or remove
+  // Move or to a group or remove from group
   const { mutate: moveToGroup } = useMutation({
     mutationFn: (targetGroupId: string | null) =>
       api.patch(`/projects/${projectId}/group`, { groupId: targetGroupId }).then((res) => res.data),
@@ -180,6 +191,7 @@ export function DropdownMenuIcons({
     },
   });
 
+  // Create a new group and move the project to it
   const { mutate: createGroupAndMove } = useMutation({
     mutationFn: () =>
       api
@@ -197,6 +209,7 @@ export function DropdownMenuIcons({
     },
   });
 
+  // Handle creating a new group and moving the project to it
   const handleCreateGroup = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     if (!newGroupName.trim()) return;

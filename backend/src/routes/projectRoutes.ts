@@ -2,7 +2,6 @@ import express from "express";
 
 import {
   createProject,
-  deleteProjectAndPages,
   duplicateProject,
   getProject,
   getProjectsByGroup,
@@ -32,6 +31,5 @@ router.patch("/:id/trash", trashProject);
 router.patch("/:id/restore", restoreProject);
 router.patch("/:projectId/pages/bulk", updatePagesBulkController);
 router.patch("/:projectId/:pageId", updateProject);
-router.delete("/:id", deleteProjectAndPages);
 
 export default router;
