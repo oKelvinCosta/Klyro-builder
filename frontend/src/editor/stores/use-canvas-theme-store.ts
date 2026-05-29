@@ -1,4 +1,4 @@
-// src/stores/useCanvasThemeStore.ts
+// src/stores/useThemeStore.ts
 import { create } from 'zustand';
 
 export interface CanvasTheme {
@@ -83,7 +83,7 @@ interface CanvasThemeStore {
   resetTheme: () => void;
 }
 
-export const useCanvasThemeStore = create<CanvasThemeStore>((set) => ({
+export const useThemeStore = create<CanvasThemeStore>((set) => ({
   theme: defaultTheme,
   setTheme: (partial) => set((state) => ({ theme: { ...state.theme, ...partial } })),
   resetTheme: () => set({ theme: defaultTheme }),

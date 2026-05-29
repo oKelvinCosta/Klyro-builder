@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { useCanvasThemeStore } from '@/editor/stores/use-canvas-theme-store';
+import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
 import { RichTextMenu, type ComponentConfig } from '@puckeditor/core';
 import Highlight from '@tiptap/extension-highlight';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
@@ -35,7 +35,7 @@ const TEXT_STYLES = [
   { value: 'p-sm', label: 'Parágrafo sm', fontSize: '0.875rem' },
 ];
 const RichTextToolbar = ({ editor }: { editor: any }) => {
-  const { theme } = useCanvasThemeStore();
+  const { theme } = useThemeStore();
   const [presets, setPresets] = useState<{ name: string; styles: any }[]>([]);
   const [activeMenu, setActiveMenu] = useState<'color' | 'highlight' | 'preset' | null>(null);
 
@@ -115,9 +115,9 @@ const RichTextToolbar = ({ editor }: { editor: any }) => {
     <div className="flex flex-col gap-2 px-4 py-2">
       <span className="text-[10px] font-bold uppercase text-slate-400">{title}</span>
       <div className="grid grid-cols-9 gap-4">
-        {allColors.map((color) => (
+        {allColors.map((color, index) => (
           <button
-            key={color}
+            key={`${color}-${index}`}
             className="h-5 w-5 rounded-sm border border-white shadow-sm transition-transform hover:scale-110"
             style={{ background: color }}
             onClick={() => {

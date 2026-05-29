@@ -17,7 +17,7 @@ export function usePageLoader(projectId: string) {
     gcTime: Infinity, // Keep cache while tab is open
     refetchOnWindowFocus: false, // Don't refetch when returning to tab
     refetchOnReconnect: false, // Don't refetch on internet reconnection
-    refetchOnMount: false, // Don't refetch when component remounts
+    refetchOnMount: false, // don't refetch when component remounts if cache exists
   });
 
   return {

@@ -1,8 +1,8 @@
-import { useCanvasThemeStore } from '@/editor/stores/use-canvas-theme-store';
+import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
 import { GoogleFontLoader } from './google-font-loader';
 
 export function CanvasWrapper({ children }: { children: React.ReactNode }) {
-  const { theme } = useCanvasThemeStore();
+  const { theme } = useThemeStore();
 
   const cssVars = {
     '--background': theme.background,

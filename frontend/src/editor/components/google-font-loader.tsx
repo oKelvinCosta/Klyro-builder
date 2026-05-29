@@ -1,4 +1,4 @@
-import { useCanvasThemeStore } from '@/editor/stores/use-canvas-theme-store';
+import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
 import * as React from 'react';
 
 /**
@@ -6,7 +6,7 @@ import * as React from 'react';
  *
  * FUNCTIONALITY:
  * This component automatically synchronizes the document's available fonts with the
- * theme settings. It listens to changes in the `useCanvasThemeStore`, extracts the
+ * theme settings. It listens to changes in the `useThemeStore`, extracts the
  * requested font families, and injects `<link>` tags into the DOM to fetch those
  * fonts from the Google Fonts API.
  *
@@ -21,7 +21,7 @@ import * as React from 'react';
  * </CanvasWrapper>
  */
 export function GoogleFontLoader() {
-  const { theme } = useCanvasThemeStore();
+  const { theme } = useThemeStore();
 
   /**
    * Identifies unique font families defined in the theme that need to be loaded.

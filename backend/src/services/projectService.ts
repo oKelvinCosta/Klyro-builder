@@ -8,6 +8,8 @@ interface CreateProjectData {
   cover?: string;
   userId: string | mongoose.Types.ObjectId;
   groupId?: string | mongoose.Types.ObjectId | null;
+  // Theme configuration (colors, typography, etc.)
+  theme?: Record<string, any>;
 }
 
 /**
@@ -27,6 +29,8 @@ export const createProjectWithPage = async (
       groupId: data?.groupId ?? null,
       version: 1,
       deletedAt: null,
+      // Ensure theme is stored; default to empty object if not provided
+      theme: data?.theme ?? {},
     });
 
     page = await Page.create({
@@ -51,9 +55,9 @@ export const createProjectWithPage = async (
  */
 export const updateProjectAndPage = async (
   projectId: string,
-  projectData: Partial<{ title: string; slug: string; cover: string }>,
+  projectData: Partial<{ title?: string; slug?: string; cover?: string; theme?: Record<string, any> }>,
   pageId?: string,
-  pageData?: Partial<{ title: string; slug: string; puckData: object }>
+  pageData?: Partial<{ title?: string; slug?: string; puckData?: object }>
 ) => {
   // Project
   const project = await Project.findByIdAndUpdate(
@@ -101,6 +105,8 @@ export const duplicateProjectWithPages = async (projectId: string) => {
       groupId: original.groupId ?? null,
       version: original.version,
       deletedAt: null,
+      // Preserve theme configuration when duplicating
+      theme: original.theme ?? {},
     });
 
     await Page.insertMany(

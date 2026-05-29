@@ -7,14 +7,15 @@ import { useEditorMode } from '@/editor/stores/editor-mode-store';
 import { Puck, createUsePuck } from '@puckeditor/core';
 import '@puckeditor/core/puck.css';
 import { Cog, Eye, Rocket, Server } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // import database from '../../../../backend/database/database.json';
 // import database2 from '../../../../backend/database/database2.json';
 import { CanvasWrapper } from '@/editor/components/canvas-wrapper';
 import { ConfigPanel } from '@/editor/components/config-panel';
 import { SnapshotPanel } from '@/editor/components/snapshot-panel';
-import { CanvasThemePanel } from '@/editor/components/theme-panel';
+import { ThemePanel } from '@/editor/components/theme-panel';
+import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
 import '@/styles/canvas.css';
 import '@/styles/editor.css';
 import { Palette } from 'lucide-react';
@@ -57,6 +58,11 @@ export function PageEditor() {
   const { handleAutoSave } = useAutoSave();
 
   // console.log('Page data fetched:', pageData?.puckData);
+  useLayoutEffect(() => {
+    if (!pageData) return;
+
+    useThemeStore.getState().setTheme(pageData.project?.theme || {});
+  }, [pageData]);
 
   // Set editor mode to editing on component mount
   // To render something different in editor mode
@@ -83,7 +89,7 @@ export function PageEditor() {
     name: 'theme',
     label: 'Tema',
     icon: <Palette size={24} />,
-    render: () => <CanvasThemePanel />,
+    render: () => <ThemePanel />,
   };
 
   const SnapshotPlugin = {

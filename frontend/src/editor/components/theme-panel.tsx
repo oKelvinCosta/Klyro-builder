@@ -14,7 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useCanvasThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
+import { useThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
+import { usePageUpdater } from '@/pages/puck/hooks/use-page-updater';
 import { Palette, RotateCcw, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
@@ -194,11 +195,12 @@ const ColorField = ({
 };
 
 /**
- * MAIN COMPONENT: CanvasThemePanel
+ * MAIN COMPONENT: ThemePanel
  * The main sidebar panel that manages theme editing.
  */
-export function CanvasThemePanel() {
-  const { theme, setTheme, resetTheme } = useCanvasThemeStore();
+export function ThemePanel() {
+  const { theme, setTheme, resetTheme } = useThemeStore();
+  const { updatePage } = usePageUpdater();
 
   // localTheme holds the "draft" of the theme before it's applied to the global store
   const [localTheme, setLocalTheme] = useState<CanvasTheme>(theme);
@@ -219,6 +221,8 @@ export function CanvasThemePanel() {
 
   const handleSave = () => {
     setTheme(localTheme); // Apply changes to the Canvas
+    // Persist theme to the backend
+    updatePage.mutate({ project: { theme: localTheme } } as any);
   };
 
   // Shared props to pass to all ColorField instances

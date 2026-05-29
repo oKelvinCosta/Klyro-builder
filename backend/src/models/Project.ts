@@ -26,6 +26,11 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     default: () => `https://api.dicebear.com/9.x/identicon/svg?seed=projeto-${Date.now()}`
   },
+  // Theme configuration
+  theme: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  },
 
   // Project N:1 User
   userId: {
