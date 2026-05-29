@@ -1,10 +1,18 @@
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
 import { RichTextMenu, type ComponentConfig } from '@puckeditor/core';
 import Highlight from '@tiptap/extension-highlight';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type RichTextBlockProps = {
   content: React.ReactNode;
@@ -24,12 +32,12 @@ const BASE_COLORS = [
 
 // Text styles configuration
 const TEXT_STYLES = [
-  { value: 1, label: 'Heading 1' },
-  { value: 2, label: 'Heading 2' },
-  { value: 3, label: 'Heading 3' },
-  { value: 4, label: 'Heading 4' },
-  { value: 5, label: 'Heading 5' },
-  { value: 6, label: 'Heading 6' },
+  { value: '1', label: 'Heading 1' },
+  { value: '2', label: 'Heading 2' },
+  { value: '3', label: 'Heading 3' },
+  { value: '4', label: 'Heading 4' },
+  { value: '5', label: 'Heading 5' },
+  { value: '6', label: 'Heading 6' },
   { value: 'p-base', label: 'Parágrafo base' },
   { value: 'p-lg', label: 'Parágrafo lg', fontSize: '1.5rem' },
   { value: 'p-sm', label: 'Parágrafo sm', fontSize: '0.875rem' },
@@ -38,6 +46,17 @@ const RichTextToolbar = ({ editor }: { editor: any }) => {
   const { theme } = useThemeStore();
   const [presets, setPresets] = useState<{ name: string; styles: any }[]>([]);
   const [activeMenu, setActiveMenu] = useState<'color' | 'highlight' | 'preset' | null>(null);
+
+  // Force re-render on editor transactions to keep toolbar state (like active heading dropdown) in sync
+  const [, forceUpdate] = useState({});
+  useEffect(() => {
+    if (!editor) return;
+    const updateToolbar = () => forceUpdate({});
+    editor.on('transaction', updateToolbar);
+    return () => {
+      editor.off('transaction', updateToolbar);
+    };
+  }, [editor]);
 
   // Combine static base colors with dynamic theme colors
   const allColors = [
@@ -173,18 +192,9 @@ const RichTextToolbar = ({ editor }: { editor: any }) => {
 
           <RichTextMenu.Group>
             {(() => {
-              let currentValue: string | number = 'p-base';
-              for (let i = 1; i <= 6; i++) {
-                if (editor.isActive('heading', { level: i })) {
-                  currentValue = i;
-                  break;
-                }
-              }
               return (
-                <select
-                  className="h-7 rounded border border-slate-200 bg-transparent px-1 text-xs outline-none"
-                  onChange={(e) => {
-                    const value = e.target.value;
+                <Select
+                  onValueChange={(value) => {
                     const style = TEXT_STYLES.find((s) => s.value === value);
                     if (value === 'p-base') {
                       editor.chain().focus().setParagraph().unsetMark('textStyle').run();
@@ -197,17 +207,32 @@ const RichTextToolbar = ({ editor }: { editor: any }) => {
                         .run();
                     } else {
                       const level = Number(value) as 1 | 2 | 3 | 4 | 5 | 6;
-                      editor.chain().focus().toggleHeading({ level }).unsetMark('textStyle').run();
+                      if (!editor.isActive('heading', { level })) {
+                        editor
+                          .chain()
+                          .focus()
+                          .toggleHeading({ level })
+                          .unsetMark('textStyle')
+                          .run();
+                      } else {
+                        editor.chain().focus().run();
+                      }
                     }
                   }}
-                  value={String(currentValue)}
                 >
-                  {TEXT_STYLES.map((style) => (
-                    <option key={style.value} value={style.value}>
-                      {style.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger className="h-7 w-[130px] text-xs">
+                    <SelectValue placeholder="Estilo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {TEXT_STYLES.map((style) => (
+                        <SelectItem key={style.value} value={style.value} className="text-xs">
+                          {style.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               );
             })()}
           </RichTextMenu.Group>
