@@ -9,12 +9,15 @@ interface DataToUpdate {
     slug?: string;
     cover?: string;
     theme?: Record<string, any>;
+    textStyles?: unknown[];
   };
   page?: {
     title?: string;
     slug?: string;
     puckData?: object;
   };
+  /** Evita toast em saves automáticos (ex.: estilos de texto) */
+  silent?: boolean;
 }
 
 export function usePageUpdater() {
@@ -22,7 +25,8 @@ export function usePageUpdater() {
   const queryClient = useQueryClient();
 
   const updatePage = useMutation({
-    mutationFn: (data: DataToUpdate) => api.patch(`/projects/${projectId}/${pageId}`, data),
+    mutationFn: ({ silent: _silent, ...data }: DataToUpdate) =>
+      api.patch(`/projects/${projectId}/${pageId}`, data),
     onSuccess: (_, variables) => {
       queryClient.setQueryData(['Project', projectId], (old: any) => {
         if (!old) return old;
@@ -43,8 +47,9 @@ export function usePageUpdater() {
           firstPage: updatedFirstPage,
         };
       });
-      console.log('Project saved successfully!');
-      toast.success('Project saved successfully!');
+      if (!variables.silent) {
+        toast.success('Project saved successfully!');
+      }
     },
     onError: (error) => {
       toast.error('Error saving Project');

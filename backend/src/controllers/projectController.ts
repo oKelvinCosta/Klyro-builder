@@ -28,10 +28,13 @@ type Response = express.Response;
  * }
  */
 export const createProject = async (req: Request, res: Response) => {  
+  
   try {
+    console.log('🚀 [createProject] Requisição recebida:', req.body);
     const userId = new mongoose.Types.ObjectId("69c9a51d260548585aa1fad8");
     const { groupId } = req.body;
 
+    console.log('🚀 [createProject] Chamando createProjectWithPage com:', { userId, groupId, ...req.body });
     const result = await createProjectWithPage({
       userId,
       ...req.body,
@@ -248,9 +251,11 @@ export const updateProject = async (req: Request, res: Response) => {
   try {
     const projectId = Array.isArray(req.params.projectId) ? req.params.projectId[0] : req.params.projectId;
     const pageId = Array.isArray(req.params.pageId) ? req.params.pageId[0] : req.params.pageId;
-    
+
     // Frontend sends only the fields it wants to update
     const { project: projectData, page: pageData } = req.body;
+
+    console.log('🔧 Backend - Recebendo dados para atualizar:', { projectId, pageId, projectData, pageData });
 
     const result = await updateProjectAndPage(
       projectId,
@@ -259,9 +264,12 @@ export const updateProject = async (req: Request, res: Response) => {
       pageData && Object.keys(pageData).length > 0 ? pageData : undefined
     );
 
+    console.log('🔧 Backend - Resultado da atualização:', result);
+
     return res.status(200).json(result);
   } catch (err) {
     const error = err as Error;
+    console.error('🔧 Backend - Erro na atualização:', error);
     if (error.message.includes('Project not found')) {
       return res.status(404).json({ error: 'Project not found' });
     }

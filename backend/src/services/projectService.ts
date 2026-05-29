@@ -10,6 +10,8 @@ interface CreateProjectData {
   groupId?: string | mongoose.Types.ObjectId | null;
   // Theme configuration (colors, typography, etc.)
   theme?: Record<string, any>;
+  // Estilos de texto salvos (presets)
+  textStyles?: any[];
 }
 
 /**
@@ -20,6 +22,7 @@ interface CreateProjectData {
 export const createProjectWithPage = async (
   data?: CreateProjectData,
 ) => {
+  
   let project;
   let page;
 
@@ -31,7 +34,11 @@ export const createProjectWithPage = async (
       deletedAt: null,
       // Ensure theme is stored; default to empty object if not provided
       theme: data?.theme ?? {},
+      // Ensure textStyles is stored; default to empty array if not provided
+      textStyles: (data?.textStyles && data.textStyles.length > 0) ? data.textStyles : [],
     });
+
+    console.log('project createProjectWithPage', project);
 
     page = await Page.create({
       order: 1,
@@ -55,7 +62,7 @@ export const createProjectWithPage = async (
  */
 export const updateProjectAndPage = async (
   projectId: string,
-  projectData: Partial<{ title?: string; slug?: string; cover?: string; theme?: Record<string, any> }>,
+  projectData: Partial<{ title?: string; slug?: string; cover?: string; theme?: Record<string, any>; textStyles?: any[] }>,
   pageId?: string,
   pageData?: Partial<{ title?: string; slug?: string; puckData?: object }>
 ) => {
@@ -95,7 +102,7 @@ export const duplicateProjectWithPages = async (projectId: string) => {
 
   if (!original) return null;
 
-  let newProject;
+  let newProject: InstanceType<typeof Project> | null = null;
   try {
     newProject = await Project.create({
       title: `${original.title} (copy)`,
@@ -107,19 +114,27 @@ export const duplicateProjectWithPages = async (projectId: string) => {
       deletedAt: null,
       // Preserve theme configuration when duplicating
       theme: original.theme ?? {},
+      // Preserve text styles when duplicating
+      textStyles: original.textStyles ?? [],
     });
 
-    await Page.insertMany(
-      pages.map(({ title, slug, type, order, puckData }) => ({
-        title,
-        slug,
-        type,
-        order,
-        puckData,
-        projectId: newProject._id,
-        deletedAt: null,
-      }))
-    );
+    if (!newProject._id) {
+      throw new Error('Failed to duplicate project');
+    }else{
+      await Page.insertMany(
+            pages.map(({ title, slug, type, order, puckData }) => ({
+              title,
+              slug,
+              type,
+              order,
+              puckData,
+              projectId: newProject!._id,
+              deletedAt: null,
+            }))
+          );
+    }
+
+    
   } catch (err) {
     if (newProject) {
       await Project.findByIdAndDelete(newProject._id);

@@ -16,6 +16,7 @@ import { ConfigPanel } from '@/editor/components/config-panel';
 import { SnapshotPanel } from '@/editor/components/snapshot-panel';
 import { ThemePanel } from '@/editor/components/theme-panel';
 import { useThemeStore } from '@/editor/stores/use-canvas-theme-store';
+import { useTextStylesStore } from '@/editor/stores/use-text-styles-store';
 import '@/styles/canvas.css';
 import '@/styles/editor.css';
 import { Palette } from 'lucide-react';
@@ -62,6 +63,7 @@ export function PageEditor() {
     if (!pageData) return;
 
     useThemeStore.getState().setTheme(pageData.project?.theme || {});
+    useTextStylesStore.getState().setTextStyles(pageData.project?.textStyles ?? []);
   }, [pageData]);
 
   // Set editor mode to editing on component mount

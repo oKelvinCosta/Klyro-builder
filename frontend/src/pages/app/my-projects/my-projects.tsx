@@ -17,7 +17,7 @@ export function MyProjects() {
     staleTime: 0,
     gcTime: 4 * 60 * 1000,
   });
-  console.log('my-projects', projectsData);
+  // console.log('my-projects', projectsData);
   return (
     <>
       <Header />

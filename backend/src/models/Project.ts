@@ -31,6 +31,11 @@ const ProjectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     default: {}
   },
+  // Estilos de texto salvos (presets)
+  textStyles: {
+    type: [mongoose.Schema.Types.Mixed],
+    default: []
+  },
 
   // Project N:1 User
   userId: {
