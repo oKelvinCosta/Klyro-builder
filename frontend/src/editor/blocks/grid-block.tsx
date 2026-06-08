@@ -1,5 +1,6 @@
 // @/components/puck/ImgBlock.tsx
 import { Button } from '@/components/ui/button';
+import type { ContainerVariant } from '@/editor/fields';
 import * as Fields from '@/editor/fields';
 import { type ComponentConfig } from '@puckeditor/core';
 import { Monitor, Smartphone, Tablet, XCircle } from 'lucide-react';
@@ -8,15 +9,16 @@ import { borderColor, checkedColor, inputColor, inputForegroundColor } from '../
 
 export type GridBlockProps = {
   columnFormat: '1/1' | '1/2-1/2' | '1/3-2/3' | '2/3-1/3' | '1/3-1/3-1/3' | '1/4-1/4-1/4-1/4';
-  alignment: 'top' | 'center' | 'bottom';
+  alignmentY: 'top' | 'center' | 'bottom';
   mobileBreakpoint: 'never' | 'sm' | 'md' | 'lg';
   'col-1': any; // eslint-disable-line @typescript-eslint/no-explicit-any
   'col-2': any; // eslint-disable-line @typescript-eslint/no-explicit-any
   'col-3': any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  'col-4': any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  'col-4': any; // eslint-disable-line @typescript-eslint/no-explicit-any;
+  container: ContainerVariant;
 };
 
-const defaultAlignmentY = 'center' satisfies GridBlockProps['alignment'];
+const defaultAlignmentY = 'center' satisfies GridBlockProps['alignmentY'];
 
 export const GridBlock = (): ComponentConfig<GridBlockProps> => {
   // const { isEditing } = useEditorMode();
@@ -73,7 +75,7 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
           );
         },
       },
-      alignment: Fields.AlignmentYField({ defaultValue: 'center' }),
+      alignmentY: Fields.AlignmentYField({ defaultValue: 'center' }),
       mobileBreakpoint: {
         label: 'Quebrar para 1 coluna em:',
         type: 'custom',
@@ -150,24 +152,27 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
         type: 'slot',
         disallow: ['Container'],
       },
+      container: Fields.ContainerField(),
     },
     defaultProps: {
       columnFormat: '1/2-1/2',
-      alignment: defaultAlignmentY,
+      alignmentY: defaultAlignmentY,
       mobileBreakpoint: 'md',
       'col-1': [],
       'col-2': [],
       'col-3': [],
       'col-4': [],
+      container: '980',
     },
     render: ({
       columnFormat,
-      alignment,
+      alignmentY,
       mobileBreakpoint,
       'col-1': Col1,
       'col-2': Col2,
       'col-3': Col3,
       'col-4': Col4,
+      container,
     }) => {
       // Mapeamento explícito para o Tailwind não remover as classes (Purge CSS)
       const containerBreakpoints: Record<string, string> = {
@@ -243,14 +248,19 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
       const config =
         gridConfigs[columnFormat as keyof typeof gridConfigs] || gridConfigs['1/2-1/2'];
 
-      const alignmentClasses = {
+      const alignmentYClasses = {
         top: 'items-start',
         center: 'items-center',
         bottom: 'items-end',
       };
 
       return (
-        <div className={`${config.containerClass} ${alignmentClasses[alignment]}`}>
+        <div
+          className={`mx-auto ${config.containerClass} ${alignmentYClasses[alignmentY]}`}
+          style={{
+            maxWidth: Fields.CONTAINER_MAP[container].maxWidth,
+          }}
+        >
           {config.slots.map((Slot, index) => {
             const spanClass = config.spans[mobileBreakpoint as keyof typeof config.spans][index];
             return (

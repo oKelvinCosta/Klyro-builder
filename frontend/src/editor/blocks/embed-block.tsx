@@ -1,10 +1,12 @@
 // @/components/puck/ImgBlock.tsx
+import { CONTAINER_MAP, type ContainerVariant } from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 
 export type EmbedBlockProps = {
   embedCode: string;
   width: string;
   height: string;
+  container?: ContainerVariant;
 };
 
 export const EmbedBlock: ComponentConfig<EmbedBlockProps> = {
