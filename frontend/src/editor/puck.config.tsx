@@ -11,7 +11,6 @@ type Props = {
   Button: Blocks.ButtonBlockProps;
   CompleteScormButtonBlock: Blocks.CompleteScormButtonBlockProps;
   Section: Blocks.SectionBlockProps;
-  Embed: Blocks.EmbedBlockProps;
   CarouselBlock: Blocks.CarouselBlockProps;
   AccordionBlock: Blocks.AccordionBlockProps;
   // Choices blocks
@@ -41,7 +40,6 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
 
     // Media & Interactive
     Img: Blocks.ImgBlock,
-    Embed: Blocks.EmbedBlock,
     CarouselBlock: Blocks.CarouselBlock,
     AccordionBlock: Blocks.AccordionBlock,
 
@@ -55,11 +53,11 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
         components: ['Section', 'Container', 'Grid'],
       },
       text: {
-        components: ['RichText', 'Card', 'Html'],
+        components: ['RichText'],
         title: 'Texto e conteúdo',
       },
       media: {
-        components: ['Img', 'Embed', 'CarouselBlock', 'AccordionBlock'],
+        components: ['Img', 'Card', 'CarouselBlock', 'AccordionBlock', 'Html'],
         title: 'Mídia e interatividade',
       },
       scorm: {

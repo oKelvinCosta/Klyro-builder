@@ -171,7 +171,7 @@ export const SectionBlock = (): ComponentConfig<SectionBlockProps> => {
             }}
           >
             {/* <Slot className={`${isEditing ? 'p-2' : ''}`} /> */}
-            <SlotPuck Slot={Slot} />
+            <SlotPuck Slot={Slot} style={{ gap: '4rem' }} />
           </div>
 
           {/* Divider Bottom */}

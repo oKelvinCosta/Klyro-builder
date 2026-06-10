@@ -68,7 +68,11 @@ export const ImgBlock: ComponentConfig<ImgBlockProps> = {
   render: ({ src, borderRadius, maxWidthValue, maxWidthUnit, alignment, rounded }) => {
     return (
       <div
-        style={{ maxWidth: `${maxWidthValue}${maxWidthUnit}`, ...getAlignmentXClasses(alignment) }}
+        style={{
+          width: '100%',
+          maxWidth: `${maxWidthValue}${maxWidthUnit}`,
+          ...getAlignmentXClasses(alignment),
+        }}
       >
         <Img
           src={src}

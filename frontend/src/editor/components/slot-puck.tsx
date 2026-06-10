@@ -9,11 +9,12 @@ interface SlotPuckProps {
 export const SlotPuck = ({ Slot, style, ...props }: SlotPuckProps) => {
   const { isEditing } = useEditorMode();
 
-  const editorCss = isEditing ? 'p-2' : '';
+  const editorCss = isEditing ? '1rem' : '';
 
   return (
     <Slot
       style={{
+        width: '100%',
         padding: editorCss,
         display: 'flex',
         flexDirection: 'column',

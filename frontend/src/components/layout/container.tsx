@@ -16,6 +16,7 @@ export default function Container({
     <div
       className={className}
       style={{
+        width: '100%',
         margin: 'auto',
         display: 'flex',
         flexDirection: 'column',
