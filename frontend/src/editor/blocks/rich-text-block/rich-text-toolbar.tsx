@@ -2,10 +2,10 @@
  * Custom Puck richtext toolbar: formatting, colors, text size, presets, link.
  * Wired via RichTextBlock field `renderMenu`.
  */
+import { ColorPickerField } from '@/editor/components/color-picker-field';
 import { useTextStylesActions } from '@/editor/hooks/use-text-styles-actions';
 import { RichTextMenu } from '@puckeditor/core';
 import { useEffect, useState } from 'react';
-import { ColorPalette } from './color-palette';
 import { PresetsPanel } from './presets-panel';
 import { TextSizeSelect } from './text-size-select';
 import type { ToolbarActiveMenu } from './types';
@@ -18,6 +18,7 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
   const allColors = useToolbarColors();
   const { textStyles: presets, savePreset, deletePreset } = useTextStylesActions();
   const [activeMenu, setActiveMenu] = useState<ToolbarActiveMenu>(null);
+
   const getMarkColor = (markName: string) => {
     if (!editor) return undefined;
     const attrs = editor.getAttributes(markName);
@@ -112,44 +113,60 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
           <div className="bg-muted rounded-md border p-2">
             {/* Menu Text Color */}
             {activeMenu === 'color' && (
-              <ColorPalette
-                title="Cor do Texto"
-                colors={allColors}
-                value={currentTextColor}
-                onChange={(color) => {
-                  editor.chain().focus().setColor(color).run();
-                }}
-                onSelect={(color) => {
-                  editor.chain().focus().setColor(color).run();
-                  closeMenu();
-                }}
-                onRemove={() => {
-                  editor.chain().focus().unsetColor().run();
-                  closeMenu();
-                }}
-                removeLabel="Remover cor"
-              />
+              <div className="flex items-start gap-2 p-1">
+                <ColorPickerField
+                  value={currentTextColor}
+                  onChange={(color) => {
+                    editor.chain().focus().setColor(color).run();
+                  }}
+                  enableGradient={false}
+                  allowColorTypeToggle={false}
+                  showPresets={true}
+                  presets={allColors}
+                  width={280}
+                  height={100}
+                  className="min-w-[50%]"
+                />
+                <button
+                  onClick={() => {
+                    editor.chain().focus().unsetColor().run();
+                    closeMenu();
+                  }}
+                  className="mt-2 text-xs font-medium text-slate-500 transition-colors hover:text-red-500"
+                  title="Remover cor"
+                >
+                  Remover
+                </button>
+              </div>
             )}
 
             {/* Menu Highlight Color */}
             {activeMenu === 'highlight' && (
-              <ColorPalette
-                title="Cor de Fundo"
-                colors={allColors}
-                value={currentHighlight}
-                onChange={(color) => {
-                  editor.chain().focus().setHighlight({ color }).run();
-                }}
-                onSelect={(color) => {
-                  editor.chain().focus().setHighlight({ color }).run();
-                  closeMenu();
-                }}
-                onRemove={() => {
-                  editor.chain().focus().unsetHighlight().run();
-                  closeMenu();
-                }}
-                removeLabel="Remover fundo"
-              />
+              <div className="flex items-start gap-2 p-1">
+                <ColorPickerField
+                  value={currentHighlight}
+                  onChange={(color) => {
+                    editor.chain().focus().setHighlight({ color }).run();
+                  }}
+                  enableGradient={false}
+                  allowColorTypeToggle={false}
+                  showPresets={true}
+                  presets={allColors}
+                  width={280}
+                  height={100}
+                  className="min-w-[50%]"
+                />
+                <button
+                  onClick={() => {
+                    editor.chain().focus().unsetHighlight().run();
+                    closeMenu();
+                  }}
+                  className="mt-2 text-xs font-medium text-slate-500 transition-colors hover:text-red-500"
+                  title="Remover fundo"
+                >
+                  Remover
+                </button>
+              </div>
             )}
 
             {/* Menu Presets */}
