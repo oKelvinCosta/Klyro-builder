@@ -3,7 +3,6 @@ import Container from '@/components/layout/container';
 import MainCard from '@/components/main-card';
 import { CONTAINER_MAP, type ContainerVariant } from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
-import { SlotPuck } from '../components/slot-puck';
 
 export type CardBlockProps = {
   imgSrc?: string;
@@ -156,7 +155,7 @@ export const CardBlock: ComponentConfig<CardBlockProps> = {
           variant={variant}
         >
           {content}
-          {Slot ? <SlotPuck Slot={Slot as React.ElementType} style={{ gap: '2rem' }} /> : ''}
+          {/* {Slot ? <SlotPuck Slot={Slot as React.ElementType} style={{ gap: '2rem' }} /> : ''} */}
         </MainCard>
       </Container>
     );

@@ -27,7 +27,7 @@ export default function AccordionContained({
   return (
     <div
       className={cn(
-        'bg-card text-card-foreground w-full overflow-hidden rounded-xl border shadow-sm',
+        'bg-card text-card-foreground w-full overflow-hidden border shadow-sm',
         className
       )}
       onClick={(e) => e.stopPropagation()}
@@ -39,11 +39,9 @@ export default function AccordionContained({
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className={cn(index !== 0 && 'border-t', 'w-full [&_h3]:mb-0')}
+              className={cn(index !== 0 && 'border-t', 'w-full')}
             >
-              <AccordionTrigger className="text-primary px-4 py-3 text-lg">
-                {item.title}
-              </AccordionTrigger>
+              <AccordionTrigger className="px-4 py-3 text-lg">{item.title}</AccordionTrigger>
               <AccordionContent className="px-4 pb-2 pt-0" forceMount>
                 {item.content}
               </AccordionContent>
@@ -56,7 +54,7 @@ export default function AccordionContained({
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className={cn(index !== 0 && 'border-t', 'w-full [&_h3]:mb-0')}
+              className={cn(index !== 0 && 'border-t', 'w-full')}
             >
               <AccordionTrigger className="px-4 py-3 text-lg">{item.title}</AccordionTrigger>
               <AccordionContent className="px-4 pb-2 pt-0">{item.content}</AccordionContent>

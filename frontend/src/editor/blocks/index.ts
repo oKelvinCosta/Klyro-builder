@@ -6,7 +6,6 @@ export * from './choices/footer-choices-block';
 export * from './choices/header-choices-block';
 export * from './complete-scorm-button-block';
 export * from './container-block';
-export * from './embed-block';
 export * from './grid-block';
 export * from './html-block';
 export * from './img-block';

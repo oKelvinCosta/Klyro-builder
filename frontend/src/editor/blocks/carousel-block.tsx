@@ -1,4 +1,5 @@
 import CarouselCard from '@/components/carousel-card';
+import Container from '@/components/layout/container';
 import { Button } from '@/components/ui/button';
 import { CONTAINER_MAP, type ContainerVariant } from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
@@ -176,14 +177,9 @@ export const CarouselBlock: ComponentConfig<CarouselBlockProps> = {
     }));
 
     return (
-      <div
-        style={{
-          maxWidth: CONTAINER_MAP[container || '980'].maxWidth,
-        }}
-        className="mx-auto"
-      >
+      <Container style={{ maxWidth: CONTAINER_MAP[container as ContainerVariant].maxWidth }}>
         <CarouselCard items={adaptedItems} layout={layout} />
-      </div>
+      </Container>
     );
   },
 };

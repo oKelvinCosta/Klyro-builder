@@ -87,15 +87,7 @@ export const HtmlBlock: ComponentConfig<HtmlBlockProps> = {
 
     return (
       <Container style={{ maxWidth: CONTAINER_MAP[container as ContainerVariant].maxWidth }}>
-        <div
-          dangerouslySetInnerHTML={{ __html: sanitizedcontent }}
-          style={{
-            border: '1px solid #e2e8f0',
-            padding: '16px',
-            borderRadius: '8px',
-            backgroundColor: '#f8fafc',
-          }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: sanitizedcontent }} />
       </Container>
     );
   },

@@ -171,9 +171,11 @@
 }
 .klyro-canvas h1 {
   @apply mb-4 text-6xl;
+  line-height: 110% !important;
 }
 .klyro-canvas h2 {
   @apply mb-4 text-5xl;
+  line-height: 110% !important;
 }
 .klyro-canvas h3 {
   @apply mb-4 text-4xl;
