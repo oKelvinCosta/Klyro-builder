@@ -1,9 +1,20 @@
 import { Spinner } from '@/components/ui/spinner';
 import { CanvasWrapper } from '@/editor/components/canvas-wrapper';
 import { config } from '@/editor/puck.config';
+import { useThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
+import { useTextStylesStore } from '@/editor/stores/use-text-styles-store';
 import '@/styles/canvas.css';
 import { Render, type Data } from '@puckeditor/core';
 import { useEffect, useState } from 'react';
+
+type ExportedScormData = {
+  puckData?: Data;
+  project?: {
+    theme?: Partial<CanvasTheme> | null;
+    textStyles?: unknown[] | null;
+  };
+};
+
 /**
  * Page component that renders static Puck data from a SCORM-generated JSON file.
  * Uses native fetch since the file path is only known at runtime (per-user temp folder).
@@ -22,7 +33,17 @@ export function PageProd() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
-      .then((json) => setData(json as Data))
+      .then((json: ExportedScormData | Data) => {
+        const hasExportWrapper = typeof json === 'object' && json !== null && 'puckData' in json;
+        const exportedData = hasExportWrapper ? (json as ExportedScormData) : null;
+        const puckData = (exportedData?.puckData ?? json) as Data;
+
+        // CanvasWrapper reads the store, and aplly css
+        useThemeStore.getState().hydrateTheme(exportedData?.project?.theme);
+        useTextStylesStore.getState().setTextStyles(exportedData?.project?.textStyles ?? []);
+
+        setData(puckData);
+      })
       .catch((err) => {
         console.error('Erro ao carregar puck-data.json:', err);
         setError(true);

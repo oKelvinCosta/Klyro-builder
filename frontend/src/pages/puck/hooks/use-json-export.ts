@@ -1,12 +1,16 @@
 import { api } from '@/lib/axios';
 import { useMutation } from '@tanstack/react-query';
 
+type ExportProjectPayload = {
+  title?: string;
+  slug?: string;
+  theme?: Record<string, unknown>;
+  textStyles?: unknown[];
+};
+
 type ExportPayload = {
   puckData: unknown;
-  project?: {
-    title?: string;
-    slug?: string;
-  };
+  project?: ExportProjectPayload;
 };
 
 const getFileNameFromHeader = (contentDisposition?: string) => {

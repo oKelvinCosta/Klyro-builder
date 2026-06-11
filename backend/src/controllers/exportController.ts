@@ -31,7 +31,17 @@ export const savePuckData = async (req: Request, res: Response) => {
     
     // 1. Limpeza da pasta de destino
     // 2. Salva o arquivo JSON de dados
-    scormService.saveJsonFile(puckData, tempDir, scormOpenDir, 'puck-data.json');
+    const exportData = {
+      puckData,
+      project: {
+        title: project?.title,
+        slug: project?.slug,
+        theme: project?.theme ?? {},
+        textStyles: project?.textStyles ?? [],
+      },
+    };
+
+    scormService.saveJsonFile(exportData, tempDir, scormOpenDir, 'puck-data.json');
     console.info(`Arquivo de dados salvo em: ${filePath}`);
 
 
