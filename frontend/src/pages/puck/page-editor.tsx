@@ -145,8 +145,11 @@ export function PageEditor() {
             // Get current Puck data for export
             const currentAppState = usePuckData((state) => state.appState.data);
 
-            const handlePublish = async () => {
-              await saveJsonFile(currentAppState);
+            const handleExport = async () => {
+              await saveJsonFile({
+                puckData: currentAppState,
+                project: pageData.project,
+              });
             };
 
             return (
@@ -163,7 +166,7 @@ export function PageEditor() {
 
                 <Button
                   className="flex items-center"
-                  onClick={handlePublish}
+                  onClick={handleExport}
                   disabled={isExporting}
                   variant={'neon'}
                 >

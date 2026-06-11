@@ -1,9 +1,29 @@
-import { useMutation } from '@tanstack/react-query';
 import { api } from '@/lib/axios';
+import { useMutation } from '@tanstack/react-query';
+
+type ExportPayload = {
+  puckData: unknown;
+  project?: {
+    title?: string;
+    slug?: string;
+  };
+};
+
+const getFileNameFromHeader = (contentDisposition?: string) => {
+  if (!contentDisposition) return 'SCORM_package.zip';
+
+  const utf8FileNameMatch = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8FileNameMatch?.[1]) {
+    return decodeURIComponent(utf8FileNameMatch[1]);
+  }
+
+  const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/i);
+  return fileNameMatch?.[1] ?? 'SCORM_package.zip';
+};
 
 export function useJsonExport() {
   const mutation = useMutation({
-    mutationFn: async (data: unknown) => {
+    mutationFn: async (data: ExportPayload) => {
       const response = await api.post(`/export/puck-data`, data, {
         responseType: 'blob',
       });
@@ -11,18 +31,10 @@ export function useJsonExport() {
     },
     onSuccess: (response) => {
       const data = response.data;
-      const contentDisposition = response.headers['content-disposition'];
-      let fileName = 'SCORM_package.zip';
-
-      if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
-        if (fileNameMatch && fileNameMatch.length > 1) {
-          fileName = fileNameMatch[1];
-        }
-      }
+      const fileName = getFileNameFromHeader(response.headers['content-disposition']);
 
       // Create a URL for the blob
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(data);
       const link = document.createElement('a');
       link.href = url;
 

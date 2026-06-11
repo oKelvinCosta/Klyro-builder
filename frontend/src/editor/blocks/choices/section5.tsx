@@ -11,7 +11,7 @@ export default function Section5() {
       <p>Hoje você conheceu algumas modalidades de crédito e como usá-las a seu favor.</p>
 
       <div className="mt-16">
-        <CompleteScormButton size="lg" variant="lime" className="mx-auto" />
+        <CompleteScormButton size="lg" variant="neon" className="mx-auto" />
       </div>
     </div>
   );

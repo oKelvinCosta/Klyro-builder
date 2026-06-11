@@ -1,5 +1,5 @@
 // @/components/puck/ImgBlock.tsx
-import { CONTAINER_MAP, type ContainerVariant } from '@/editor/fields/container-field';
+import type { ContainerVariant } from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 
 export type EmbedBlockProps = {

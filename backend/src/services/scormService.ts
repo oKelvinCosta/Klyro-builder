@@ -106,7 +106,22 @@ export const generateScormManifest = async (targetDir: string, frontendDir: stri
 /**
  * Compacta um diretório em um arquivo ZIP com timestamp.
  */
-export const zipDirectory = async (sourceDir: string, outPath: string): Promise<string> => {
+const toSafeFilePart = (value?: string): string => {
+  if (!value) return 'curso';
+
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9-_]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase() || 'curso';
+};
+
+export const zipDirectory = async (
+  sourceDir: string,
+  outPath: string,
+  packageName?: string
+): Promise<string> => {
   const now = new Date();
   
   // Format: DD-MM-YYYY_HH-mm-ss (using dashes for time because colons are invalid in Windows filenames)
@@ -118,7 +133,7 @@ export const zipDirectory = async (sourceDir: string, outPath: string): Promise<
   const seconds = String(now.getSeconds()).padStart(2, '0');
 
   const timestamp = `${day}-${month}-${year}_${hours}-${minutes}-${seconds}`;
-  const zipName = `SCORM_${timestamp}.zip`;
+  const zipName = `SCORM_${toSafeFilePart(packageName)}_${timestamp}.zip`;
   const finalPath = path.join(outPath, zipName);
 
   return new Promise((resolve, reject) => {

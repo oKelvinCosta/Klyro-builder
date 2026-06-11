@@ -138,7 +138,7 @@ export const CardBlock: ComponentConfig<CardBlockProps> = {
     textSize,
     variant,
     container,
-    slot: Slot,
+    slot: _slot,
   }) => {
     return (
       <Container

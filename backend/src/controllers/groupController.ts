@@ -260,14 +260,14 @@ export const deleteGroup = async (req: Request, res: Response) => {
       
       // 3.1. Mark projects as deleted (deletedAt) and remove the group relationship (groupId: null)
       // so they appear individually in the trash.
-      const pRes = await Project.updateMany(
+      await Project.updateMany(
         { _id: { $in: projectIds } },
         { deletedAt, groupId: null }
       );
       // console.log('[deleteGroup] Project soft-delete result:', pRes);
       
       // 3.2. Mark all pages belonging to those projects as deleted.
-      const pgRes = await Page.updateMany(
+      await Page.updateMany(
         { projectId: { $in: projectIds } },
         { deletedAt }
       );

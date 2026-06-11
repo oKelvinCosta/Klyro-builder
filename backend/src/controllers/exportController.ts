@@ -13,7 +13,13 @@ const __dirname = path.dirname(__filename);
 
 export const savePuckData = async (req: Request, res: Response) => {
   try {
-    const data = req.body;
+    const { puckData, project } = req.body;
+
+    if (!puckData) {
+      return res.status(400).json({
+        error: 'Dados do Puck nao enviados.',
+      });
+    }
 
     // Definição de caminhos
     const tempDir = path.join(__dirname, '../../temp');
@@ -25,7 +31,7 @@ export const savePuckData = async (req: Request, res: Response) => {
     
     // 1. Limpeza da pasta de destino
     // 2. Salva o arquivo JSON de dados
-    scormService.saveJsonFile(data,tempDir, scormOpenDir, 'puck-data.json');
+    scormService.saveJsonFile(puckData, tempDir, scormOpenDir, 'puck-data.json');
     console.info(`Arquivo de dados salvo em: ${filePath}`);
 
 
@@ -43,11 +49,11 @@ export const savePuckData = async (req: Request, res: Response) => {
     console.info('Compactando pacote SCORM...');
     // tempDir é backend/temp, queremos salvar o zip em backend/temp
     const zipOutputFolder = tempDir;
-    const zipPath = await scormService.zipDirectory(scormOpenDir, zipOutputFolder);
+    const zipPath = await scormService.zipDirectory(scormOpenDir, zipOutputFolder, project?.slug);
     console.info(`Pacote ZIP gerado: ${zipPath}`);
 
     // 7. Envia o arquivo para download automático
-    res.download(zipPath, path.basename(zipPath), (err) => {
+    return res.download(zipPath, path.basename(zipPath), (err) => {
       if (err) {
         console.error('Erro ao enviar o arquivo ZIP:', err);
       }
@@ -55,7 +61,7 @@ export const savePuckData = async (req: Request, res: Response) => {
 
   } catch (error) {
     console.error('Erro no processo de exportação/build/SCORM:', error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       error: 'Erro interno no servidor durante o processo.',
       details: error instanceof Error ? error.message : String(error)
     });
