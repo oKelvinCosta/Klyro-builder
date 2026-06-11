@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { ColorPickerField } from '@/editor/components/color-picker-field';
 import { useThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
 import { usePageUpdater } from '@/pages/puck/hooks/use-page-updater';
 import { Palette, RotateCcw, Save } from 'lucide-react';
@@ -21,27 +22,52 @@ import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
 import { FontPicker } from './font-picker';
 
-/**
- * UTILS: Color Conversion Functions
- * These helpers manage the translation between Hex (UI), HSL (Store/CSS),
- * and various user input formats.
- */
+function hslToRgba(hslStr: string): string {
+  if (!hslStr) return 'rgba(0,0,0,1)';
+  const parts = hslStr.replace(/%/g, '').trim().split(/\s+/);
+  if (parts.length < 3) return 'rgba(0,0,0,1)';
 
-/**
- * Converts a Hex color string (#RRGGBB) to a Shadcn-compatible HSL string ("H S% L%").
- * Used when the user selects a color via the native <input type="color">.
- */
-function hexToHsl(hex: string): string {
-  hex = hex.replace(/^#/, '');
-  const r = parseInt(hex.substring(0, 2), 16) / 255;
-  const g = parseInt(hex.substring(2, 4), 16) / 255;
-  const b = parseInt(hex.substring(4, 6), 16) / 255;
+  const h = Number(parts[0]);
+  const s = Number(parts[1]) / 100;
+  const l = Number(parts[2]) / 100;
 
-  const max = Math.max(r, g, b),
-    min = Math.min(r, g, b);
-  let h = 0,
-    s = 0,
-    l = (max + min) / 2;
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = l - c / 2;
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  if (h >= 0 && h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+
+  const red = Math.round((r + m) * 255);
+  const green = Math.round((g + m) * 255);
+  const blue = Math.round((b + m) * 255);
+
+  return `rgba(${red},${green},${blue},1)`;
+}
+
+function rgbaToHsl(rgba: string): string {
+  const match = rgba.match(
+    /rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*([0-9.]+))?\s*\)/
+  );
+  if (!match) return '0 0% 0%';
+
+  const r = Number(match[1]) / 255;
+  const g = Number(match[2]) / 255;
+  const b = Number(match[3]) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0;
+  let s = 0;
+  const l = (max + min) / 2;
 
   if (max !== min) {
     const d = max - min;
@@ -64,59 +90,6 @@ function hexToHsl(hex: string): string {
 }
 
 /**
- * Converts a Shadcn-style HSL string ("H S% L%") back to Hex (#RRGGBB).
- * Used to display the current color in the native color picker and text inputs.
- */
-function hslToHex(hslStr: string): string {
-  if (!hslStr) return '#000000';
-  const parts = hslStr.split(' ');
-  if (parts.length < 3) return '#000000';
-
-  const h = parseFloat(parts[0]);
-  const s = parseFloat(parts[1].replace('%', '')) / 100;
-  const l = parseFloat(parts[2].replace('%', '')) / 100;
-
-  const a = s * Math.min(l, 1 - l);
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12;
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color)
-      .toString(16)
-      .padStart(2, '0');
-  };
-  return `#${f(0)}${f(8)}${f(4)}`;
-}
-
-/**
- * Smart parser that identifies if an input string is Hex or HSL.
- * Allows users to paste various formats while normalizing them to the Store format.
- */
-function parseAnyColorToHsl(input: string): string | null {
-  const trimmed = input.trim();
-
-  // 1. Check for Hex formats (#FFF, #FFFFFF, or just FFFFFF)
-  if (trimmed.startsWith('#') || /^[0-9a-fA-F]{3,6}$/.test(trimmed)) {
-    const hex = trimmed.startsWith('#') ? trimmed : `#${trimmed}`;
-    if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(hex)) {
-      return hexToHsl(hex);
-    }
-  }
-
-  // 2. Check for HSL space-separated format (e.g., "200 50 50" or "200 50% 50%")
-  const hslParts = trimmed.replace(/%/g, '').split(/\s+/);
-  if (hslParts.length === 3) {
-    const h = parseFloat(hslParts[0]);
-    const s = parseFloat(hslParts[1]);
-    const l = parseFloat(hslParts[2]);
-    if (!isNaN(h) && !isNaN(s) && !isNaN(l)) {
-      return `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
-    }
-  }
-
-  return null;
-}
-
-/**
  * COMPONENT: ColorField
  * Individual row containing a label, color picker, and hex text input.
  * Defined outside to avoid re-mounting on parent re-renders.
@@ -126,37 +99,9 @@ interface ColorFieldProps {
   id: keyof CanvasTheme;
   localTheme: CanvasTheme;
   handleChange: (key: keyof CanvasTheme, value: string) => void;
-  handleColorChange: (key: keyof CanvasTheme, hex: string) => void;
 }
 
-const ColorField = ({
-  label,
-  id,
-  localTheme,
-  handleChange,
-  handleColorChange,
-}: ColorFieldProps) => {
-  // inputValue tracks the text shown in the Hex input (independent of the store format)
-  const [inputValue, setInputValue] = useState(hslToHex(localTheme[id] as string));
-
-  // Sync input value when localTheme changes (e.g., when clicking the color picker or resetting)
-  useEffect(() => {
-    setInputValue(hslToHex(localTheme[id] as string));
-  }, [localTheme, id]);
-
-  const handleTextChange = (val: string) => {
-    setInputValue(val);
-    const hsl = parseAnyColorToHsl(val);
-    if (hsl) {
-      handleChange(id, hsl); // Update local state only if valid color detected
-    }
-  };
-
-  const handleBlur = () => {
-    // Ensure the input always displays a valid Hex when focus is lost
-    setInputValue(hslToHex(localTheme[id] as string));
-  };
-
+const ColorField = ({ label, id, localTheme, handleChange }: ColorFieldProps) => {
   return (
     <div className="space-y-1.5">
       <Label
@@ -171,25 +116,10 @@ const ColorField = ({
       >
         {label}
       </Label>
-      <div className={cn('flex', 'gap-2')}>
-        {/* Native Color Picker */}
-        <Input
-          id={id}
-          type="color"
-          className={cn('size-8', 'shrink-0', 'cursor-pointer', 'p-0.5')}
-          value={hslToHex(localTheme[id] as string)}
-          onChange={(e) => handleColorChange(id, e.target.value)}
-        />
-        {/* Hex/HSL Text Input */}
-        <Input
-          type="text"
-          value={inputValue}
-          onChange={(e) => handleTextChange(e.target.value)}
-          onBlur={handleBlur}
-          className={cn('h-8', 'font-mono', 'text-xs')}
-          placeholder="#000000 ou H S L"
-        />
-      </div>
+      <ColorPickerField
+        value={hslToRgba(localTheme[id] as string)}
+        onChange={(color) => handleChange(id, rgbaToHsl(color))}
+      />
     </div>
   );
 };
@@ -210,13 +140,8 @@ export function ThemePanel() {
     setLocalTheme(theme);
   }, [theme]);
 
-  // Memoized handlers to keep props stable for ColorField
   const handleChange = (key: keyof CanvasTheme, value: string) => {
     setLocalTheme((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleColorChange = (key: keyof CanvasTheme, hex: string) => {
-    handleChange(key, hexToHsl(hex));
   };
 
   const handleSave = () => {
@@ -229,7 +154,6 @@ export function ThemePanel() {
   const commonProps = {
     localTheme,
     handleChange,
-    handleColorChange,
   };
 
   return (

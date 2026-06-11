@@ -2,6 +2,7 @@
  * Puck RichText block: field config, TipTap extensions, canvas render.
  * Toolbar UI lives in rich-text-toolbar.tsx and sibling modules.
  */
+import Container from '@/components/layout/container';
 import { CONTAINER_MAP, type ContainerVariant } from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 import { RichTextToolbar } from './rich-text-toolbar';
@@ -95,13 +96,12 @@ export const RichTextBlock: ComponentConfig<RichTextBlockProps> = {
   },
 
   render: ({ content, container }) => (
-    <div
+    <Container
       style={{
-        maxWidth: CONTAINER_MAP[container || '980'].maxWidth,
+        maxWidth: CONTAINER_MAP[container as ContainerVariant].maxWidth,
       }}
-      className="mx-auto"
     >
       {content}
-    </div>
+    </Container>
   ),
 };

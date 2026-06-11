@@ -18,6 +18,18 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
   const allColors = useToolbarColors();
   const { textStyles: presets, savePreset, deletePreset } = useTextStylesActions();
   const [activeMenu, setActiveMenu] = useState<ToolbarActiveMenu>(null);
+  const getMarkColor = (markName: string) => {
+    if (!editor) return undefined;
+    const attrs = editor.getAttributes(markName);
+    if (attrs?.color) return attrs.color;
+    // Fallback to storedMarks for empty selections where getAttributes returns undefined
+    const storedMarks = editor.state?.storedMarks;
+    const mark = storedMarks?.find((m: any) => m.type.name === markName);
+    return mark?.attrs?.color;
+  };
+
+  const currentTextColor = getMarkColor('textStyle') ?? allColors[0];
+  const currentHighlight = getMarkColor('highlight') ?? allColors[0];
 
   const [, forceUpdate] = useState({});
   useEffect(() => {
@@ -103,6 +115,10 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
               <ColorPalette
                 title="Cor do Texto"
                 colors={allColors}
+                value={currentTextColor}
+                onChange={(color) => {
+                  editor.chain().focus().setColor(color).run();
+                }}
                 onSelect={(color) => {
                   editor.chain().focus().setColor(color).run();
                   closeMenu();
@@ -120,6 +136,10 @@ export function RichTextToolbar({ editor }: RichTextToolbarProps) {
               <ColorPalette
                 title="Cor de Fundo"
                 colors={allColors}
+                value={currentHighlight}
+                onChange={(color) => {
+                  editor.chain().focus().setHighlight({ color }).run();
+                }}
                 onSelect={(color) => {
                   editor.chain().focus().setHighlight({ color }).run();
                   closeMenu();

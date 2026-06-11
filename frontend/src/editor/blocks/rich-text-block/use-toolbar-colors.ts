@@ -17,5 +17,6 @@ export function useToolbarColors() {
     `hsl(${theme['extra-color-3']})`,
     `hsl(${theme['extra-color-4']})`,
     `hsl(${theme['extra-color-5']})`,
+    `hsl(${theme['extra-color-5']})`,
   ];
 }

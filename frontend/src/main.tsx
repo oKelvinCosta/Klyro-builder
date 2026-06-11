@@ -5,12 +5,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './app.tsx';
 
-const isWithoutScormBuild = import.meta.env.VITE_APP_WITHOUT_SCORM === 'false';
+const isExportingScorm = import.meta.env.VITE_EXPORT_SCORM === 'true';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {/* At SCORM doesn't have dark mode */}
-    {isWithoutScormBuild ? (
+    {isExportingScorm ? (
       <App />
     ) : (
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

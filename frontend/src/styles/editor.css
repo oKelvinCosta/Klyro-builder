@@ -61,5 +61,5 @@
 
 /* RichTextEditor */
 .klyro-editor [class*='_RichTextEditor--editor'] {
-  /* height: 300px !important; */
+  height: 500px !important;
 }
