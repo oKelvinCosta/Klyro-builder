@@ -1,5 +1,6 @@
 import PreviewLayout from '@/pages/_layouts/preview-layout';
 
+import Auth from '@/pages/app/auth/auth';
 import { MyProjects } from '@/pages/app/my-projects';
 import { ProjectsByGroup } from '@/pages/app/projects-by-group/';
 import { MyTrash } from '@/pages/app/trash';
@@ -22,6 +23,11 @@ const routesDEV = [
       { path: 'group/:groupId', element: <ProjectsByGroup /> },
       { path: 'lixeira', element: <MyTrash /> },
     ],
+  },
+  {
+    path: '/auth',
+    element: <BlankLayout />,
+    children: [{ path: '', element: <Auth /> }],
   },
 
   {
