@@ -7,9 +7,16 @@ backend/node_modules/
 .env
 .env.local
 backend/.env
-!frontend/.env
-!frontend/.env.local
+frontend/.env
+frontend/.env.development
+frontend/.env.development.scorm
+frontend/.env.production
+frontend/.env.production.scorm
+frontend/.env.production.scorm.debug
+frontend/.env.local
 *.local
+
+serviceAccountKey.json
 
 # Builds and temporary files
 dist/
@@ -43,3 +50,4 @@ lerna-debug.log*
 
 # Vite/React cache
 .vite/
+

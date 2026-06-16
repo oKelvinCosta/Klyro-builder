@@ -4,10 +4,33 @@ import path from 'path';
 import { promisify } from 'util';
 
 import archiver from 'archiver';
-import dotenv from 'dotenv';
 import scopackager from 'simple-scorm-packager';
 
 const execPromise = promisify(exec);
+
+// ============================================================================
+// CONFIGURAÇÕES PADRÃO DO CURSO
+// ============================================================================
+
+interface CourseConfig {
+  title: string;
+  description: string;
+  keywords: string[];
+  duration: string; // ISO 8601 format (e.g., "PT0H30M0S")
+  author: string;
+  organization: string;
+  distBuildFolder: string;
+}
+
+const DEFAULT_COURSE_CONFIG: CourseConfig = {
+  title: 'Curso SCORM Personalizado',
+  description: 'Curso desenvolvido com PUCK Builder',
+  keywords: ['scorm', 'curso', 'e-learning'],
+  duration: 'PT0H30M0S',
+  author: 'Usuário PUCK Builder',
+  organization: 'PUCK Builder',
+  distBuildFolder: 'static-site',
+};
 
 /**
  * Limpa o conteúdo de um diretório sem deletar a pasta raiz.
@@ -69,35 +92,36 @@ export const copyFrontendBuildOutput = async (frontendDir: string, buildOutputSo
 }
 
 /**
- * Gera o manifesto SCORM com base nas configurações do .env do frontend.
+ * Gera o manifesto SCORM com base nas configurações do curso.
+ * Usa configurações padrão do backend - não carrega nada do frontend
  */
 export const generateScormManifest = async (targetDir: string, frontendDir: string): Promise<string> => {
-  const frontendEnvPath = path.resolve(frontendDir, '.env');
-  const frontendEnv = fs.existsSync(frontendEnvPath) 
-    ? dotenv.parse(fs.readFileSync(frontendEnvPath)) 
-    : {};
+  // Usa configurações padrão do backend
+  const courseConfig = DEFAULT_COURSE_CONFIG;
+  
+  console.log('Gerando manifesto SCORM com configuração padrão:', courseConfig);
 
-  const scormConfig = {
+  const manifestConfig = {
     version: '1.2',
-    organization: frontendEnv.VITE_COURSE_ORGANIZATION || 'SESI NEAD MG',
-    title: frontendEnv.VITE_COURSE_TITLE || 'Curso POK-BUILDER',
+    organization: courseConfig.organization,
+    title: courseConfig.title,
     language: 'pt-BR',
     masteryScore: 80,
     startingPage: 'index.html',
     source: targetDir,
     package: {
       zip: false,
-      author: frontendEnv.VITE_COURSE_AUTHOR || 'SESI',
+      author: courseConfig.author,
       outputFolder: targetDir,
-      description: frontendEnv.VITE_COURSE_DESCRIPTION || '',
-      keywords: (frontendEnv.VITE_COURSE_KEYWORDS || 'scorm,curso').split(','),
-      typicalDuration: frontendEnv.VITE_COURSE_DURATION || 'PT0H5M0S',
-      rights: `©${new Date().getFullYear()} ${frontendEnv.VITE_COURSE_ORGANIZATION || 'SESI'}. Todos os direitos reservados.`,
+      description: courseConfig.description,
+      keywords: courseConfig.keywords,
+      typicalDuration: courseConfig.duration,
+      rights: `©${new Date().getFullYear()} ${courseConfig.organization}. Todos os direitos reservados.`,
     },
   };
 
   return new Promise((resolve) => {
-    scopackager(scormConfig, (msg: string) => {
+    scopackager(manifestConfig, (msg: string) => {
       resolve(msg);
     });
   });

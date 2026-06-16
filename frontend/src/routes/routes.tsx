@@ -1,5 +1,6 @@
 import PreviewLayout from '@/pages/_layouts/preview-layout';
 
+import { getScormConfig } from '@/config/course-config';
 import Auth from '@/pages/app/auth/auth';
 import { MyProjects } from '@/pages/app/my-projects';
 import { ProjectsByGroup } from '@/pages/app/projects-by-group/';
@@ -11,8 +12,7 @@ import { AppLayout } from '../pages/_layouts/app-layout/app-layout';
 import BlankLayout from '../pages/_layouts/blank-layout';
 import { PageProd } from '../pages/puck/page-prod';
 
-const isDEV =
-  process.env.NODE_ENV === 'development' || import.meta.env.VITE_ENABLE_SCORM_DEBUG_PROD === 'true';
+const isDEV = getScormConfig().env === 'DEV';
 
 const routesDEV = [
   {

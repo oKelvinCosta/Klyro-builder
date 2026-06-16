@@ -5,10 +5,11 @@ import path from 'path';
 import tailwindcss from 'tailwindcss';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
+import { courseConfig } from './src/config/course-config';
 
 dotenv.config();
 
-const folder = process.env.VITE_DIST_BUILD || 'static-site'; // ✅ fallback padrão
+const folder = courseConfig.distBuildFolder; // ✅ usa configuração centralizada
 
 export default defineConfig({
   base: './', // ✅ mantém caminhos relativos

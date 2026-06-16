@@ -1,11 +1,11 @@
-import { src, dest, series } from 'gulp';
-import zipGulp from 'gulp-zip';
-import path from 'path';
 import { deleteAsync } from 'del';
 import dotenv from 'dotenv';
+import { dest, series, src } from 'gulp';
+import zipGulp from 'gulp-zip';
+import path from 'path';
 dotenv.config();
 
-const folder = process.env.VITE_DIST_BUILD;
+const folder = 'static-site';
 
 // Function to delete everything inside the "dist" folder
 export function clean() {

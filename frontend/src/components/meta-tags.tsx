@@ -1,3 +1,4 @@
+import { courseConfig } from '@/config/course-config';
 import { useEffect } from 'react';
 
 /**
@@ -19,11 +20,11 @@ function setMeta(tagName: string, content?: string) {
 }
 
 export default function MetaTags() {
-  const siteName = import.meta.env.VITE_COURSE_TITLE as string | undefined;
-  const courseDescription = import.meta.env.VITE_COURSE_DESCRIPTION as string | undefined;
-  const courseKeywords = import.meta.env.VITE_COURSE_KEYWORDS as string | undefined;
-  const courseAuthor = import.meta.env.VITE_COURSE_AUTHOR as string | undefined;
-  const courseOrganization = import.meta.env.VITE_COURSE_ORGANIZATION as string | undefined;
+  const siteName = courseConfig.title;
+  const courseDescription = courseConfig.description;
+  const courseKeywords = courseConfig.keywords.join(',');
+  const courseAuthor = courseConfig.author;
+  const courseOrganization = courseConfig.organization;
 
   useEffect(() => {
     document.title = siteName as string;

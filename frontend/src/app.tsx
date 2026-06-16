@@ -6,33 +6,39 @@ import { QueryClientProvider } from '@tanstack/react-query';
 
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { getScormConfig } from './config/course-config';
 
 export default function App() {
-  if (import.meta.env.VITE_APP_WITHOUT_SCORM === 'true') {
+  const { appScorm } = getScormConfig();
+
+  if (!appScorm) {
     console.info('O ambiente SCORM está desativado');
   }
 
   return (
-    <div className="klyro-app">
-      <MetaTags />
+    <>
+      {/* <AuthInitializer /> */}
+      <div className="klyro-app">
+        <MetaTags />
 
-      {/* Provide the client to your App */}
-      <QueryClientProvider client={queryClient}>
-        {import.meta.env.VITE_APP_WITHOUT_SCORM === 'true' ? (
-          <>
-            <RouterProvider router={router} />
-          </>
-        ) : (
-          <>
-            <ScormProvider>
+        {/* Provide the client to your App */}
+        <QueryClientProvider client={queryClient}>
+          {!appScorm ? (
+            <>
               <RouterProvider router={router} />
-            </ScormProvider>
-          </>
-        )}
-      </QueryClientProvider>
+            </>
+          ) : (
+            <>
+              <ScormProvider>
+                <RouterProvider router={router} />
+              </ScormProvider>
+            </>
+          )}
+        </QueryClientProvider>
 
-      {/* Toast container */}
-      <Toaster />
-    </div>
+        {/* Toast container */}
+        <Toaster />
+      </div>
+    </>
   );
 }

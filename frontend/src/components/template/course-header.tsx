@@ -1,5 +1,6 @@
 import { type DividerType } from '@/components/layout/divider';
 import Section from '@/components/layout/section';
+import { courseConfig } from '@/config/course-config';
 
 interface CourseHeaderProps {
   grade: string;
@@ -63,7 +64,7 @@ export default function CourseHeader({
         {/* Title */}
         <div className="flex h-full items-center justify-center">
           <h1 className="mx-auto mt-8 max-w-3xl px-4 text-center text-2xl font-bold leading-snug sm:text-3xl md:text-4xl lg:text-5xl">
-            {children ? children : import.meta.env.VITE_COURSE_TITLE}
+            {children ? children : courseConfig.title}
           </h1>
         </div>
       </div>

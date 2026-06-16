@@ -20,6 +20,7 @@ export const savePuckData = async (req: Request, res: Response) => {
         error: 'Dados do Puck nao enviados.',
       });
     }
+    console.log('puckData:', puckData);
 
     // Definição de caminhos
     const tempDir = path.join(__dirname, '../../temp');
