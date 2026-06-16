@@ -14,9 +14,15 @@ const UserSchema = new mongoose.Schema({
     trim: true
   },
 
+  firebaseUid: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
+
   passwordHash: {
     type: String,
-    required: true
+    required: false
   },
 
   role: {

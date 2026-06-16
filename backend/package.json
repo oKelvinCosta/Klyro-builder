@@ -8,11 +8,12 @@
     "lint:fix": "eslint src/** --fix"
   },
   "dependencies": {
+    "archiver": "^7.0.1",
     "express": "^5.2.1",
+    "firebase-admin": "^14.0.0",
     "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
     "simple-scorm-packager": "^0.2.7",
-    "archiver": "^7.0.1",
     "typescript-eslint": "^8.59.1"
   },
   "devDependencies": {

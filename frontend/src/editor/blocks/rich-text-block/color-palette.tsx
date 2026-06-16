@@ -10,7 +10,7 @@ type ColorPaletteProps = {
   removeLabel: string;
   value: string;
   onChange: (color: string) => void;
-  onSelect: (color: string) => void;
+  // onSelect: (color: string) => void;
   onRemove: () => void;
 };
 
@@ -20,7 +20,7 @@ export function ColorPalette({
   removeLabel,
   value,
   onChange,
-  onSelect,
+  // onSelect,
   onRemove,
 }: ColorPaletteProps) {
   return (

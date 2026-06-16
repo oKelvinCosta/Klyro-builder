@@ -6,6 +6,7 @@
 // Read the documentation of pipwerks-scorm-api-wrapper for more information and understand what happens under the hood!
 // https://pipwerks.com/using-a-scorm-wrapper-to-simplify-the-workflow/
 
+import { getScormConfig } from '@/config/course-config';
 import pipwerks, { type SCORMAPI } from 'pipwerks-scorm-api-wrapper';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 export { LESSON_STATUS } from '@/constants/scorm'; // Re-export for build compatibility
@@ -17,7 +18,7 @@ export { LESSON_STATUS } from '@/constants/scorm'; // Re-export for build compat
  * with the Learning Management System (LMS). Each field represents a specific piece of
  * learner or course data that can be read from or written to the SCORM API.
  */
- 
+
 export const FIELDS = {
   /** Current status of the lesson */
   lessonStatus: 'cmi.core.lesson_status' as const,
@@ -37,7 +38,6 @@ type Fields = (typeof FIELDS)[keyof typeof FIELDS];
  * These constants define the standardized SCORM lesson status states that can be used
  * to track the learner's progress through the course content.
  */
-
 
 // type LessonStatus = typeof LESSON_STATUS[keyof typeof LESSON_STATUS];
 
@@ -118,9 +118,9 @@ export function ScormProvider({ children }: ScormProviderProps) {
 
   // Returns TRUE if the environment is development (using npm run dev or scorm-dev)
   // When building(npm run build, scorm-prod, or scorm-debug), the value will be "production", returning false.
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isDevelopment = getScormConfig().env === 'DEV';
 
-  const isProductionDebugMode = import.meta.env.VITE_ENABLE_SCORM_DEBUG_PROD === 'true';
+  const isProductionDebugMode = getScormConfig().env === 'PROD' && getScormConfig().debug === true;
 
   // Activate the debug based on the environment variable
   useEffect(() => {
@@ -158,7 +158,7 @@ export function ScormProvider({ children }: ScormProviderProps) {
       if (isProductionDebugMode) {
         console.info(
           '%c ------- ScormWrapper - PRODUCTION DEBUG MODE ------- \n SCORM API is initialized in debug mode. \n -------------------------------------------------------',
-          'background: #6d28d9; color: white'
+          'background: #a728d9ff; color: white'
         );
       }
     }
@@ -283,7 +283,8 @@ export function ScormProvider({ children }: ScormProviderProps) {
 
 // Hook to use the ScormContext
 // The ScormContext is a context that provides functions to interact with the SCORM API.
-export const useScorm = (): ScormContextType => { // eslint-disable-line react-refresh/only-export-components
+export const useScorm = (): ScormContextType => {
+  // eslint-disable-line react-refresh/only-export-components
   const context = useContext(ScormContext);
   if (context === undefined) {
     throw new Error('useScorm must be used within a ScormProvider');
