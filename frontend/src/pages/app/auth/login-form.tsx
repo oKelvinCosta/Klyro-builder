@@ -2,13 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { translateErrorFirebase } from '../auth/auth';
+import { translateErrorFirebase } from './page-auth';
 
 const loginFormSchema = z.object({
   email: z.email('Email inválido.'),
@@ -16,7 +16,7 @@ const loginFormSchema = z.object({
 });
 
 export function LoginForm() {
-  const login = useAuthStoreFirebase((s) => s.login);
+  const login = useAuthFirebaseStore((s) => s.login);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({

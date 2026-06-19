@@ -3,13 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as z from 'zod';
-import { translateErrorFirebase } from '../auth/auth';
+import { translateErrorFirebase } from './page-auth';
 
 const registerFormSchema = z
   .object({
@@ -47,7 +47,7 @@ const registerFormSchema = z
   });
 
 export function RegisterForm() {
-  const register = useAuthStoreFirebase((s) => s.register);
+  const register = useAuthFirebaseStore((s) => s.register);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({

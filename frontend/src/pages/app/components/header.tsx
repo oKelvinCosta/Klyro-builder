@@ -57,7 +57,7 @@ export function Header({ breadcrumb = false, title }: { breadcrumb?: boolean; ti
               <BreadcrumbList className="flex">
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/">Início</Link>
+                    <Link to="/app">Início</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />

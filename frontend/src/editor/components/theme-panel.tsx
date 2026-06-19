@@ -15,8 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ColorPickerField } from '@/editor/components/color-picker-field';
+import { usePageUpdater } from '@/editor/hooks/use-page-updater';
 import { useThemeStore, type CanvasTheme } from '@/editor/stores/use-canvas-theme-store';
-import { usePageUpdater } from '@/pages/puck/hooks/use-page-updater';
 import { Palette, RotateCcw, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';

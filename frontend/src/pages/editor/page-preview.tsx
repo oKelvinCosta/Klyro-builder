@@ -6,7 +6,7 @@ import '@/styles/canvas.css';
 import { Render } from '@puckeditor/core';
 import { useLayoutEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { usePageLoader } from './hooks/use-page-loader';
+import { usePageLoader } from '../../editor/hooks/use-page-loader';
 
 const emptyData = {
   root: { props: {} },

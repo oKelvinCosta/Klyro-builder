@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Header } from '../components/header';
 
-export function ProjectsByGroup() {
+export function PageProjectsByGroup() {
   const { groupId } = useParams();
 
   const { data: projectsData, isLoading: isLoadingProjects } = useQuery({

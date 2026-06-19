@@ -1,1 +1,1 @@
-export * from './my-trash';
+export * from './page-my-trash';

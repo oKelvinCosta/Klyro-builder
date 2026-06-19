@@ -64,7 +64,7 @@ export function AppSidebar() {
 
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to={'/app/lixeira'}>
+                    <Link to={'trash'}>
                       <TrashIcon />
                       <span>Lixeira</span>
                     </Link>

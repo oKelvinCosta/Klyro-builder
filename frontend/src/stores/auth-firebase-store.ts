@@ -64,9 +64,10 @@ async function validateLogin() {
  *
  * @example
  * ```tsx
- * const { user, loading, login, logout } = useAuthStoreFirebase();\ * ```
+ * const { user, loading, login, logout } = useAuthFirebaseStore();
+ * ```
  */
-export const useAuthStoreFirebase = create<AuthState>((set) => ({
+export const useAuthFirebaseStore = create<AuthState>((set) => ({
   user: null,
   loading: true,
   error: null,

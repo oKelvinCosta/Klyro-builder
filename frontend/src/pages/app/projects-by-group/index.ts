@@ -1,1 +1,1 @@
-export * from './projects-by-group';
+export * from './page-projects-by-group';

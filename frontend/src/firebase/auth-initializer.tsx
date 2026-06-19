@@ -1,4 +1,4 @@
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 import { useEffect } from 'react';
 
 /**
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
  * atualizados na store.
  */
 export default function AuthInitializer() {
-  const init = useAuthStoreFirebase((s) => s._init);
+  const init = useAuthFirebaseStore((s) => s._init);
 
   useEffect(() => {
     init();

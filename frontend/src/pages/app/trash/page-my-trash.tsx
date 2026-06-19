@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Header } from '../components/header';
 import { ListProjects } from '../components/list-projects';
 
-export function MyTrash() {
+export function PageMyTrash() {
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
     queryKey: ['deletedProjects'],
     queryFn: () => api.get(`/projects/trash`).then((res) => res.data),

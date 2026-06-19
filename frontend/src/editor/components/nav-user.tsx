@@ -30,7 +30,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { queryClient } from '@/lib/react-query';
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 import { useTheme } from 'next-themes';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,7 +48,7 @@ export function NavUser({
 
   const { theme, setTheme } = useTheme();
 
-  const logout = useAuthStoreFirebase((s) => s.logout);
+  const logout = useAuthFirebaseStore((s) => s.logout);
 
   function handleAppearanceChange() {
     setTheme(theme === 'dark' ? 'light' : 'dark');

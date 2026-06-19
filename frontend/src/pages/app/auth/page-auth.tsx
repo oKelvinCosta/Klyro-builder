@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
-import { ForgotPasswordForm } from './forgotPasswordForm';
-import { LoginForm } from './loginForm';
-import { RegisterForm } from './registerForm';
+import { ForgotPasswordForm } from './forgot-password-form';
+import { LoginForm } from './login-form';
+import { RegisterForm } from './register-form';
 
 export function translateErrorFirebase(code: string) {
   switch (code) {
@@ -22,7 +22,7 @@ export function translateErrorFirebase(code: string) {
   }
 }
 
-export default function Auth() {
+export function PageAuth() {
   const [searchParams] = useSearchParams();
 
   const isSignUp = searchParams.get('signup') === 'true';
@@ -42,7 +42,7 @@ export default function Auth() {
           <small>© 2026 Klyro • Todos os direitos reservados</small>
         </div>
       </div>
-      <div className="dark:bg-background order-1 flex items-center justify-center lg:order-2 lg:col-span-6 xl:col-span-8">
+      <div className="dark:bg-background order-1 flex items-center justify-center py-14 lg:order-2 lg:col-span-6 xl:col-span-8">
         {isForgotPassword ? <ForgotPasswordForm /> : isSignUp ? <RegisterForm /> : <LoginForm />}
       </div>
     </div>

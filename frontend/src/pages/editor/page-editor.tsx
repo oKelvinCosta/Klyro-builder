@@ -20,9 +20,9 @@ import { useTextStylesStore } from '@/editor/stores/use-text-styles-store';
 import '@/styles/canvas.css';
 import '@/styles/editor.css';
 import { Palette } from 'lucide-react';
-import { useAutoSave } from './hooks/use-auto-save';
-import { useJsonExport } from './hooks/use-json-export';
-import { usePageLoader } from './hooks/use-page-loader';
+import { useAutoSave } from '../../editor/hooks/use-auto-save';
+import { useJsonExport } from '../../editor/hooks/use-json-export';
+import { usePageLoader } from '../../editor/hooks/use-page-loader';
 
 // Static data for testing (can be removed if unused)
 // const initialData = database;

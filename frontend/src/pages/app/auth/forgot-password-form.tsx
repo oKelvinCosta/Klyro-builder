@@ -3,21 +3,21 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as z from 'zod';
-import { translateErrorFirebase } from '../auth/auth';
+import { translateErrorFirebase } from './page-auth';
 
 const forgotPasswordFormSchema = z.object({
   email: z.email('Email inválido.'),
 });
 
 export function ForgotPasswordForm() {
-  const resetPassword = useAuthStoreFirebase((s) => s.resetPassword);
+  const resetPassword = useAuthFirebaseStore((s) => s.resetPassword);
   const form = useForm<z.infer<typeof forgotPasswordFormSchema>>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: { email: '' },

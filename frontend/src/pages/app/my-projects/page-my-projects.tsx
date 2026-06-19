@@ -6,7 +6,7 @@ import { Header } from '../components/header';
 import { ListProjects } from '../components/list-projects';
 import { ListGroups } from './list-groups';
 
-export function MyProjects() {
+export function PageMyProjects() {
   // Get ungrouped pages of user
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
     queryKey: ['ungroupedPages'],

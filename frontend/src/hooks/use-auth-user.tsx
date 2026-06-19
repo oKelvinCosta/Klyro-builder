@@ -1,6 +1,5 @@
-// hooks/useAuthUser.ts
 import { useUserMongo } from '@/hooks/use-user-mongo';
-import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
+import { useAuthFirebaseStore } from '@/stores/auth-firebase-store';
 
 /**
  * Custom hook that aggregates authentication state from both Firebase (authentication) and MongoDB (user database).
@@ -13,7 +12,7 @@ export function useAuthUser() {
     user: userFirebase,
     loading: loadingFirebase,
     error: errorFirebase,
-  } = useAuthStoreFirebase();
+  } = useAuthFirebaseStore();
 
   // User from MongoDB
   const {

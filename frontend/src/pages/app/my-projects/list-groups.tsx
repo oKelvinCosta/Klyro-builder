@@ -36,7 +36,7 @@ export function ListGroups() {
 
   const handleOpenGroup = (groupId: string) => {
     console.info('Open group', groupId);
-    navigate(`/group/${groupId}`);
+    navigate(`group/${groupId}`);
   };
 
   const useGroupsWithProjects = () => {

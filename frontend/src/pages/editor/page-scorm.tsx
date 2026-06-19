@@ -19,7 +19,7 @@ type ExportedScormData = {
  * Page component that renders static Puck data from a SCORM-generated JSON file.
  * Uses native fetch since the file path is only known at runtime (per-user temp folder).
  */
-export function PageProd() {
+export function PageScorm() {
   const [data, setData] = useState<Data | null>(null);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);

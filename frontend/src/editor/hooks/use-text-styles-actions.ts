@@ -8,9 +8,9 @@
  *
  * We do NOT fetch on menu open: presets were already loaded with the project in `usePageLoader`.
  */
+import { usePageUpdater } from '@/editor/hooks/use-page-updater';
 import type { TextStylePreset } from '@/editor/stores/use-text-styles-store';
 import { useTextStylesStore } from '@/editor/stores/use-text-styles-store';
-import { usePageUpdater } from '@/pages/puck/hooks/use-page-updater';
 import { useCallback } from 'react';
 
 export function useTextStylesActions() {
