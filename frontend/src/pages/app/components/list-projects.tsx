@@ -110,17 +110,9 @@ export function ListProjects({
                   {
                     // Show trash icons if in trash, otherwise show regular icons
                     variant === 'trash' ? (
-                      <DropdownMenuTrashIcons
-                        projectId={project._id}
-                        userId={project.userId}
-                        groupId={project.groupId}
-                      />
+                      <DropdownMenuTrashIcons projectId={project._id} groupId={project.groupId} />
                     ) : (
-                      <DropdownMenuIcons
-                        projectId={project._id}
-                        userId={project.userId}
-                        groupId={project.groupId}
-                      />
+                      <DropdownMenuIcons projectId={project._id} groupId={project.groupId} />
                     )
                   }
                 </CardHeader>
@@ -144,11 +136,11 @@ export function ListProjects({
 
 export function DropdownMenuIcons({
   projectId,
-  userId,
+
   groupId,
 }: {
   projectId: string;
-  userId: string;
+
   groupId: string | null;
 }) {
   const queryClient = useQueryClient();
@@ -157,8 +149,8 @@ export function DropdownMenuIcons({
 
   // Get groups list
   const { data: groups = [] } = useQuery<{ _id: string; name: string }[]>({
-    queryKey: ['groups', userId],
-    queryFn: () => api.get(`/groups?userId=${userId}`).then((res) => res.data),
+    queryKey: ['groups'],
+    queryFn: () => api.get(`/groups`).then((res) => res.data),
     staleTime: 2 * 60 * 1000,
   });
 
@@ -166,7 +158,7 @@ export function DropdownMenuIcons({
   const { mutate: duplicateProject } = useMutation({
     mutationFn: () => api.post(`/projects/${projectId}/duplicate`).then((res) => res.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages'] });
       if (groupId) queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
     },
   });
@@ -175,9 +167,9 @@ export function DropdownMenuIcons({
   const { mutate: trashProject } = useMutation({
     mutationFn: () => api.patch(`/projects/${projectId}/trash`).then((res) => res.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
-      queryClient.invalidateQueries({ queryKey: ['deletedProjects', userId] });
-      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages'] });
+      queryClient.invalidateQueries({ queryKey: ['deletedProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects'] });
       if (groupId) {
         queryClient.invalidateQueries({ queryKey: ['projectsByGroup', groupId] });
         queryClient.invalidateQueries({ queryKey: ['groupPages', groupId] });
@@ -190,8 +182,8 @@ export function DropdownMenuIcons({
     mutationFn: (targetGroupId: string | null) =>
       api.patch(`/projects/${projectId}/group`, { groupId: targetGroupId }).then((res) => res.data),
     onSuccess: (_data, targetGroupId) => {
-      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
-      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages'] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects'] });
       if (targetGroupId) {
         queryClient.invalidateQueries({ queryKey: ['projectsByGroup', targetGroupId] });
         queryClient.invalidateQueries({ queryKey: ['groupPages', targetGroupId] });
@@ -207,16 +199,16 @@ export function DropdownMenuIcons({
   const { mutate: createGroupAndMove } = useMutation({
     mutationFn: () =>
       api
-        .post('/groups', { name: newGroupName.trim(), userId })
+        .post('/groups', { name: newGroupName.trim() })
         .then((res) => res.data)
         .then((group) =>
           api.patch(`/projects/${projectId}/group`, { groupId: group._id }).then(() => group)
         ),
     onSuccess: (group: { _id: string; name: string }) => {
-      queryClient.invalidateQueries({ queryKey: ['groups', userId] });
-      queryClient.invalidateQueries({ queryKey: ['ungroupedPages', userId] });
+      queryClient.invalidateQueries({ queryKey: ['groups'] });
+      queryClient.invalidateQueries({ queryKey: ['ungroupedPages'] });
       queryClient.invalidateQueries({ queryKey: ['projectsByGroup', group._id] });
-      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects'] });
       setNewGroupName('');
     },
   });
@@ -343,11 +335,9 @@ export function DropdownMenuIcons({
 
 export function DropdownMenuTrashIcons({
   projectId,
-  userId,
   groupId,
 }: {
   projectId: string;
-  userId: string;
   groupId?: string | null;
 }) {
   const queryClient = useQueryClient();
@@ -355,8 +345,8 @@ export function DropdownMenuTrashIcons({
   const { mutate: restoreProject } = useMutation({
     mutationFn: () => api.patch(`/projects/${projectId}/restore`).then((res) => res.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['deletedProjects', userId] });
-      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
+      queryClient.invalidateQueries({ queryKey: ['deletedProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects'] });
       // To select again when come back to group page
       if (groupId) {
         queryClient.invalidateQueries({ queryKey: ['groupPages', groupId] });

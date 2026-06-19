@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import type { AuthenticatedRequest } from "../middlewares/verifyFirebaseToken";
 
+import { debug } from "@/config/debug.ts";
 import { z } from "zod";
 import User from "../models/User.ts";
 
@@ -34,7 +35,7 @@ export async function syncUser(req: AuthenticatedRequest, res: Response) {
     const { name } = parsed.data;
 
     let user = await User.findOne({ firebaseUid: uid });
-    console.log("syncUser: Usuário encontrado no DB?:", user);
+    debug("syncUser: Usuário encontrado no DB?:", user);
 
     if (!user) {
       user = await User.create({
@@ -46,20 +47,19 @@ export async function syncUser(req: AuthenticatedRequest, res: Response) {
         lastLogin: new Date(),
       });
 
-      console.log("syncUser: Novo usuário criado:", user);
+      debug("syncUser: Novo usuário criado:", user);
     } else {
-      console.log("syncUser: Usuário existente encontrado, atualizando dados.");
-
+      debug("syncUser: Usuário existente encontrado, atualizando dados.");
       user.lastLogin = new Date();
 
       // ✅ atualiza nome apenas se válido e vazio anteriormente
       if (name && !user.name) {
         user.name = name;
-        console.log("syncUser: Nome atualizado:", name);
+        debug("syncUser: Nome atualizado:", name);
       }
 
       await user.save();
-      console.log("syncUser: Usuário atualizado:", user);
+      debug("syncUser: Usuário atualizado:", user);
     }
 
     return res.json({ user });
@@ -69,6 +69,37 @@ export async function syncUser(req: AuthenticatedRequest, res: Response) {
     return res.status(500).json({ error: "Erro interno ao sincronizar usuário" });
   }
 }
+
+/**
+* Updates the last login timestamp for an existing authenticated user.
+* Returns the user's data if found, or null if the user doesn't exist in the database.
+* Called by the frontend after Firebase authentication to refresh session data.
+*/
+export async function login(req: AuthenticatedRequest, res: Response) {
+  try {
+    const { uid } = req.firebaseUser!;
+
+    let user = await User.findOne({ firebaseUid: uid });
+    debug("login: Usuário encontrado no DB?:", user);
+
+    if (user) {
+      debug("login: Usuário existente encontrado, atualizando dados.");
+
+      user.lastLogin = new Date();
+      await user.save();
+      debug("login: Usuário atualizado:", user);
+    }
+    
+
+    return res.json({ user });
+
+  } catch (error) {
+    console.error("Erro ao fazer login:", error);
+    return res.status(500).json({ error: "Erro interno ao fazer login" });
+  }
+}
+
+
 
 
 /**

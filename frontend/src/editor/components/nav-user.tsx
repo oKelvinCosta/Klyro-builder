@@ -29,7 +29,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { queryClient } from '@/lib/react-query';
+import { useAuthStoreFirebase } from '@/stores/auth-store-firebase';
 import { useTheme } from 'next-themes';
+import { useNavigate } from 'react-router-dom';
 
 export function NavUser({
   user,
@@ -40,12 +43,23 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
 
   const { theme, setTheme } = useTheme();
 
+  const logout = useAuthStoreFirebase((s) => s.logout);
+
   function handleAppearanceChange() {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  }
+
+  async function handleLogout() {
+    await logout();
+    // Clean React Query cache to remove userMongo data
+    queryClient.clear();
+    console.log('Logout realizado com sucesso');
+    navigate('/');
   }
 
   return (
@@ -128,7 +142,12 @@ export function NavUser({
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => {
+                handleLogout();
+              }}
+            >
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

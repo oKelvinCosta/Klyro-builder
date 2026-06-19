@@ -7,6 +7,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { getScormConfig } from './config/course-config';
+import AuthInitializer from './firebase/auth-initializer';
 
 export default function App() {
   const { appScorm } = getScormConfig();
@@ -17,10 +18,9 @@ export default function App() {
 
   return (
     <>
-      {/* <AuthInitializer /> */}
+      <AuthInitializer />
       <div className="klyro-app">
         <MetaTags />
-
         {/* Provide the client to your App */}
         <QueryClientProvider client={queryClient}>
           {!appScorm ? (

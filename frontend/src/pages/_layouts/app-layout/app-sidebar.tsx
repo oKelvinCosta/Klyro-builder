@@ -10,16 +10,16 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { NavUser } from '@/editor/components/nav-user';
+import { useAuthUser } from '@/hooks/use-auth-user';
 import { BellIcon, HouseIcon, TrashIcon, UsersIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function AppSidebar() {
+  const { userMongo } = useAuthUser();
   const mockUser = {
-    name: 'Kelvin costa',
-    email: 'okelvincosta@gmail.com',
-
-    // avatar: 'https://api.dicebear.com/9.x/bottts-neutral/svg?seed=oKelvin',
-    avatar: 'https://avatars.githubusercontent.com/u/28162385?v=4&size=64',
+    name: userMongo?.name,
+    email: userMongo?.email,
+    avatar: `https://api.dicebear.com/9.x/identicon/svg?seed=${userMongo?.name}`,
   };
   return (
     <Sidebar>
@@ -39,7 +39,7 @@ export function AppSidebar() {
                 {/* Menu */}
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to={'/'}>
+                    <Link to={'/app'}>
                       <HouseIcon />
                       <span>Início</span>
                     </Link>
@@ -47,24 +47,24 @@ export function AppSidebar() {
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <a href="#">
+                    <Link to={'/app'}>
                       <BellIcon />
                       Notificações
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <a href="#">
+                    <Link to={'/app'}>
                       <UsersIcon />
                       <span>Compartilhados comigo</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
 
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <Link to={'/lixeira'}>
+                    <Link to={'/app/lixeira'}>
                       <TrashIcon />
                       <span>Lixeira</span>
                     </Link>
@@ -85,7 +85,7 @@ export function AppSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-2.5!">
-                  <Link to={'/'}>
+                  <Link to={'/app'}>
                     <span className="text-space-500 dark:text-primary title-font m-0 text-2xl font-bold">
                       Klyro
                     </span>

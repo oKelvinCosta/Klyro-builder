@@ -1,6 +1,7 @@
 import * as express from 'express';
 import mongoose from "mongoose";
 
+import { AuthenticatedRequest } from '@/middlewares/verifyFirebaseToken.ts';
 import Page from "../models/Page.ts";
 import Project from "../models/Project.ts";
 import {
@@ -27,14 +28,13 @@ type Response = express.Response;
  *   "groupId": "60d5ec7f9d23a8001c8b4567"
  * }
  */
-export const createProject = async (req: Request, res: Response) => {  
-  
+export const createProject = async (req: AuthenticatedRequest, res: Response) => {  
   try {
-    console.log('🚀 [createProject] Requisição recebida:', req.body);
-    const userId = new mongoose.Types.ObjectId("69c9a51d260548585aa1fad8");
+    // console.log('🚀 [createProject] Requisição recebida:', req.body);
+    const userId = req.userId;
     const { groupId } = req.body;
 
-    console.log('🚀 [createProject] Chamando createProjectWithPage com:', { userId, groupId, ...req.body });
+    // console.log('🚀 [createProject] Chamando createProjectWithPage com:', { userId, groupId, ...req.body });
     const result = await createProjectWithPage({
       userId,
       ...req.body,
@@ -136,15 +136,14 @@ export const getProjectsByGroup = async (req: Request, res: Response) => {
  * 
  * Example request: GET /projects/ungrouped?userId=69c9a51d260548585aa1fad8
  */
-export const getUngroupedProjectsByUser = async (req: Request, res: Response) => {
+export const getUngroupedProjectsByUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = req.query;
-    const userObjectId = new mongoose.Types.ObjectId(userId as string);
-
+     const userId = req.userId;
+ 
     const projects = await Project.aggregate([
       {
         $match: {
-          userId: userObjectId,
+          userId: userId,
           deletedAt: null,
           $or: [
             { groupId: null },
@@ -255,7 +254,7 @@ export const updateProject = async (req: Request, res: Response) => {
     // Frontend sends only the fields it wants to update
     const { project: projectData, page: pageData } = req.body;
 
-    console.log('🔧 Backend - Recebendo dados para atualizar:', { projectId, pageId, projectData, pageData });
+    // console.log('🔧 Backend - Recebendo dados para atualizar:', { projectId, pageId, projectData, pageData });
 
     const result = await updateProjectAndPage(
       projectId,
@@ -264,7 +263,7 @@ export const updateProject = async (req: Request, res: Response) => {
       pageData && Object.keys(pageData).length > 0 ? pageData : undefined
     );
 
-    console.log('🔧 Backend - Resultado da atualização:', result);
+    // console.log('🔧 Backend - Resultado da atualização:', result);
 
     return res.status(200).json(result);
   } catch (err) {
@@ -376,19 +375,17 @@ export const restoreProject = async (req: Request, res: Response) => {
 
 /**
  * Returns all trashed projects for a user.
- * @route GET /projects/trash?userId=123
- * @queryparam userId - The user's ObjectId (required)
+ * @route GET /projects/trash
  * @returns Array of projects with deletedAt != null
  * 
- * Example request: GET /projects/trash?userId=69c9a51d260548585aa1fad8
+ * Example request: GET /projects/trash
  */
-export const getTrashedProjects = async (req: Request, res: Response) => {
+export const getTrashedProjects = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = req.query;
-    const userObjectId = new mongoose.Types.ObjectId(userId as string);
-
+    const userId = req.userId;
+    
     const projects = await Project.find({
-      userId: userObjectId,
+      userId: userId,
       deletedAt: { $ne: null }
     })
       .select('_id title cover deletedAt updatedAt createdAt userId groupId')

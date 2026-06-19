@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { getAuth } from 'firebase/auth';
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   // withCredentials: true, // Cookies from frontend send to backend to manage authentication
 });
@@ -17,3 +18,22 @@ function randomDelay(): number {
   // return Math.floor(Math.random() * 1000) + 1000;
   return 0;
 }
+
+// Add token to every request
+api.interceptors.request.use(
+  async (config) => {
+    // call directly the firebase, or can call the zustand state
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const token = await user.getIdToken();
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+export { api };

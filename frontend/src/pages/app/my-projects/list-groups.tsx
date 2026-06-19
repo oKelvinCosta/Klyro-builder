@@ -27,7 +27,6 @@ import { EllipsisVerticalIcon, TrashIcon } from 'lucide-react';
 export function ListGroups() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [userId] = useState('69c9a51d260548585aa1fad8'); //kelvin
 
   const [groupToDelete, setGroupToDelete] = useState<{
     _id: string;
@@ -42,8 +41,8 @@ export function ListGroups() {
 
   const useGroupsWithProjects = () => {
     return useQuery({
-      queryKey: ['groupsWithProjects', userId],
-      queryFn: () => api.get(`/groups/with-projects?userId=${userId}`).then((res) => res.data),
+      queryKey: ['groupsWithProjects'],
+      queryFn: () => api.get(`/groups/with-projects`).then((res) => res.data),
       staleTime: 5 * 60 * 1000,
       gcTime: 8 * 60 * 1000,
     });
@@ -56,9 +55,9 @@ export function ListGroups() {
   const { mutate: deleteGroupMutation } = useMutation({
     mutationFn: (groupId: string) => api.delete(`/groups/${groupId}`).then((res) => res.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groups', userId] });
-      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects', userId] });
-      queryClient.invalidateQueries({ queryKey: ['deletedProjects', userId] });
+      queryClient.invalidateQueries({ queryKey: ['groups'] });
+      queryClient.invalidateQueries({ queryKey: ['groupsWithProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['deletedProjects'] });
       setGroupToDelete(null);
     },
   });

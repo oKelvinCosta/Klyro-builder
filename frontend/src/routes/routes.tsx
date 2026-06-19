@@ -11,13 +11,23 @@ import { createHashRouter } from 'react-router-dom';
 import { AppLayout } from '../pages/_layouts/app-layout/app-layout';
 import BlankLayout from '../pages/_layouts/blank-layout';
 import { PageProd } from '../pages/puck/page-prod';
+import { PrivateRoute } from './private-route';
 
 const isDEV = getScormConfig().env === 'DEV';
 
 const routesDEV = [
   {
     path: '/',
-    element: <AppLayout />,
+    element: <BlankLayout />,
+    children: [{ path: '', element: <Auth /> }],
+  },
+  {
+    path: '/app',
+    element: (
+      <PrivateRoute>
+        <AppLayout />
+      </PrivateRoute>
+    ),
     children: [
       { path: '', element: <MyProjects /> },
       { path: 'group/:groupId', element: <ProjectsByGroup /> },
@@ -25,24 +35,34 @@ const routesDEV = [
     ],
   },
   {
-    path: '/auth',
-    element: <BlankLayout />,
-    children: [{ path: '', element: <Auth /> }],
-  },
-
-  {
     path: '/editor/:projectId/:pageId',
-    element: <BlankLayout />,
+    element: (
+      <PrivateRoute>
+        <BlankLayout />
+      </PrivateRoute>
+    ),
     children: [{ path: '', element: <PageEditor /> }],
   },
   {
     path: '/preview/:pageId',
-    element: <PreviewLayout />,
+    element: (
+      <PrivateRoute>
+        <PreviewLayout />
+      </PrivateRoute>
+    ),
     children: [{ path: '', element: <PagePreview /> }],
   },
 ];
 
 const routesPROD = [
+  {
+    path: '/',
+    element: <BlankLayout />,
+    children: [{ path: '/', element: <PageProd /> }],
+  },
+];
+
+const routesExportedSCORM = [
   {
     path: '/',
     element: <BlankLayout />,

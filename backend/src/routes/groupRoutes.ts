@@ -1,5 +1,6 @@
 import express from "express";
 
+import { verifyFirebaseToken } from "@/middlewares/verifyFirebaseToken.ts";
 import {
   createGroup,
   deleteGroup,
@@ -11,9 +12,9 @@ import {
 
 const router = express.Router();
 
-router.post("/", createGroup);
-router.get("/", getGroupsByUserId);
-router.get("/with-projects", getGroupsWithProjects);
+router.post("/", verifyFirebaseToken, createGroup);
+router.get("/", verifyFirebaseToken, getGroupsByUserId);
+router.get("/with-projects", verifyFirebaseToken, getGroupsWithProjects);
 router.get("/:id", getGroupById);
 router.patch("/:id", updateGroup);
 router.delete("/:id", deleteGroup);

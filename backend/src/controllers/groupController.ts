@@ -1,6 +1,7 @@
 import * as express from 'express';
 import mongoose from 'mongoose';
 
+import { AuthenticatedRequest } from '@/middlewares/verifyFirebaseToken.ts';
 import Group from '../models/Group.ts';
 import Page from '../models/Page.ts';
 import Project from '../models/Project.ts';
@@ -15,9 +16,10 @@ type Response = express.Response;
  * @body {name: string, userId: string} req.body - Object containing the group name and user ID
  * @returns {Promise<Response>} 201 with the created group document, or 500 on error.
  */
-export const createGroup = async (req: Request, res: Response) => {
+export const createGroup = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const group = await Group.create(req.body);
+    const userId = req.userId;
+    const group = await Group.create({ ...req.body, userId: userId });
     return res.status(201).json(group);
   } catch (err: unknown) {
     return res.status(500).json({ error: (err as Error).message });
@@ -27,16 +29,13 @@ export const createGroup = async (req: Request, res: Response) => {
 /**
  * Fetches and returns all groups belonging to a specific user.
  * 
- * @route GET /groups?userId=123
- * @query {string} userId - Owner user ID (required)
+ * @route GET /groups
  * @returns {Promise<Response>} 200 with the list of groups, or 500 on error.
  */
-export const getGroupsByUserId = async (req: Request, res: Response) => {
+export const getGroupsByUserId = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = req.query;
-    
-    const userObjectId = new mongoose.Types.ObjectId(userId as string);
-    const groups = await Group.find({ userId: userObjectId });
+    const userId = req.userId;
+    const groups = await Group.find({ userId: userId });
     return res.json(groups);
   } catch (err: unknown) {
     return res.status(500).json({ error: (err as Error).message });
@@ -70,25 +69,17 @@ export const getGroupById = async (req: Request, res: Response) => {
  * groups that no longer exist). If found, the system automatically
  * moves them to the trash (soft-delete) and removes the group association.
  * 
- * @route GET /groups/with-projects?userId=123
- * @query {string} userId - Owner user ID (required)
+ * @route GET /groups/with-projects
  * @returns {Promise<Response>} 200 with aggregated groups and projects, or 500 on error.
  */
-export const getGroupsWithProjects = async (req: Request, res: Response) => {
+export const getGroupsWithProjects = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { userId } = req.query;
+    const userId = req.userId;
     
-    // Step 1: Search parameter validation
-    if (!userId || typeof userId !== 'string') {
-      return res.status(400).json({ error: 'userId is required and must be a string' });
-    }
-    
-    const userObjectId = new mongoose.Types.ObjectId(userId);
-    // console.log('[getGroupsWithProjects] userId:', userId);
-    
+  
     // Step 2: Database self-healing module
     // 2.1. Fetch all active user group IDs
-    const activeGroups = await Group.find({ userId: userObjectId }, '_id');
+    const activeGroups = await Group.find({ userId: userId }, '_id');
     const activeGroupIds = activeGroups.map(g => g._id);
     const activeGroupStrings = activeGroupIds.map(id => id.toString());
     // console.log('[getGroupsWithProjects] activeGroupIds:', activeGroupIds);
@@ -97,7 +88,7 @@ export const getGroupsWithProjects = async (req: Request, res: Response) => {
     // 2.2. Search for active projects (deletedAt: null) that have a groupId,
     // but whose ID is not present in the active groups list (ObjectId or String)
     const orphanedProjects = await Project.find({
-      userId: userObjectId,
+      userId: userId,
       deletedAt: null,
       $and: [
         { groupId: { $ne: null } },
@@ -129,7 +120,7 @@ export const getGroupsWithProjects = async (req: Request, res: Response) => {
     }
     
     // Step 3: Preventive validation for existing groups
-    const groups = await Group.find({ userId: userObjectId });
+    const groups = await Group.find({ userId: userId });
     
     // If the user has no active groups, return an empty array immediately
     if (groups.length === 0) {
@@ -142,7 +133,7 @@ export const getGroupsWithProjects = async (req: Request, res: Response) => {
       // 4.1. Filter only groups belonging to the current user
       {
         $match: {
-          userId: userObjectId
+          userId: userId
         }
       },
       // 4.2. Perform the collection join ($lookup) with projects

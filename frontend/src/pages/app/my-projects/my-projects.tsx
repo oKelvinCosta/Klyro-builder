@@ -2,18 +2,15 @@ import { api } from '@/lib/axios';
 // import { ListGroups } from '@/pages/app/my-projects';
 
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { Header } from '../components/header';
 import { ListProjects } from '../components/list-projects';
 import { ListGroups } from './list-groups';
 
 export function MyProjects() {
-  const [userId] = useState('69c9a51d260548585aa1fad8');
-
   // Get ungrouped pages of user
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
-    queryKey: ['ungroupedPages', userId],
-    queryFn: () => api.get(`/projects/ungrouped?userId=${userId}`).then((res) => res.data),
+    queryKey: ['ungroupedPages'],
+    queryFn: () => api.get(`/projects/ungrouped`).then((res) => res.data),
     staleTime: 0,
     gcTime: 4 * 60 * 1000,
   });

@@ -1,5 +1,6 @@
 import express from "express";
 
+import { verifyFirebaseToken } from "@/middlewares/verifyFirebaseToken.ts";
 import {
   createProject,
   duplicateProject,
@@ -19,11 +20,11 @@ const router = express.Router();
 
 // the order of routes matters
 // more specific routes should be defined before general ones
-router.post("/", createProject);
+router.post("/", verifyFirebaseToken, createProject);
 router.post("/:id/duplicate", duplicateProject);
 router.get("/", getProjectsByUser);
-router.get("/ungrouped", getUngroupedProjectsByUser);
-router.get("/trash", getTrashedProjects);
+router.get("/ungrouped", verifyFirebaseToken, getUngroupedProjectsByUser);
+router.get("/trash",verifyFirebaseToken, getTrashedProjects);
 router.get("/group/:groupId", getProjectsByGroup);
 router.get("/:id", getProject);
 router.patch("/:id/group", updateProjectGroup);

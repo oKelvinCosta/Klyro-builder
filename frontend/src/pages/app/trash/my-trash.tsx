@@ -1,16 +1,12 @@
 import { api } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { Header } from '../components/header';
 import { ListProjects } from '../components/list-projects';
 
 export function MyTrash() {
-  const [userId] = useState('69c9a51d260548585aa1fad8'); //kelvin
-
-  // Get pages of user
   const { data: projectsData, isLoading: isLoadingPages } = useQuery({
-    queryKey: ['deletedProjects', userId],
-    queryFn: () => api.get(`/projects/trash?userId=${userId}`).then((res) => res.data),
+    queryKey: ['deletedProjects'],
+    queryFn: () => api.get(`/projects/trash`).then((res) => res.data),
     staleTime: 2 * 60 * 1000,
     gcTime: 4 * 60 * 1000,
   });

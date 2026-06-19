@@ -1,4 +1,6 @@
+import User from "@/models/User.ts";
 import type { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { auth } from "../services/firebaseAdminService.ts";
 
 export interface AuthenticatedRequest extends Request {
@@ -7,6 +9,7 @@ export interface AuthenticatedRequest extends Request {
     email?: string;
     [key: string]: any;
   };
+  userId?: Types.ObjectId | null;
 }
 
 export async function verifyFirebaseToken(
@@ -23,8 +26,13 @@ export async function verifyFirebaseToken(
   const idToken = authHeader.split("Bearer ")[1];
 
   try {
-    const decodedToken = await auth.verifyIdToken(idToken);
-    req.firebaseUser = decodedToken;
+    const decoded = await auth.verifyIdToken(idToken);
+
+    // When register a new user it will return null
+    const user = await User.findOne({ firebaseUid: decoded.uid });
+
+    req.firebaseUser = decoded;
+    req.userId = user?._id || null;
     next();
   } catch (error) {
     console.error("Erro ao verificar token Firebase:", error);
