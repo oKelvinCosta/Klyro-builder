@@ -1,15 +1,15 @@
 import * as express from 'express';
 import mongoose from "mongoose";
 
-import { AuthenticatedRequest } from '@/middlewares/verifyFirebaseToken.ts';
-import Page from "../models/Page.ts";
-import Project from "../models/Project.ts";
+import { AuthenticatedRequest } from '#/middlewares/verifyFirebaseToken.js';
+import Page from "../models/Page.js";
+import Project from "../models/Project.js";
 import {
-  createProjectWithPage,
-  duplicateProjectWithPages,
-  updatePagesBulk,
-  updateProjectAndPage
-} from '../services/projectService.ts';
+    createProjectWithPage,
+    duplicateProjectWithPages,
+    updatePagesBulk,
+    updateProjectAndPage
+} from '../services/projectService.js';
 
 type Request = express.Request;
 type Response = express.Response;

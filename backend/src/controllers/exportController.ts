@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 
 import * as express from 'express';
 
-import * as scormService from '../services/scormService.ts';
+import * as scormService from '../services/scormService.js';
 
 type Request = express.Request;
 type Response = express.Response;

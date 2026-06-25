@@ -1,20 +1,20 @@
 import express from "express";
 
-import { verifyFirebaseToken } from "@/middlewares/verifyFirebaseToken.ts";
+import { verifyFirebaseToken } from "#/middlewares/verifyFirebaseToken.js";
 import {
-  createProject,
-  duplicateProject,
-  getProject,
-  getProjectsByGroup,
-  getProjectsByUser,
-  getTrashedProjects,
-  getUngroupedProjectsByUser,
-  restoreProject,
-  trashProject,
-  updatePagesBulkController,
-  updateProject,
-  updateProjectGroup
-} from "../controllers/projectController.ts";
+    createProject,
+    duplicateProject,
+    getProject,
+    getProjectsByGroup,
+    getProjectsByUser,
+    getTrashedProjects,
+    getUngroupedProjectsByUser,
+    restoreProject,
+    trashProject,
+    updatePagesBulkController,
+    updateProject,
+    updateProjectGroup
+} from "../controllers/projectController.js";
 
 const router = express.Router();
 

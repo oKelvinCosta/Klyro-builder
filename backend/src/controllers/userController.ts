@@ -1,8 +1,8 @@
 import * as express from 'express';
 type Response = express.Response;
 
-import type { AuthenticatedRequest } from "../middlewares/verifyFirebaseToken.ts";
-import User from "../models/User.ts";
+import type { AuthenticatedRequest } from "../middlewares/verifyFirebaseToken.js";
+import User from "../models/User.js";
 
 /**
  * Lista todos os usuários.

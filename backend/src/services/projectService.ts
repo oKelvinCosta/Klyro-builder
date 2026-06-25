@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Page from "../models/Page.ts";
-import Project from "../models/Project.ts";
+import Page from "../models/Page.js";
+import Project from "../models/Project.js";
 
 interface CreateProjectData {
   title?: string;

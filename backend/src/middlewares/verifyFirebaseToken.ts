@@ -1,7 +1,7 @@
-import User from "@/models/User.ts";
+import User from "#/models/User.js";
 import type { NextFunction, Request, Response } from "express";
 import { Types } from "mongoose";
-import { auth } from "../services/firebaseAdminService.ts";
+import { auth } from "../services/firebaseAdminService.js";
 
 export interface AuthenticatedRequest extends Request {
   firebaseUser?: {

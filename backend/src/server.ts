@@ -2,14 +2,14 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import express from 'express';
-import './config/db.ts';
-import { connectDB } from './config/db.ts';
-import authRoutes from "./routes/authRoutes.ts";
-import exportRoutes from './routes/exportRoutes.ts';
-import groupRoutes from './routes/groupRoutes.ts';
-import pageRoutes from './routes/pageRoutes.ts';
-import projectRoutes from './routes/projectRoutes.ts';
-import userRoutes from './routes/userRoutes.ts';
+import './config/db.js';
+import { connectDB } from './config/db.js';
+import authRoutes from "./routes/authRoutes.js";
+import exportRoutes from './routes/exportRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
+import pageRoutes from './routes/pageRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -42,6 +42,6 @@ const PORT = process.env.PORT || 3000;
 
 
 app.listen(PORT, () => {
-  console.log('server.ts - Servidor rodando 🚀');
-  console.log(`server.ts - Local:   http://localhost:${PORT}/`);
+  console.log('server.js - Servidor rodando 🚀');
+  console.log(`server.js - Local:   http://localhost:${PORT}/`);
 });

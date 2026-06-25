@@ -1,10 +1,10 @@
 import * as express from 'express';
 import mongoose from 'mongoose';
 
-import { AuthenticatedRequest } from '@/middlewares/verifyFirebaseToken.ts';
-import Group from '../models/Group.ts';
-import Page from '../models/Page.ts';
-import Project from '../models/Project.ts';
+import { AuthenticatedRequest } from '#/middlewares/verifyFirebaseToken.js';
+import Group from '../models/Group.js';
+import Page from '../models/Page.js';
+import Project from '../models/Project.js';
 
 type Request = express.Request;
 type Response = express.Response;

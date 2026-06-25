@@ -1,14 +1,14 @@
 import express from "express";
 
-import { verifyFirebaseToken } from "@/middlewares/verifyFirebaseToken.ts";
+import { verifyFirebaseToken } from "#/middlewares/verifyFirebaseToken.js";
 import {
-  createGroup,
-  deleteGroup,
-  getGroupById,
-  getGroupsByUserId,
-  getGroupsWithProjects,
-  updateGroup
-} from "../controllers/groupController.ts";
+    createGroup,
+    deleteGroup,
+    getGroupById,
+    getGroupsByUserId,
+    getGroupsWithProjects,
+    updateGroup
+} from "../controllers/groupController.js";
 
 const router = express.Router();
 

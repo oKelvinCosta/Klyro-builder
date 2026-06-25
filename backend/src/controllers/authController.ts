@@ -1,9 +1,9 @@
 import type { Response } from "express";
-import type { AuthenticatedRequest } from "../middlewares/verifyFirebaseToken";
+import type { AuthenticatedRequest } from "../middlewares/verifyFirebaseToken.js";
 
-import { debug } from "@/config/debug.ts";
+import { debug } from "#/config/debug.js";
 import { z } from "zod";
-import User from "../models/User.ts";
+import User from "../models/User.js";
 
 const syncUserSchema = z.object({
   name: z
