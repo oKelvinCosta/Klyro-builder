@@ -95,7 +95,8 @@ export const copyFrontendBuildOutput = async (frontendDir: string, buildOutputSo
  * Gera o manifesto SCORM com base nas configurações do curso.
  * Usa configurações padrão do backend - não carrega nada do frontend
  */
-export const generateScormManifest = async (targetDir: string, frontendDir: string): Promise<string> => {
+// export const generateScormManifest = async (targetDir: string, frontendDir: string): Promise<string> => {
+  export const generateScormManifest = async (targetDir: string): Promise<string> => {
   // Usa configurações padrão do backend
   const courseConfig = DEFAULT_COURSE_CONFIG;
   

@@ -52,7 +52,8 @@ export const savePuckData = async (req: Request, res: Response) => {
 
     // 5. Gera o manifesto SCORM
     console.info('Gerando manifesto SCORM...');
-    const scormMsg = await scormService.generateScormManifest(scormOpenDir, frontendDir);
+    // const scormMsg = await scormService.generateScormManifest(scormOpenDir, frontendDir);
+    const scormMsg = await scormService.generateScormManifest(scormOpenDir);
     console.info('SCORM Packager:', scormMsg);
 
 

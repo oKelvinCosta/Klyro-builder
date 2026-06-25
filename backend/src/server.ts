@@ -34,6 +34,10 @@ app.use('/export', exportRoutes);
 
 app.use("/auth", authRoutes);
 
+app.get('/health', (_req, _res) => {
+  _res.status(200).json({ status: 'ok' });
+});
+
 const PORT = process.env.PORT || 3000;
 
 

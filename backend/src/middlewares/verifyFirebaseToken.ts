@@ -16,19 +16,18 @@ export async function verifyFirebaseToken(
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Token não fornecido" });
+    res.status(401).json({ error: "Token não fornecido" });
+    return;
   }
 
   const idToken = authHeader.split("Bearer ")[1];
 
   try {
     const decoded = await auth.verifyIdToken(idToken);
-
-    // When register a new user it will return null
     const user = await User.findOne({ firebaseUid: decoded.uid });
 
     req.firebaseUser = decoded;
@@ -36,6 +35,7 @@ export async function verifyFirebaseToken(
     next();
   } catch (error) {
     console.error("Erro ao verificar token Firebase:", error);
-    return res.status(401).json({ error: "Token inválido ou expirado" });
+    res.status(401).json({ error: "Token inválido ou expirado" });
   }
 }
+
