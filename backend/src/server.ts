@@ -15,6 +15,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
+  origin: [
+    'https://klyro-builder.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:5174',
+  ],
+  credentials: true,
   exposedHeaders: ['Content-Disposition']
 }));
 app.use(express.json());
