@@ -50,6 +50,18 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
   };
 
   return {
+    root: {
+      fields: {
+        // title: {
+        //   type: 'text',
+        //   label: 'Título da página',
+        // },
+        // subtitle: {
+        //   type: 'text',
+        //   label: 'Subtítulo',
+        // },
+      },
+    },
     categories: {
       layout: {
         components: ['Section', 'Container', 'Grid'],
