@@ -1,7 +1,11 @@
 import CarouselCard from '@/components/carousel-card';
 import Container from '@/components/layout/container';
 import { Button } from '@/components/ui/button';
-import { CONTAINER_MAP, ContainerField, type ContainerVariant } from '@/editor/fields/container-field';
+import {
+  CONTAINER_MAP,
+  ContainerField,
+  type ContainerVariant,
+} from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 import type * as React from 'react';
 
@@ -18,7 +22,7 @@ export type CarouselBlockProps = {
     buttonVariant?: 'indigo' | 'gray' | 'lime' | 'red' | 'outline' | 'link';
   }[];
   layout: '1:1' | '1:2' | '2:1';
-  container?: ContainerVariant;
+  container: ContainerVariant;
 };
 
 const placeholderImgUrl =
@@ -28,6 +32,7 @@ const placeholderImgUrl =
  * CarouselBlock configuration for Puck Editor
  */
 export const CarouselBlock: ComponentConfig<CarouselBlockProps> = {
+  label: 'Carrossel',
   fields: {
     items: {
       type: 'array',
@@ -77,7 +82,7 @@ export const CarouselBlock: ComponentConfig<CarouselBlockProps> = {
         { label: '2:1 (Larger Image)', value: '2:1' },
       ],
     },
-    container: ContainerField({ defaultValue: '980' }),
+    container: ContainerField(),
   },
   defaultProps: {
     items: [

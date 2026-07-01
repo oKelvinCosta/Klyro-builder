@@ -9,7 +9,7 @@ import { useRef } from 'react';
 import { HtmlIframeInstructionsField } from '../fields/html-iframe-instructions-field';
 import { useHtmlBlockAutoResize } from '../hooks/use-html-block-auto-resize';
 
-export type HtmlBlockProps = {
+export type EmbedBlockProps = {
   iframeInstructions?: undefined;
   content: string;
   container: ContainerVariant;
@@ -28,7 +28,7 @@ function sanitizeHtml(content: string) {
 /**
  * Renders sanitized HTML and keeps embedded iframes sized to their content.
  */
-function HtmlBlockContent({ content }: { content: string }) {
+function EmbedBlockContent({ content }: { content: string }) {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useHtmlBlockAutoResize(contentRef, [content]);
@@ -36,17 +36,18 @@ function HtmlBlockContent({ content }: { content: string }) {
   return <div ref={contentRef} dangerouslySetInnerHTML={{ __html: content }} />;
 }
 
-export const HtmlBlock: ComponentConfig<HtmlBlockProps> = {
+export const EmbedBlock: ComponentConfig<EmbedBlockProps> = {
+  label: 'Embed',
   fields: {
     iframeInstructions: HtmlIframeInstructionsField(),
     content: {
       type: 'textarea',
-      label: 'HTML Content',
+      label: 'Embed Content',
     },
     container: ContainerField(),
   },
   defaultProps: {
-    content: '<p>HTML Block</p>',
+    content: '<p>Embed Block</p>',
     container: '980' as ContainerVariant,
   },
   render: ({ content, container }) => {
@@ -54,7 +55,7 @@ export const HtmlBlock: ComponentConfig<HtmlBlockProps> = {
 
     return (
       <Container style={{ maxWidth: CONTAINER_MAP[container as ContainerVariant].maxWidth }}>
-        <HtmlBlockContent content={sanitizedContent} />
+        <EmbedBlockContent content={sanitizedContent} />
       </Container>
     );
   },

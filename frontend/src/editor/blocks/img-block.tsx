@@ -25,6 +25,7 @@ const getAlignmentXClasses = (alignment: 'left' | 'center' | 'right') => {
 };
 
 export const ImgBlock: ComponentConfig<ImgBlockProps> = {
+  label: 'Imagem',
   fields: {
     src: {
       type: 'text',

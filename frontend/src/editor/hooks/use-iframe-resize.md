@@ -106,13 +106,8 @@ window.parent.postMessage(
 );
 ```
 
-## YouTube fallback
-
-For YouTube embeds, the parent hook also applies a responsive fallback: `width: 100%`, `aspect-ratio: 16 / 9`, and a computed height based on the iframe width. This helps when the browser does not fully honor `aspect-ratio`.
-
 ## Notes
 
 - Same-origin iframes can often be measured directly.
 - Cross-origin quizzes should send `postMessage` updates from inside the iframe.
 - `iframeId` must match the `data-iframe-id` attribute used by the parent.
-- YouTube embeds get a responsive fallback even when the iframe comes with fixed dimensions.

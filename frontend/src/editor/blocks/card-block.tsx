@@ -21,6 +21,7 @@ export type CardBlockProps = {
 };
 
 export const CardBlock: ComponentConfig<CardBlockProps> = {
+  label: 'Cartão',
   fields: {
     imgSrc: { type: 'text' },
     title: { type: 'text' },

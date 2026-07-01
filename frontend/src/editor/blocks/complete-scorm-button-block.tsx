@@ -8,6 +8,7 @@ export type CompleteScormButtonBlockProps = {
 };
 
 export const CompleteScormButtonBlock: ComponentConfig<CompleteScormButtonBlockProps> = {
+  label: 'Botão SCORM',
   fields: {
     content: {
       type: 'text',

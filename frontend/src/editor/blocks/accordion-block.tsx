@@ -1,7 +1,11 @@
 import AccordionContained from '@/components/accordion-contained';
 import Img from '@/components/img';
 import Container from '@/components/layout/container';
-import { CONTAINER_MAP, ContainerField, type ContainerVariant } from '@/editor/fields/container-field';
+import {
+  CONTAINER_MAP,
+  ContainerField,
+  type ContainerVariant,
+} from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 
 /**
@@ -14,13 +18,14 @@ export type AccordionBlockProps = {
     imgSrc?: string;
   }[];
   forcedOpen?: boolean;
-  container?: ContainerVariant;
+  container: ContainerVariant;
 };
 
 /**
  * AccordionBlock configuration for Puck Editor
  */
 export const AccordionBlock: ComponentConfig<AccordionBlockProps> = {
+  label: 'Acordeão',
   fields: {
     items: {
       type: 'array',
@@ -49,7 +54,7 @@ export const AccordionBlock: ComponentConfig<AccordionBlockProps> = {
         { label: 'Edit Mode (All Open)', value: true },
       ],
     },
-    container: ContainerField({ defaultValue: '980' }),
+    container: ContainerField(),
   },
   defaultProps: {
     items: [

@@ -3,16 +3,17 @@ import { type Config } from '@puckeditor/core';
 
 type Props = {
   RichText: Blocks.RichTextBlockProps;
-  Html: Blocks.HtmlBlockProps;
+  Embed: Blocks.EmbedBlockProps;
+  Video: Blocks.VideoBlockProps;
   Card: Blocks.CardBlockProps;
   Img: Blocks.ImgBlockProps;
   Grid: Blocks.GridBlockProps;
   Container: Blocks.ContainerBlockProps;
   Button: Blocks.ButtonBlockProps;
-  CompleteScormButtonBlock: Blocks.CompleteScormButtonBlockProps;
+  CompleteScormButton: Blocks.CompleteScormButtonBlockProps;
   Section: Blocks.SectionBlockProps;
-  CarouselBlock: Blocks.CarouselBlockProps;
-  AccordionBlock: Blocks.AccordionBlockProps;
+  Carousel: Blocks.CarouselBlockProps;
+  Accordion: Blocks.AccordionBlockProps;
   // Choices blocks
   HeaderChoicesBlock: Blocks.HeaderChoicesBlockProps;
   FooterChoicesBlock: Blocks.FooterChoicesBlockProps;
@@ -23,7 +24,7 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
 
   const components = {
     // SCORM & Completion
-    CompleteScormButtonBlock: Blocks.CompleteScormButtonBlock,
+    CompleteScormButton: Blocks.CompleteScormButtonBlock,
     // Buttons
     Button: Blocks.ButtonBlock,
     // Containers
@@ -32,7 +33,8 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
     // Text & Content
     RichText: Blocks.RichTextBlock,
     Card: Blocks.CardBlock,
-    Html: Blocks.HtmlBlock,
+    Embed: Blocks.EmbedBlock,
+    Video: Blocks.VideoBlock,
 
     // Layout
     Grid: Blocks.GridBlock(),
@@ -40,8 +42,8 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
 
     // Media & Interactive
     Img: Blocks.ImgBlock,
-    CarouselBlock: Blocks.CarouselBlock,
-    AccordionBlock: Blocks.AccordionBlock,
+    Carousel: Blocks.CarouselBlock,
+    Accordion: Blocks.AccordionBlock,
 
     // Dynamic blocks based on project type
     ...projectConfig.components,
@@ -57,11 +59,11 @@ export function config({ projectType }: { projectType: string }): Config<Props> 
         title: 'Texto e conteúdo',
       },
       media: {
-        components: ['Img', 'Card', 'CarouselBlock', 'AccordionBlock', 'Html'],
+        components: ['Img', 'Card', 'Carousel', 'Accordion', 'Embed', 'Video'],
         title: 'Mídia e interatividade',
       },
       scorm: {
-        components: ['CompleteScormButtonBlock'],
+        components: ['CompleteScormButton'],
         defaultExpanded: false,
       },
       // Dynamic categories based on project type

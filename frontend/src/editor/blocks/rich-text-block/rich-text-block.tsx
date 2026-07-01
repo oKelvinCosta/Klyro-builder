@@ -3,7 +3,11 @@
  * Toolbar UI lives in rich-text-toolbar.tsx and sibling modules.
  */
 import Container from '@/components/layout/container';
-import { CONTAINER_MAP, ContainerField, type ContainerVariant } from '@/editor/fields/container-field';
+import {
+  CONTAINER_MAP,
+  ContainerField,
+  type ContainerVariant,
+} from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 import { RichTextToolbar } from './rich-text-toolbar';
 import { richTextTiptapExtensions } from './tiptap-extensions';
@@ -12,6 +16,7 @@ import type { RichTextBlockProps } from './types';
 export type { RichTextBlockProps } from './types';
 
 export const RichTextBlock: ComponentConfig<RichTextBlockProps> = {
+  label: 'Texto',
   fields: {
     content: {
       type: 'richtext',
@@ -26,7 +31,7 @@ export const RichTextBlock: ComponentConfig<RichTextBlockProps> = {
         return <RichTextToolbar editor={editor} />;
       },
     },
-    container: ContainerField({ defaultValue: '980' }),
+    container: ContainerField(),
   },
 
   defaultProps: {

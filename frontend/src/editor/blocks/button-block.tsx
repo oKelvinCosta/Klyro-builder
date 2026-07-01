@@ -17,6 +17,7 @@ export type ButtonBlockProps = {
 };
 
 export const ButtonBlock: ComponentConfig<ButtonBlockProps> = {
+  label: 'Botão',
   fields: {
     content: {
       type: 'richtext',

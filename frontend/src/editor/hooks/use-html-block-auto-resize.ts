@@ -6,8 +6,6 @@ type IframeResizeMessage = {
   height: number;
 };
 
-const YOUTUBE_IFRAME_SRC_PATTERN = /(?:youtube\.com\/embed\/|youtube-nocookie\.com\/embed\/)/i;
-
 /**
  * Keeps iframe height in sync with its content when possible.
  *
@@ -32,31 +30,7 @@ export function useHtmlBlockAutoResize(
       iframe.style.display = 'block';
     };
 
-    // YouTube embeds should behave responsively even when the original iframe
-    // comes with fixed dimensions.
-    const applyYouTubeResponsiveSizing = (iframe: HTMLIFrameElement) => {
-      const width =
-        iframe.getBoundingClientRect().width ||
-        iframe.parentElement?.getBoundingClientRect().width ||
-        0;
-      const fallbackHeight = width > 0 ? `${Math.round((width * 9) / 16)}px` : '';
-
-      iframe.style.width = '100%';
-      iframe.style.aspectRatio = '16 / 9';
-      iframe.style.display = 'block';
-
-      if (fallbackHeight) {
-        iframe.style.height = fallbackHeight;
-      } else {
-        iframe.style.height = 'auto';
-      }
-    };
-
     const measureIframe = (iframe: HTMLIFrameElement) => {
-      if (iframe.src && YOUTUBE_IFRAME_SRC_PATTERN.test(iframe.src)) {
-        applyYouTubeResponsiveSizing(iframe);
-        return;
-      }
 
       try {
         const doc = iframe.contentDocument || iframe.contentWindow?.document;
@@ -124,3 +98,5 @@ export function useHtmlBlockAutoResize(
     };
   }, dependencies);
 }
+
+

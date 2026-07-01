@@ -27,6 +27,7 @@ export const GridBlock = (): ComponentConfig<GridBlockProps> => {
   // const { isEditing } = useEditorMode();
 
   return {
+    label: 'Colunas',
     fields: {
       columnFormat: {
         label: 'Layout colunas',

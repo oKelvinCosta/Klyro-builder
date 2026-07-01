@@ -1,5 +1,9 @@
 import Container from '@/components/layout/container';
-import { CONTAINER_MAP, ContainerField, type ContainerVariant } from '@/editor/fields/container-field';
+import {
+  CONTAINER_MAP,
+  ContainerField,
+  type ContainerVariant,
+} from '@/editor/fields/container-field';
 import type { ComponentConfig } from '@puckeditor/core';
 import { SlotPuck } from '../components/slot-puck';
 
@@ -9,6 +13,7 @@ export type ContainerBlockProps = {
 };
 
 export const ContainerBlock: ComponentConfig<ContainerBlockProps> = {
+  label: 'Contêiner',
   fields: {
     variant: ContainerField(),
     slot: {

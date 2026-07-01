@@ -22,6 +22,7 @@ export const SectionBlock = (): ComponentConfig<SectionBlockProps> => {
   // const { isEditing } = useEditorMode();
 
   return {
+    label: 'Seção',
     fields: {
       // 🖼️ background image
       backgroundImage: {
