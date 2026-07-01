@@ -3,6 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
+/**
+ * Data payload accepted by the page/project update endpoint.
+ *
+ * This hook supports partial updates so callers can send only the fields
+ * they need. The `project` block is used for project-level metadata such as
+ * the title, slug, theme, and text styles. The `page` block is used for the
+ * current page content and page metadata.
+ */
 interface DataToUpdate {
   project?: {
     title?: string;
@@ -16,10 +24,26 @@ interface DataToUpdate {
     slug?: string;
     puckData?: object;
   };
-  /** Evita toast em saves automáticos (ex.: estilos de texto) */
+  /** Skip the success toast for silent saves, such as autosave flows. */
   silent?: boolean;
 }
 
+/**
+ * Hook that persists editor changes for the current project and page.
+ *
+ * How it works:
+ * - Reads `projectId` and `pageId` from the route.
+ * - Sends a `PATCH /projects/:projectId/:pageId` request with the provided
+ *   partial payload.
+ * - Updates the React Query cache for `['Project', projectId]` so the editor
+ *   UI can reflect the saved values immediately.
+ * - Optionally shows a success toast unless the caller passes `silent: true`.
+ *
+ * Typical usage:
+ * - Project title changes from the config panel.
+ * - Autosaved page content from the canvas.
+ * - Theme and text-style updates from the editor sidebar.
+ */
 export function usePageUpdater() {
   const { projectId, pageId } = useParams();
   const queryClient = useQueryClient();
@@ -31,12 +55,12 @@ export function usePageUpdater() {
       queryClient.setQueryData(['Project', projectId], (old: any) => {
         if (!old) return old;
 
-        // Mescla de forma segura as propriedades novas do projeto sem apagar as antigas
+        // Merge the updated project fields without dropping any existing data.
         const updatedProject = variables.project
           ? { ...old.project, ...variables.project }
           : old.project;
 
-        // In the cache, the page is stored under `firstPage` (from GET /projects/:id response)
+        // The current page is stored under `firstPage` in the cached project payload.
         const updatedFirstPage = variables.page
           ? { ...old.firstPage, ...variables.page }
           : old.firstPage;
